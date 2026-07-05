@@ -27,6 +27,7 @@ export default function HomePage() {
   const adminSetSubscription = useStore((s) => s.adminSetSubscription);
   const adminSetCredits = useStore((s) => s.adminSetCredits);
   const adminSetTier = useStore((s) => s.adminSetTier);
+  const setShowTour = useStore((s) => s.setShowTour);
   const router = useRouter();
   const company = getCompany();
   const [greeting, setGreeting] = useState("");
@@ -57,6 +58,7 @@ export default function HomePage() {
         if (session) adminSetTier(session.companyId, result.tier as FirmTier);
         addNotification({ type: "subscription_renewed", title: "Subscription Active", message: `Your ${result.tier} subscription is now live.` });
         setStripeSuccess(`${result.tier} subscription activated`);
+        setShowTour(true);
       }
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps

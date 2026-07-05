@@ -32,6 +32,7 @@ interface StoreState {
   activateSubscription: (tier: string) => void;
   cancelSubscription: () => void;
   dismissTour: () => void;
+  setShowTour: (show: boolean) => void;
   getCompanyVault: () => SOP[];
   getCompany: () => CompanyNode | null;
   heartbeatTick: () => void;
@@ -275,6 +276,10 @@ export const useStore = create<StoreState>((set, get) => ({
 
   dismissTour: () => {
     set({ showTour: false });
+  },
+
+  setShowTour: (show: boolean) => {
+    set({ showTour: show });
   },
 
   getCompanyVault: () => get().vault,

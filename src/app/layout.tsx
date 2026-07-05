@@ -8,6 +8,10 @@ const Nav = dynamic(() => import("@/components/Nav"), {
   ssr: false,
 });
 
+const OnboardingTour = dynamic(() => import("@/components/OnboardingTour"), {
+  ssr: false,
+});
+
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
 export const viewport: Viewport = {
@@ -129,6 +133,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body style={{ background: "#0F172A", minHeight: "100vh" }}>
         <InitStore />
         <Nav />
+        <OnboardingTour />
         <main className="fade-in">{children}</main>
       </body>
     </html>
