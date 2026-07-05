@@ -28,11 +28,11 @@ export default function RegisterPage() {
     if (!companySize) { setError("Please select your company size."); return; }
     if (email !== DIRECTOR_EMAIL && pin.length < 4) { setError("PIN must be at least 4 characters."); return; }
     if (email !== DIRECTOR_EMAIL && pin !== confirmPin) { setError("PINs do not match."); return; }
-    const success = await register(company, email, pin, companySize);
-    if (success) {
+    try {
+      await register(company, email, pin, companySize);
       router.push("/choose-focus");
-    } else {
-      setError("Company name or email already registered.");
+    } catch (e: any) {
+      setError(e?.message || "Registration failed.");
     }
   };
 

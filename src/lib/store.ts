@@ -97,8 +97,8 @@ export const useStore = create<StoreState>((set, get) => ({
         vault: [],
       });
       return true;
-    } catch {
-      return false;
+    } catch (e: any) {
+      throw new Error(e?.message || "Registration failed");
     }
   },
 
