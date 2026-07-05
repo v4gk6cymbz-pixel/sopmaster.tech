@@ -47,6 +47,10 @@ export default function ForgePage() {
     return () => { if (abortRef.current) abortRef.current.abort(); };
   }, []);
 
+  useEffect(() => {
+    if (company && (!company.focus || company.focus !== "sops")) router.push("/");
+  }, [company, router]);
+
   const removeSystem = (s: string) => setSystems(systems.filter(x => x !== s));
   const addSystem = (s: string) => { if (s.trim() && !systems.includes(s.trim())) setSystems([...systems, s.trim()]); };
 

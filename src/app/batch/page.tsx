@@ -152,6 +152,10 @@ export default function BatchPage() {
   const addSoftware = (s: string) => { if (s.trim() && !softwareStack.includes(s.trim())) setSoftwareStack([...softwareStack, s.trim()]); setSoftwareInput(""); };
   const removeSoftware = (s: string) => setSoftwareStack(softwareStack.filter(x => x !== s));
 
+  useEffect(() => {
+    if (!session?.isDirector) router.push("/");
+  }, [session, router]);
+
   const handleGenerate = async () => {
     setError("");
     if (!companyName.trim() || selectedDepartments.length === 0) { setError("Company name and at least one department are required."); return; }

@@ -199,6 +199,10 @@ export default function ChecklistPage() {
   }, []);
 
   useEffect(() => {
+    if (company && (!company.focus || company.focus !== "checklists")) router.push("/");
+  }, [company, router]);
+
+  useEffect(() => {
     setTitle(`${checklistType} — ${compName || "Your Organisation"}`);
   }, [checklistType, compName]);
 
