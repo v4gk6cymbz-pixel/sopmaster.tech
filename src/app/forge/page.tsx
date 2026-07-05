@@ -111,7 +111,7 @@ export default function ForgePage() {
     clearInterval(logInterval);
     setProgress(100); setLogs((l) => [...l, "Complete"]);
 
-    deductCredit(10);
+    await deductCredit(10);
     const hash = generateHash();
     const vHash = generateVerificationHash();
     const now = new Date();

@@ -24,7 +24,7 @@ interface StoreState {
   addSOP: (sop: SOP) => Promise<void>;
   updateSOP: (id: string, data: any) => Promise<void>;
   removeSOP: (id: string) => Promise<void>;
-  deductCredit: (amount?: number) => boolean;
+  deductCredit: (amount?: number) => Promise<boolean>;
   addCredits: (amount: number) => void;
   setJurisdiction: (j: string) => Promise<void>;
   updatePin: (newPin: string) => Promise<void>;
@@ -185,8 +185,17 @@ export const useStore = create<StoreState>((set, get) => ({
     } catch {}
   },
 
-  deductCredit: (_amount = 1) => {
-    return true;
+  deductCredit: async (amount = 1) => {
+    try {
+      const result = await api.company.deductCredits(amount);
+      const companies = get().companies.map(c =>
+        c.id === get().session?.companyId ? { ...c, credits: result.credits } : c
+      );
+      set({ companies });
+      return true;
+    } catch {
+      return false;
+    }
   },
 
   addCredits: (_amount: number) => {},

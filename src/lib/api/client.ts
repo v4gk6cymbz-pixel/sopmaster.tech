@@ -48,6 +48,7 @@ export const api = {
     get: () => request("/api/company"),
     update: (data: any) => request("/api/company", { method: "PATCH", body: JSON.stringify(data) }),
     updatePin: (pin: string) => request("/api/company/pin", { method: "PUT", body: JSON.stringify({ pin }) }),
+    deductCredits: (amount: number) => request("/api/company/deduct-credits", { method: "POST", body: JSON.stringify({ amount }) }),
   },
   vault: {
     list: () => request("/api/vault"),

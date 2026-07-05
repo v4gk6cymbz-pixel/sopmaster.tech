@@ -93,7 +93,7 @@ export function buildSopHtml(title: string, company: string, jurisdiction: strin
     const contentHtml = sec.content.map((line) => {
       const t = line.trim();
       if (t.startsWith("---") || t.startsWith("___")) return `<hr />`;
-      return `<p class="body-text">${escapeHtml(t)}</p>`;
+      return `<div class="body-card"><p class="body-text">${escapeHtml(t)}</p></div>`;
     }).join("\n");
 
     return `<div class="section">
@@ -187,20 +187,28 @@ export function buildSopHtml(title: string, company: string, jurisdiction: strin
     font-size: 12pt;
     font-weight: 700;
     color: #0f172a;
-    margin: 0 0 8pt 0;
-    padding: 6pt 10pt;
-    background: #f8fafc;
-    border-left: 3px solid #0f172a;
+    margin: 0 0 10pt 0;
+    padding: 7pt 12pt;
+    background: #0f172a;
+    color: #fff;
     text-transform: uppercase;
-    letter-spacing: 0.5pt;
+    letter-spacing: 1pt;
   }
   .section-body { margin-top: 4pt; }
+  .body-card {
+    border: 1px solid #e2e8f0;
+    border-left: 4px solid #0f172a;
+    border-radius: 4pt;
+    padding: 8pt 12pt;
+    margin: 0 0 8pt 0;
+    background: #ffffff;
+    page-break-inside: avoid;
+  }
   .body-text {
     font-size: 10.5pt;
-    line-height: 1.65;
-    margin: 4pt 0 8pt 0;
+    line-height: 1.6;
+    margin: 0;
     color: #334155;
-    text-align: justify;
   }
 
   .footer {

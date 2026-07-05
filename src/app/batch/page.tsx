@@ -210,7 +210,7 @@ export default function BatchPage() {
 
     clearInterval(interval);
     setProgress(100);
-    deductCredit(batchCost);
+    await deductCredit(batchCost);
     setResult(batchResult);
     setLogs(l => [...l, `Package complete: ${batchResult.totalCount} SOPs across ${selectedDepartments.length} departments`]);
     setGenerating(false);

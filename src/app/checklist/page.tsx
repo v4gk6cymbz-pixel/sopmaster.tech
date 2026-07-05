@@ -202,7 +202,7 @@ export default function ChecklistPage() {
     setTitle(`${checklistType} — ${compName || "Your Organisation"}`);
   }, [checklistType, compName]);
 
-  const startGeneration = () => {
+  const startGeneration = async () => {
     setError("");
     if (!compName.trim()) {
       setError("Company name is required.");
@@ -212,7 +212,7 @@ export default function ChecklistPage() {
       setError("Checklists require an active subscription. Subscribe in Administration.");
       return;
     }
-    const canDeduct = deductCredit();
+    const canDeduct = await deductCredit();
     if (!canDeduct && !session?.isDirector) {
       setError("Insufficient credits. Purchase more in Administration.");
       return;
