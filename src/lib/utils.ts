@@ -89,10 +89,44 @@ export function buildSopHtml(title: string, company: string, jurisdiction: strin
     return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
   }
 
+  const isStep = (t: string) => /^Step\s+\d+/i.test(t);
+  const isCallout = (t: string) => /^(WARNING|CAUTION|NOTE|TIP|IMPORTANT|REMEMBER|BEST PRACTICE):/i.test(t);
+  const getCalloutType = (t: string) => {
+    const m = t.match(/^(WARNING|CAUTION|NOTE|TIP|IMPORTANT|REMEMBER|BEST PRACTICE):/i);
+    return m ? m[1].toUpperCase() : null;
+  };
+  const calloutColors: Record<string, { bg: string; border: string; label: string }> = {
+    WARNING: { bg: "#fef2f2", border: "#ef4444", label: "#dc2626" },
+    CAUTION: { bg: "#fff7ed", border: "#f97316", label: "#ea580c" },
+    NOTE: { bg: "#eff6ff", border: "#3b82f6", label: "#2563eb" },
+    TIP: { bg: "#f0fdf4", border: "#22c55e", label: "#16a34a" },
+    IMPORTANT: { bg: "#faf5ff", border: "#a855f7", label: "#9333ea" },
+    REMEMBER: { bg: "#fefce8", border: "#eab308", label: "#ca8a04" },
+    "BEST PRACTICE": { bg: "#ecfdf5", border: "#14b8a6", label: "#0d9488" },
+  };
+
   const sectionsHtml = sections.map((sec) => {
     const contentHtml = sec.content.map((line) => {
       const t = line.trim();
       if (t.startsWith("---") || t.startsWith("___")) return `<hr />`;
+      if (isStep(t)) {
+        const parts = t.split(":");
+        const stepNum = parts[0];
+        const stepText = parts.slice(1).join(":").trim();
+        return `<div class="step-box">
+          <div class="step-number">${escapeHtml(stepNum)}</div>
+          <div class="step-content">${escapeHtml(stepText)}</div>
+        </div>`;
+      }
+      if (isCallout(t)) {
+        const type = getCalloutType(t);
+        const colors = calloutColors[type || ""] || calloutColors.NOTE;
+        const text = t.replace(/^(WARNING|CAUTION|NOTE|TIP|IMPORTANT|REMEMBER|BEST PRACTICE):\s*/i, "");
+        return `<div class="callout" style="background:${colors.bg};border-left-color:${colors.border};">
+          <div class="callout-label" style="color:${colors.label};">${escapeHtml(type || "NOTE")}</div>
+          <div class="callout-text">${escapeHtml(text)}</div>
+        </div>`;
+      }
       return `<div class="body-card"><p class="body-text">${escapeHtml(t)}</p></div>`;
     }).join("\n");
 
@@ -112,48 +146,65 @@ export function buildSopHtml(title: string, company: string, jurisdiction: strin
   body {
     font-family: 'Calibri', 'Arial', sans-serif;
     color: #1e293b;
-    line-height: 1.6;
+    line-height: 1.55;
     font-size: 10.5pt;
     max-width: 7.5in;
     margin: 0 auto;
     padding: 0;
   }
 
-  .doc-header {
+  .cover-page {
     text-align: center;
-    margin-bottom: 22pt;
-    padding-bottom: 14pt;
-    border-bottom: 3px solid #0f172a;
+    padding: 60pt 0 40pt;
+    page-break-after: always;
   }
-  .doc-header .classification {
+  .cover-page .classification-badge {
     display: inline-block;
-    font-size: 7.5pt;
+    font-size: 8pt;
     font-weight: 700;
     color: #fff;
     background: #0f172a;
-    padding: 3pt 14pt;
-    margin-bottom: 10pt;
+    padding: 4pt 18pt;
+    margin-bottom: 24pt;
     text-transform: uppercase;
-    letter-spacing: 2.5pt;
+    letter-spacing: 3pt;
   }
-  .doc-header h1 {
-    font-size: 20pt;
+  .cover-page h1 {
+    font-size: 26pt;
     font-weight: 700;
     color: #0f172a;
-    margin: 0 0 6pt 0;
+    margin: 0 0 8pt;
     text-transform: uppercase;
-    letter-spacing: 1pt;
+    letter-spacing: 1.5pt;
+    line-height: 1.2;
   }
-  .doc-header .subtitle {
+  .cover-page .divider {
+    width: 80pt;
+    height: 3px;
+    background: #0f172a;
+    margin: 16pt auto;
+  }
+  .cover-page .meta {
     font-size: 10pt;
     color: #64748b;
-    margin: 2pt 0;
+    margin: 4pt 0;
+  }
+  .cover-page .verification {
+    margin-top: 36pt;
+    padding: 12pt 20pt;
+    display: inline-block;
+    border: 1px solid #e2e8f0;
+    border-radius: 4pt;
+    font-size: 8pt;
+    color: #94a3b8;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 0.5pt;
   }
 
   .meta-table {
     width: 100%;
     border-collapse: collapse;
-    margin: 10pt 0 20pt 0;
+    margin: 14pt 0 22pt;
     border: 1px solid #e2e8f0;
   }
   .meta-table td {
@@ -179,28 +230,54 @@ export function buildSopHtml(title: string, company: string, jurisdiction: strin
     color: #64748b;
   }
 
+  .toc {
+    page-break-after: always;
+    margin-bottom: 20pt;
+  }
+  .toc h2 {
+    font-size: 14pt;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 16pt;
+    text-transform: uppercase;
+    letter-spacing: 1pt;
+    border-bottom: 2px solid #0f172a;
+    padding-bottom: 6pt;
+  }
+  .toc-item {
+    display: flex;
+    gap: 8pt;
+    padding: 5pt 0;
+    border-bottom: 1px dotted #e2e8f0;
+    font-size: 10.5pt;
+    color: #334155;
+  }
+  .toc-item .num { color: #64748b; min-width: 24pt; }
+  .toc-item .dots { flex: 1; border-bottom: 1px dotted #d0d5dd; margin: 0 4pt; }
+
   .section {
     margin-bottom: 18pt;
     page-break-inside: avoid;
   }
   .section-heading {
-    font-size: 12pt;
+    font-size: 12.5pt;
     font-weight: 700;
-    color: #0f172a;
-    margin: 0 0 10pt 0;
+    color: #fff;
+    margin: 0 0 10pt;
     padding: 7pt 12pt;
     background: #0f172a;
-    color: #fff;
     text-transform: uppercase;
     letter-spacing: 1pt;
+    border-radius: 3pt;
   }
   .section-body { margin-top: 4pt; }
+
   .body-card {
     border: 1px solid #e2e8f0;
     border-left: 4px solid #0f172a;
     border-radius: 4pt;
     padding: 8pt 12pt;
-    margin: 0 0 8pt 0;
+    margin: 0 0 8pt;
     background: #ffffff;
     page-break-inside: avoid;
   }
@@ -211,6 +288,38 @@ export function buildSopHtml(title: string, company: string, jurisdiction: strin
     color: #334155;
   }
 
+  .step-box {
+    display: flex;
+    gap: 10pt;
+    margin: 6pt 0 8pt;
+    padding: 8pt 12pt;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-left: 4px solid #0f172a;
+    border-radius: 3pt;
+    page-break-inside: avoid;
+  }
+  .step-number {
+    font-weight: 700;
+    font-size: 9pt;
+    color: #0f172a;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.5pt;
+    min-width: 65pt;
+  }
+  .step-content { flex: 1; font-size: 10.5pt; line-height: 1.5; color: #334155; }
+
+  .callout {
+    margin: 6pt 0 8pt 12pt;
+    padding: 7pt 12pt;
+    border-radius: 3pt;
+    border-left: 4px solid;
+    page-break-inside: avoid;
+  }
+  .callout-label { font-size: 7.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: 1pt; margin-bottom: 2pt; }
+  .callout-text { font-size: 10pt; line-height: 1.5; color: #1e293b; }
+
   .footer {
     font-size: 8pt;
     color: #94a3b8;
@@ -220,12 +329,14 @@ export function buildSopHtml(title: string, company: string, jurisdiction: strin
     text-align: center;
   }
   .footer p { margin: 1pt 0; }
-
-  hr {
-    border: none;
-    border-top: 1px solid #e2e8f0;
-    margin: 12pt 0;
+  .footer .hash {
+    font-family: 'Courier New', monospace;
+    font-size: 7.5pt;
+    color: #94a3b8;
+    letter-spacing: 0.5pt;
   }
+
+  hr { border: none; border-top: 1px solid #e2e8f0; margin: 12pt 0; }
 
   @media print {
     .section { break-inside: avoid; }
@@ -234,12 +345,19 @@ export function buildSopHtml(title: string, company: string, jurisdiction: strin
 </head>
 <body>
 
-<div class="doc-header">
-  <div class="classification">Controlled Document</div>
+<!-- COVER PAGE -->
+<div class="cover-page">
+  <div class="classification-badge">${escapeHtml(sopType || "Controlled Document")}</div>
   <h1>${escapeHtml(title)}</h1>
-  <p class="subtitle">${escapeHtml(company)} &middot; ${escapeHtml(industry)} &middot; ${escapeHtml(jurisdiction)}</p>
+  <div class="divider"></div>
+  <p class="meta"><strong>${escapeHtml(company)}</strong></p>
+  <p class="meta">${escapeHtml(industry)} &middot; ${escapeHtml(jurisdiction)}</p>
+  <p class="meta">Version ${version}.0 &middot; ${escapeHtml(dateCreated)}</p>
+  <p class="meta">Prepared by: ${escapeHtml(createdBy)}</p>
+  <div class="verification">VERIFICATION HASH: ${escapeHtml(verificationHash)}</div>
 </div>
 
+<!-- META TABLE -->
 <table class="meta-table">
   <tr>
     <td class="label-cell">Document ID</td>
@@ -271,12 +389,20 @@ export function buildSopHtml(title: string, company: string, jurisdiction: strin
   </tr>
 </table>
 
+<!-- TABLE OF CONTENTS -->
+<div class="toc">
+  <h2>Table of Contents</h2>
+  ${sections.map((sec, i) => `<div class="toc-item"><span class="num">${i + 1}.</span>${escapeHtml(sec.heading)}<span class="dots"></span></div>`).join("\n")}
+</div>
+
+<!-- SECTIONS -->
 ${sectionsHtml}
 
+<!-- FOOTER -->
 <div class="footer">
   <p><strong>${escapeHtml(company)}</strong> &mdash; Standard Operating Procedure</p>
   <p>Generated by SOPMaster &mdash; ${new Date().toLocaleDateString("en-GB", { year: "numeric", month: "long", day: "numeric" })}</p>
-  <p>This document is a controlled operational procedure. Unauthorised modification invalidates its verification hash.</p>
+  <p class="hash">Verification Hash: ${escapeHtml(verificationHash)} &middot; Unauthorised modification invalidates document</p>
   <p>Confidential &mdash; Not for external distribution without authorisation.</p>
 </div>
 
