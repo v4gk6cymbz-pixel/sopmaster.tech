@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
       name: company.email === DIRECTOR_EMAIL ? "Director" : company.name,
       role: "director",
       email: company.email,
-      isDirector: true,
+      isDirector: company.email === DIRECTOR_EMAIL,
     };
     const token = signToken(tokenPayload);
 

@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
 
     if (!pin || !verifyPin(pin, company.pinHash)) return badRequest("Invalid credentials");
 
-    const isDirector = !memberName || memberRole === "Director";
+    const isDirector = company.email === DIRECTOR_EMAIL;
     const tokenPayload = {
       companyId: company.id,
       companyName: company.name,
