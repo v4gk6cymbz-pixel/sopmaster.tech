@@ -28,6 +28,7 @@ export async function GET(req: NextRequest) {
         lifetimeCredits: company.lifetimeCredits,
         createdAt: company.createdAt.toISOString(),
         jurisdiction: company.jurisdiction,
+        focus: company.focus,
         team: company.team,
         profile: company.profile,
       },

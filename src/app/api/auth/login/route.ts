@@ -77,6 +77,7 @@ function formatCompany(c: any) {
     lifetimeCredits: c.lifetimeCredits,
     createdAt: c.createdAt?.toISOString?.() || c.createdAt,
     jurisdiction: c.jurisdiction,
+    focus: c.focus,
     team: c.team || [],
     profile: c.profile || null,
   };

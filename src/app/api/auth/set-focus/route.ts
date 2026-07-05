@@ -13,11 +13,13 @@ export async function POST(req: NextRequest) {
       return badRequest("Focus must be 'sops' or 'checklists'");
     }
 
-    const credits = focus === "sops" ? 100 : 10;
+    const existing = await prisma.company.findUnique({ where: { id: auth.companyId } });
+    const credits = existing?.credits && existing.credits > 0 ? existing.credits : focus === "sops" ? 100 : 10;
+    const lifetimeCredits = existing?.lifetimeCredits && existing.lifetimeCredits > 0 ? existing.lifetimeCredits : credits;
 
     const company = await prisma.company.update({
       where: { id: auth.companyId },
-      data: { focus, credits, lifetimeCredits: credits },
+      data: { focus, credits, lifetimeCredits },
     });
 
     return NextResponse.json({
