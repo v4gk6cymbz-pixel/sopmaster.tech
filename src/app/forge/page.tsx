@@ -149,7 +149,7 @@ export default function ForgePage() {
           Operational Documents
         </h1>
         <p style={{ fontSize: "13px", color: "#64748B" }}>
-          Generate standard operating procedures for your organisation. Each document costs 1 credit.
+          Generate standard operating procedures for your organisation. Each document costs 10 credits.
         </p>
       </div>
 
@@ -157,15 +157,6 @@ export default function ForgePage() {
         <div className="card" style={{ marginBottom: "20px", padding: "16px 20px", borderColor: "#EF4444" }}>
           <p style={{ fontSize: "13px", color: "#EF4444", fontWeight: 500 }}>{company.credits <= 0 ? "No credits remaining." : "Low credits."}</p>
           <p style={{ fontSize: "12px", color: "#94A3B8", marginTop: "4px" }}>SOPs cost 10 credits. Purchase more in Administration to continue generating.</p>
-        </div>
-      )}
-
-      {jurisdictionInfo && (
-        <div className="card" style={{ marginBottom: "20px", padding: "12px 16px", borderColor: "rgba(59,130,246,0.15)" }}>
-          <p style={{ fontSize: "11px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em", color: "#64748B", marginBottom: "2px" }}>
-            Active Jurisdiction — {jurisdictionInfo.name}
-          </p>
-          <p style={{ fontSize: "12px", color: "#94A3B8", lineHeight: 1.5 }}>{jurisdictionInfo.trigger}</p>
         </div>
       )}
 

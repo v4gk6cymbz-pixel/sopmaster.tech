@@ -233,15 +233,6 @@ export default function BatchPage() {
         </p>
       </div>
 
-      {jurisdictionInfo && (
-        <div className="card" style={{ marginBottom: "20px", padding: "12px 16px", borderColor: "rgba(59,130,246,0.15)" }}>
-          <p style={{ fontSize: "11px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em", color: "#64748B", marginBottom: "2px" }}>
-            Active Jurisdiction — {jurisdictionInfo.name}
-          </p>
-          <p style={{ fontSize: "12px", color: "#94A3B8", lineHeight: 1.5 }}>{jurisdictionInfo.trigger}</p>
-        </div>
-      )}
-
       {!company.subscriptionActive && !session?.isDirector && (
         <div className="card" style={{ marginBottom: "20px", padding: "16px 20px", borderColor: "#F59E0B" }}>
           <p style={{ fontSize: "13px", color: "#F59E0B", fontWeight: 500 }}>Subscription required</p>
