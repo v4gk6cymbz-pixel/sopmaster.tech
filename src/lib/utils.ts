@@ -35,10 +35,12 @@ export async function redirectToStripe(type: "credits" | "subscription", data: {
     const body: any = { type };
     if (data.tier) body.tier = data.tier;
     if (data.amount) body.amount = data.amount;
+    const token = typeof window !== "undefined" ? localStorage.getItem("sopmaster_token") : null;
+    const headers: Record<string, string> = { "Content-Type": "application/json" };
+    if (token) headers["Authorization"] = `Bearer ${token}`;
     const res = await fetch("/api/stripe/create-checkout", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
+      headers,
       body: JSON.stringify(body),
     });
     const json = await res.json();
