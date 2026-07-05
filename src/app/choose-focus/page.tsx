@@ -33,7 +33,7 @@ export default function ChooseFocusPage() {
           What will you be creating?
         </h1>
         <p style={{ fontSize: "14px", color: "#94A3B8", marginBottom: "32px" }}>
-          Choose your focus to get started. You can always switch later.
+          Choose your focus to get started.
         </p>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
           <button

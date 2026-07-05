@@ -581,12 +581,12 @@ export default function HomePage() {
   }
 
   return (
-    <div style={{ maxWidth: "1120px", margin: "0 auto", padding: "32px 24px" }} className="fade-in">
-      <div style={{ marginBottom: "32px" }}>
-        <h1 style={{ fontSize: "22px", fontWeight: 600, color: "#F1F5F9", marginBottom: "4px" }}>
+    <div style={{ maxWidth: "1120px", margin: "0 auto", padding: "40px 32px" }} className="fade-in">
+      <div style={{ marginBottom: "40px" }}>
+        <h1 style={{ fontSize: "26px", fontWeight: 600, color: "#F1F5F9", marginBottom: "6px" }}>
           {greeting}, {session.name}
         </h1>
-        <p style={{ fontSize: "13px", color: "#64748B" }}>
+        <p style={{ fontSize: "14px", color: "#64748B" }}>
           {company.name} &middot; {getTierLimits(company.tier).label}
         </p>
       </div>
@@ -631,108 +631,75 @@ export default function HomePage() {
         </div>
       )}
 
-      <div className="dash-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px", marginBottom: "24px" }}>
-        <div className="card">
-          <div className="card-header">Company Overview</div>
-          <div className="data-row"><span className="data-label">Company</span><span className="data-value">{company.name}</span></div>
-          <div className="data-row"><span className="data-label">Plan</span><span className="data-value">{getTierLimits(company.tier).label}</span></div>
+      <div className="dash-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "28px", marginBottom: "32px" }}>
+        <div className="card" style={{ padding: "24px" }}>
+          <div className="card-header" style={{ fontSize: "13px", marginBottom: "16px" }}>Company Overview</div>
+          <div className="data-row" style={{ marginBottom: "12px" }}><span className="data-label">Company</span><span className="data-value">{company.name}</span></div>
+          <div className="data-row" style={{ marginBottom: "12px" }}><span className="data-label">Plan</span><span className="data-value">{getTierLimits(company.tier).label}</span></div>
           <div className="data-row"><span className="data-label">Jurisdiction</span><span className="data-value accent">{company.jurisdiction}</span></div>
-          <div className="data-row"><span className="data-label">Subscription</span><span className="data-value">{company.subscriptionActive ? "Active" : "Inactive"}</span></div>
-          <div className="data-row"><span className="data-label">Users</span><span className="data-value">{company.team.length}</span></div>
         </div>
 
-        <div className="card">
-          <div className="card-header">Operational Activity</div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+        <div className="card" style={{ padding: "24px" }}>
+          <div className="card-header" style={{ fontSize: "13px", marginBottom: "16px" }}>Credits &amp; Activity</div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
             <div>
-              <div className="stat-label">SOPs Generated</div>
+              <div className="stat-label">Credits Available</div>
+              <div className="stat-value" style={{ fontSize: "28px", color: "#3B82F6" }}>{company.credits}</div>
+            </div>
+            <div>
+              <div className="stat-label">Documents Created</div>
               <div className="stat-value">{vault.length}</div>
-            </div>
-            <div>
-              <div className="stat-label">Active Documents</div>
-              <div className="stat-value">{activeCount}</div>
-            </div>
-            <div>
-              <div className="stat-label">Credits Remaining</div>
-              <div className="stat-value">{company.credits}</div>
-            </div>
-            <div>
-              <div className="stat-label">Credits Used</div>
-              <div className="stat-value">{company.lifetimeCredits}</div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="dash-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px", marginBottom: "24px" }}>
-        <div className="card">
-          <div className="card-header">System Status</div>
-          <div className="data-row"><span className="data-label">Platform</span><span className="data-value"><span className="status-dot active" style={{ marginRight: "6px" }}></span>Operational</span></div>
-          <div className="data-row"><span className="data-label">Jurisdiction Active</span><span className="data-value">{company.jurisdiction}</span></div>
-          <div className="data-row"><span className="data-label">Library Version</span><span className="data-value">2026.2</span></div>
-          <div className="data-row"><span className="data-label">Documents in Vault</span><span className="data-value">{vault.length}</span></div>
-        </div>
-
-        <div className="card">
-          <div className="card-header">Quick Actions</div>
-          {!company.focus ? (
-            <div style={{ textAlign: "center", padding: "16px 0" }}>
-              <p style={{ fontSize: "13px", color: "#94A3B8", marginBottom: "12px" }}>
-                Choose what you want to create to unlock tools.
-              </p>
-              <button onClick={() => router.push("/choose-focus")} className="btn btn-primary" style={{ width: "100%" }}>
-                Choose Focus
+      <div className="card" style={{ padding: "24px", marginBottom: "32px" }}>
+        <div className="card-header" style={{ fontSize: "13px", marginBottom: "16px" }}>Quick Actions</div>
+        {!company.focus ? (
+          <div style={{ textAlign: "center", padding: "24px 0" }}>
+            <p style={{ fontSize: "14px", color: "#94A3B8", marginBottom: "16px" }}>
+              Choose what you want to create to unlock tools.
+            </p>
+            <button onClick={() => router.push("/choose-focus")} className="btn btn-primary" style={{ padding: "12px 32px", fontSize: "14px" }}>
+              Choose Focus
+            </button>
+          </div>
+        ) : (
+          <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+            {company.focus === "sops" ? (
+              <button onClick={() => router.push("/forge")} className="btn btn-primary" style={{ padding: "14px 28px", fontSize: "14px", flex: 1, minWidth: "180px" }}>
+                Generate SOP
               </button>
-            </div>
-          ) : (
-            <>
-              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                {company.focus === "sops" ? (
-                  <button onClick={() => router.push("/forge")} className="btn btn-primary" style={{ width: "100%" }}>
-                    Generate SOP
-                  </button>
-                ) : (
-                  <button disabled className="btn btn-secondary" style={{ width: "100%", opacity: 0.5, cursor: "not-allowed" }} title="Switch focus to SOPs to access">
-                    Generate SOP 🔒
-                  </button>
-                )}
-                {company.focus === "checklists" ? (
-                  <button onClick={() => router.push("/checklist")} className="btn btn-primary" style={{ width: "100%" }}>
-                    Create Checklist
-                  </button>
-                ) : (
-                  <button disabled className="btn btn-secondary" style={{ width: "100%", opacity: 0.5, cursor: "not-allowed" }} title="Switch focus to Checklists to access">
-                    Create Checklist 🔒
-                  </button>
-                )}
-                <button disabled className="btn btn-secondary" style={{ width: "100%", opacity: 0.5, cursor: "not-allowed" }} title="Batch generation is a paid upgrade">
-                  Batch Generation 🔒
-                </button>
-                <button onClick={() => router.push("/armory")} className="btn btn-secondary" style={{ width: "100%" }}>
-                  Open Document Vault
-                </button>
-                <button onClick={() => router.push("/settings")} className="btn btn-secondary" style={{ width: "100%" }}>
-                  Administration
-                </button>
-              </div>
-              <div style={{ marginTop: "12px", paddingTop: "12px", borderTop: "1px solid #334155", textAlign: "center" }}>
-                <span style={{ fontSize: "11px", color: "#64748B" }}>
-                  Focus: <span style={{ color: company.focus === "sops" ? "#3B82F6" : "#22C55E", fontWeight: 600 }}>{company.focus === "sops" ? "SOPs" : "Checklists"}</span>
-                </span>
-                <button onClick={() => router.push("/choose-focus")} className="btn-ghost" style={{ fontSize: "11px", marginLeft: "8px", padding: "2px 8px", textDecoration: "underline" }}>
-                  Change
-                </button>
-              </div>
-            </>
-          )}
-        </div>
+            ) : (
+              <button disabled className="btn btn-secondary" style={{ padding: "14px 28px", fontSize: "14px", flex: 1, minWidth: "180px", opacity: 0.5, cursor: "not-allowed" }}>
+                Generate SOP
+              </button>
+            )}
+            {company.focus === "checklists" ? (
+              <button onClick={() => router.push("/checklist")} className="btn btn-primary" style={{ padding: "14px 28px", fontSize: "14px", flex: 1, minWidth: "180px" }}>
+                Create Checklist
+              </button>
+            ) : (
+              <button disabled className="btn btn-secondary" style={{ padding: "14px 28px", fontSize: "14px", flex: 1, minWidth: "180px", opacity: 0.5, cursor: "not-allowed" }}>
+                Create Checklist
+              </button>
+            )}
+            <button onClick={() => router.push("/armory")} className="btn btn-secondary" style={{ padding: "14px 28px", fontSize: "14px", flex: 1, minWidth: "180px" }}>
+              Document Vault
+            </button>
+            <button onClick={() => router.push("/settings")} className="btn btn-secondary" style={{ padding: "14px 28px", fontSize: "14px", flex: 1, minWidth: "180px" }}>
+              Administration
+            </button>
+          </div>
+        )}
       </div>
 
       {vault.length > 0 && (
-        <div className="card">
-          <div className="card-header">Latest Documents</div>
+        <div className="card" style={{ padding: "24px" }}>
+          <div className="card-header" style={{ fontSize: "13px", marginBottom: "16px" }}>Latest Documents</div>
           {vault.slice(-5).reverse().map((sop) => (
-            <div key={sop.id} className="doc-row">
+            <div key={sop.id} className="doc-row" style={{ padding: "10px 0" }}>
               <span className="status-dot" style={{ background: sop.status === "active" ? "#22C55E" : "#64748B", flexShrink: 0 }}></span>
               <span style={{ flex: 1, color: "#F1F5F9", fontWeight: 500 }}>{sop.title}</span>
               <span style={{ fontSize: "12px", color: "#64748B", width: "100px" }}>{sop.dateCreated}</span>
