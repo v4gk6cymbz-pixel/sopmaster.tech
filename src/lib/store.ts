@@ -55,7 +55,7 @@ export const useStore = create<StoreState>((set, get) => ({
   session: null,
   vault: [],
   initialized: false,
-  showTour: true,
+  showTour: false,
   heartbeat: 0,
   notifications: [],
   companyProfile: {} as CompanyProfile,
