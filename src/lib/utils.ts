@@ -91,58 +91,9 @@ export function buildSopHtml(title: string, company: string, jurisdiction: strin
 
   const sectionsHtml = sections.map((sec) => {
     const contentHtml = sec.content.map((line) => {
-      const trimmed = line.trim();
-      const isStep = /^Step \d+/.test(trimmed);
-      const isWhy = /^WHY:/.test(trimmed);
-      const isHow = /^HOW TO VERIFY:/.test(trimmed);
-      const isExample = /^(REAL.WORLD EXAMPLE|EXAMPLE):/i.test(trimmed);
-      const isBullet = trimmed.startsWith("\u2022") || trimmed.startsWith("\u25CB") || trimmed.startsWith("\u2610") || trimmed.startsWith("* ");
-      const isCheckbox = trimmed.startsWith("\u2610");
-      const isTableHeader = /^Table \d+/.test(trimmed);
-
-      if (isStep) {
-        return `<div class="step-box">
-          <div class="step-number">${escapeHtml(trimmed.split(":")[0] || trimmed)}</div>
-          <div class="step-content">${escapeHtml(trimmed.includes(":") ? trimmed.substring(trimmed.indexOf(":") + 1).trim() : "")}</div>
-        </div>`;
-      }
-      if (isWhy) {
-        return `<div class="callout callout-why">
-          <div class="callout-label">WHY</div>
-          <div class="callout-text">${escapeHtml(trimmed.replace(/^WHY:\s*/i, ""))}</div>
-        </div>`;
-      }
-      if (isHow) {
-        return `<div class="callout callout-verify">
-          <div class="callout-label">VERIFICATION</div>
-          <div class="callout-text">${escapeHtml(trimmed.replace(/^HOW TO VERIFY:\s*/i, ""))}</div>
-        </div>`;
-      }
-      if (isExample) {
-        return `<div class="callout callout-example">
-          <div class="callout-label">EXAMPLE</div>
-          <div class="callout-text">${escapeHtml(trimmed.replace(/^(REAL.WORLD EXAMPLE|EXAMPLE):\s*/i, ""))}</div>
-        </div>`;
-      }
-      if (isTableHeader) {
-        return `<p class="table-header-label">${escapeHtml(trimmed)}</p>`;
-      }
-      if (isCheckbox) {
-        return `<div class="checkbox-item">
-          <span class="checkbox-box">&#9744;</span>
-          <span>${escapeHtml(trimmed.replace(/^\u2610\s*/, ""))}</span>
-        </div>`;
-      }
-      if (isBullet) {
-        return `<div class="bullet-item">
-          <span class="bullet-marker">&#8226;</span>
-          <span>${escapeHtml(trimmed.replace(/^[\u2022\u25CB\u2610\*]\s*/, ""))}</span>
-        </div>`;
-      }
-      if (trimmed.startsWith("---") || trimmed.startsWith("___")) {
-        return `<hr />`;
-      }
-      return `<p class="body-text">${escapeHtml(trimmed)}</p>`;
+      const t = line.trim();
+      if (t.startsWith("---") || t.startsWith("___")) return `<hr />`;
+      return `<p class="body-text">${escapeHtml(t)}</p>`;
     }).join("\n");
 
     return `<div class="section">
@@ -160,27 +111,26 @@ export function buildSopHtml(title: string, company: string, jurisdiction: strin
   @page { margin: 0.8in 0.7in; }
   body {
     font-family: 'Calibri', 'Arial', sans-serif;
-    color: #1e1e1e;
-    line-height: 1.5;
+    color: #1e293b;
+    line-height: 1.6;
     font-size: 10.5pt;
     max-width: 7.5in;
     margin: 0 auto;
     padding: 0;
   }
 
-  /* ===== HEADER ===== */
   .doc-header {
     text-align: center;
-    margin-bottom: 20pt;
+    margin-bottom: 22pt;
     padding-bottom: 14pt;
-    border-bottom: 3px solid #0d2137;
+    border-bottom: 3px solid #0f172a;
   }
   .doc-header .classification {
     display: inline-block;
-    font-size: 8pt;
+    font-size: 7.5pt;
     font-weight: 700;
     color: #fff;
-    background: #0d2137;
+    background: #0f172a;
     padding: 3pt 14pt;
     margin-bottom: 10pt;
     text-transform: uppercase;
@@ -189,234 +139,87 @@ export function buildSopHtml(title: string, company: string, jurisdiction: strin
   .doc-header h1 {
     font-size: 20pt;
     font-weight: 700;
-    color: #0d2137;
+    color: #0f172a;
     margin: 0 0 6pt 0;
     text-transform: uppercase;
     letter-spacing: 1pt;
   }
   .doc-header .subtitle {
     font-size: 10pt;
-    color: #5a6a7a;
+    color: #64748b;
     margin: 2pt 0;
   }
 
-  /* ===== META TABLE ===== */
   .meta-table {
     width: 100%;
     border-collapse: collapse;
-    margin: 10pt 0 16pt 0;
-    border: 1px solid #d0d5dd;
-    border-radius: 4pt;
-    overflow: hidden;
+    margin: 10pt 0 20pt 0;
+    border: 1px solid #e2e8f0;
   }
   .meta-table td {
-    padding: 4pt 10pt;
-    font-size: 9.5pt;
-    border: 1px solid #e2e6ea;
+    padding: 5pt 10pt;
+    font-size: 9pt;
+    border: 1px solid #e2e8f0;
     vertical-align: top;
   }
   .meta-table td.label-cell {
     font-weight: 600;
-    color: #0d2137;
+    color: #0f172a;
     width: 18%;
-    background: #f4f6f8;
+    background: #f8fafc;
     text-transform: uppercase;
     letter-spacing: 0.5pt;
-    font-size: 8.5pt;
+    font-size: 8pt;
   }
-  .meta-table td.value-cell {
-    color: #333;
-  }
+  .meta-table td.value-cell { color: #334155; }
   .meta-table .hash-cell {
     font-family: 'Courier New', monospace;
-    font-size: 8.5pt;
+    font-size: 8pt;
     letter-spacing: 0.5pt;
-    color: #555;
-  }
-
-  /* ===== SECTIONS ===== */
-  .section {
-    margin-bottom: 14pt;
-    page-break-inside: avoid;
-  }
-  .section-heading {
-    font-size: 12.5pt;
-    font-weight: 700;
-    color: #0d2137;
-    margin: 0 0 8pt 0;
-    padding-bottom: 3pt;
-    border-bottom: 1.5px solid #0d2137;
-    text-transform: uppercase;
-    letter-spacing: 0.5pt;
-  }
-  .section-body {
-    margin-top: 4pt;
-  }
-  .body-text {
-    font-size: 10.5pt;
-    line-height: 1.55;
-    margin: 3pt 0 8pt 0;
-    color: #2c3e50;
-  }
-
-  /* ===== STEP BOXES ===== */
-  .step-box {
-    display: flex;
-    gap: 10pt;
-    margin: 6pt 0 8pt 0;
-    padding: 8pt 12pt;
-    background: #f8fafc;
-    border: 1px solid #dde3ea;
-    border-left: 4px solid #0d2137;
-    border-radius: 3pt;
-    page-break-inside: avoid;
-  }
-  .step-number {
-    font-weight: 700;
-    font-size: 9pt;
-    color: #0d2137;
-    white-space: nowrap;
-    min-width: 60pt;
-    text-transform: uppercase;
-    letter-spacing: 0.5pt;
-  }
-  .step-content {
-    font-size: 10.5pt;
-    line-height: 1.5;
-    color: #2c3e50;
-    flex: 1;
-  }
-
-  /* ===== CALLOUT BOXES ===== */
-  .callout {
-    margin: 6pt 0 8pt 12pt;
-    padding: 7pt 12pt;
-    border-radius: 3pt;
-    border-left: 4px solid;
-    page-break-inside: avoid;
-  }
-  .callout-label {
-    font-size: 7.5pt;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1pt;
-    margin-bottom: 2pt;
-  }
-  .callout-text {
-    font-size: 10pt;
-    line-height: 1.5;
-  }
-  .callout-why {
-    background: #f0f4f8;
-    border-color: #3b82f6;
-  }
-  .callout-why .callout-label { color: #3b82f6; }
-  .callout-why .callout-text { color: #1e293b; }
-  .callout-verify {
-    background: #f0fdf4;
-    border-color: #22c55e;
-  }
-  .callout-verify .callout-label { color: #16a34a; }
-  .callout-verify .callout-text { color: #1e293b; }
-  .callout-example {
-    background: #fffbeb;
-    border-color: #f59e0b;
-  }
-  .callout-example .callout-label { color: #d97706; }
-  .callout-example .callout-text { color: #1e293b; }
-
-  /* ===== BULLETS ===== */
-  .bullet-item {
-    display: flex;
-    gap: 6pt;
-    margin: 2pt 0 2pt 12pt;
-    font-size: 10.5pt;
-    line-height: 1.5;
-    color: #2c3e50;
-  }
-  .bullet-marker {
-    color: #0d2137;
-    font-weight: 700;
-    flex-shrink: 0;
-  }
-
-  /* ===== CHECKBOXES ===== */
-  .checkbox-item {
-    display: flex;
-    gap: 6pt;
-    margin: 2pt 0 2pt 12pt;
-    font-size: 10.5pt;
-    line-height: 1.5;
-    color: #2c3e50;
-  }
-  .checkbox-box {
-    flex-shrink: 0;
-    font-size: 12pt;
     color: #64748b;
   }
 
-  /* ===== TABLES ===== */
-  .table-header-label {
-    font-size: 10pt;
-    font-weight: 600;
-    color: #0d2137;
-    margin: 8pt 0 4pt 0;
-    padding: 4pt 0;
-    border-bottom: 1px solid #0d2137;
-    text-transform: uppercase;
-    letter-spacing: 0.5pt;
+  .section {
+    margin-bottom: 18pt;
+    page-break-inside: avoid;
   }
-  .sop-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 8pt 0 12pt 0;
-  }
-  .sop-table th {
-    font-size: 9.5pt;
-    font-weight: 600;
-    background: #0d2137;
-    color: #fff;
-    padding: 5pt 8pt;
-    border: 1px solid #0d2137;
-    text-align: left;
-    text-transform: uppercase;
-    letter-spacing: 0.5pt;
-  }
-  .sop-table td {
-    font-size: 10pt;
-    line-height: 1.4;
-    padding: 5pt 8pt;
-    border: 1px solid #d0d5dd;
-    vertical-align: top;
-    color: #2c3e50;
-  }
-  .sop-table tr:nth-child(even) td {
+  .section-heading {
+    font-size: 12pt;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 8pt 0;
+    padding: 6pt 10pt;
     background: #f8fafc;
+    border-left: 3px solid #0f172a;
+    text-transform: uppercase;
+    letter-spacing: 0.5pt;
   }
+  .section-body { margin-top: 4pt; }
+  .body-text {
+    font-size: 10.5pt;
+    line-height: 1.65;
+    margin: 4pt 0 8pt 0;
+    color: #334155;
+    text-align: justify;
+  }
+
+  .footer {
+    font-size: 8pt;
+    color: #94a3b8;
+    margin-top: 24pt;
+    padding-top: 8pt;
+    border-top: 1px solid #e2e8f0;
+    text-align: center;
+  }
+  .footer p { margin: 1pt 0; }
 
   hr {
     border: none;
-    border-top: 1px solid #d0d5dd;
+    border-top: 1px solid #e2e8f0;
     margin: 12pt 0;
   }
 
-  /* ===== FOOTER ===== */
-  .footer {
-    font-size: 8.5pt;
-    color: #8896a7;
-    margin-top: 20pt;
-    padding-top: 8pt;
-    border-top: 1px solid #d0d5dd;
-    text-align: center;
-  }
-  .footer p {
-    margin: 1pt 0;
-  }
-
-  /* ===== PRINT ===== */
   @media print {
-    .step-box { break-inside: avoid; }
-    .callout { break-inside: avoid; }
     .section { break-inside: avoid; }
   }
 </style>
@@ -455,7 +258,7 @@ export function buildSopHtml(title: string, company: string, jurisdiction: strin
     <td class="value-cell">${escapeHtml(complexity)}</td>
   </tr>
   <tr>
-    <td class="label-cell" style="width:22%">Verification Hash</td>
+    <td class="label-cell">Verification Hash</td>
     <td class="hash-cell" colspan="3">${escapeHtml(verificationHash)}</td>
   </tr>
 </table>
