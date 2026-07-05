@@ -72,7 +72,9 @@ export const useStore = create<StoreState>((set, get) => ({
         try {
           const allCompanies = await api.admin.list();
           companies = allCompanies;
-        } catch {}
+        } catch (e) {
+          console.error("Failed to fetch admin company list:", e);
+        }
       }
       set({
         session: data.session,
@@ -81,7 +83,8 @@ export const useStore = create<StoreState>((set, get) => ({
         companyProfile: data.company?.profile || {},
         initialized: true,
       });
-    } catch {
+    } catch (e) {
+      console.error("Store init failed:", e);
       clearToken();
       set({ initialized: true });
     }
@@ -110,6 +113,7 @@ export const useStore = create<StoreState>((set, get) => ({
       );
       set({ companies });
     } catch (e) {
+      console.error("Failed to set focus:", e);
       throw e;
     }
   },
@@ -123,7 +127,9 @@ export const useStore = create<StoreState>((set, get) => ({
         try {
           const allCompanies = await api.admin.list();
           companies = allCompanies;
-        } catch {}
+        } catch (e) {
+          console.error("Failed to fetch admin company list:", e);
+        }
       }
       set({
         session: data.session,
@@ -131,7 +137,8 @@ export const useStore = create<StoreState>((set, get) => ({
         vault: data.vault || [],
       });
       return true;
-    } catch {
+    } catch (e) {
+      console.error("Login failed:", e);
       return false;
     }
   },
@@ -144,20 +151,23 @@ export const useStore = create<StoreState>((set, get) => ({
       try {
         const allCompanies = await api.admin.list();
         companies = allCompanies;
-      } catch {}
+      } catch (e) {
+        console.error("Failed to fetch admin company list:", e);
+      }
       set({
         session: data.session,
         companies,
         vault: data.vault || [],
       });
       return true;
-    } catch {
+    } catch (e) {
+      console.error("Director login failed:", e);
       return false;
     }
   },
 
   logout: async () => {
-    try { await api.auth.logout(); } catch {}
+    try { await api.auth.logout(); } catch (e) { console.error("Logout API call failed:", e); }
     clearToken();
     set({ session: null, vault: [], companies: [] });
   },
@@ -167,7 +177,9 @@ export const useStore = create<StoreState>((set, get) => ({
       await api.vault.create(sop);
       const vault = [...get().vault, sop];
       set({ vault });
-    } catch {}
+    } catch (e) {
+      console.error("Failed to save SOP to vault:", e);
+    }
   },
 
   updateSOP: async (id: string, data: any) => {
@@ -175,14 +187,18 @@ export const useStore = create<StoreState>((set, get) => ({
       await api.vault.update(id, data);
       const vault = get().vault.map(s => s.id === id ? { ...s, ...data } : s);
       set({ vault });
-    } catch {}
+    } catch (e) {
+      console.error("Failed to update SOP:", e);
+    }
   },
 
   removeSOP: async (id: string) => {
     try {
       await api.vault.delete(id);
       set({ vault: get().vault.filter(s => s.id !== id) });
-    } catch {}
+    } catch (e) {
+      console.error("Failed to remove SOP:", e);
+    }
   },
 
   deductCredit: async (amount = 1) => {
@@ -193,25 +209,37 @@ export const useStore = create<StoreState>((set, get) => ({
       );
       set({ companies });
       return true;
-    } catch {
+    } catch (e) {
+      console.error("Failed to deduct credits:", e);
       return false;
     }
   },
 
-  addCredits: (_amount: number) => {},
+  addCredits: (amount: number) => {
+    const companies = get().companies.map(c =>
+      c.id === get().session?.companyId
+        ? { ...c, credits: c.credits + amount, lifetimeCredits: c.lifetimeCredits + amount }
+        : c
+    );
+    set({ companies });
+  },
 
   setJurisdiction: async (j: string) => {
     try {
       await api.company.update({ jurisdiction: j });
       const companies = get().companies.map(c => c.id === get().session?.companyId ? { ...c, jurisdiction: j as Jurisdiction } : c);
       set({ companies });
-    } catch {}
+    } catch (e) {
+      console.error("Failed to set jurisdiction:", e);
+    }
   },
 
   updatePin: async (newPin: string) => {
     try {
       await api.company.updatePin(newPin);
-    } catch {}
+    } catch (e) {
+      console.error("Failed to update PIN:", e);
+    }
   },
 
   addTeamMember: async (name: string, role: string) => {
@@ -222,12 +250,28 @@ export const useStore = create<StoreState>((set, get) => ({
         team: c.id === get().session?.companyId ? [...c.team, member] : c.team,
       }));
       set({ companies });
-    } catch {}
+    } catch (e) {
+      console.error("Failed to add team member:", e);
+    }
   },
 
-  activateSubscription: (_tier: string) => {},
+  activateSubscription: (tier: string) => {
+    const companies = get().companies.map(c =>
+      c.id === get().session?.companyId
+        ? { ...c, subscriptionActive: true, tier: tier as any }
+        : c
+    );
+    set({ companies });
+  },
 
-  cancelSubscription: () => {},
+  cancelSubscription: () => {
+    const companies = get().companies.map(c =>
+      c.id === get().session?.companyId
+        ? { ...c, subscriptionActive: false }
+        : c
+    );
+    set({ companies });
+  },
 
   dismissTour: () => {
     set({ showTour: false });
@@ -268,14 +312,18 @@ export const useStore = create<StoreState>((set, get) => ({
       await api.company.update({ profile });
       const current = get().companyProfile;
       set({ companyProfile: { ...current, ...profile } });
-    } catch {}
+    } catch (e) {
+      console.error("Failed to update company profile:", e);
+    }
   },
 
   deleteCompany: async (id: string) => {
     try {
       await api.admin.deleteCompany(id);
       set({ companies: get().companies.filter(c => c.id !== id) });
-    } catch {}
+    } catch (e) {
+      console.error("Failed to delete company:", e);
+    }
   },
 
   adminSetSubscription: async (companyId: string, active: boolean) => {
@@ -284,7 +332,9 @@ export const useStore = create<StoreState>((set, get) => ({
       set({
         companies: get().companies.map(c => c.id === companyId ? { ...c, subscriptionActive: active } : c),
       });
-    } catch {}
+    } catch (e) {
+      console.error("Failed to set subscription:", e);
+    }
   },
 
   adminSetCredits: async (companyId: string, credits: number) => {
@@ -296,13 +346,17 @@ export const useStore = create<StoreState>((set, get) => ({
         return { ...c, credits, lifetimeCredits: c.lifetimeCredits + diff };
       });
       set({ companies });
-    } catch {}
+    } catch (e) {
+      console.error("Failed to set credits:", e);
+    }
   },
 
   adminSetTier: async (companyId: string, tier: string) => {
     try {
       await api.admin.setTier(companyId, tier);
       set({ companies: get().companies.map(c => c.id === companyId ? { ...c, tier: tier as any } : c) });
-    } catch {}
+    } catch (e) {
+      console.error("Failed to set tier:", e);
+    }
   },
 }));

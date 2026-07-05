@@ -2,12 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { useStore } from "@/lib/store";
+import { api } from "@/lib/api/client";
 import { generateBatchPackage } from "@/lib/batch-sop-generator";
 import { JURISDICTION_REGULATORY, buildSopHtml } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import type { Industry, BusinessModel, Department, Jurisdiction, BatchSOP } from "@/types";
-
-const BATCH_FUNCTION_URL = "/api/generate/batch";
 
 const ALL_DEPARTMENTS: Department[] = [
   "Executive Management", "Operations", "Sales", "Marketing", "Customer Support",
@@ -186,18 +185,12 @@ export default function BatchPage() {
     const interval = setInterval(tick, BATCH_MS / loadingLogs.length);
 
     try {
-      const res = await fetch(BATCH_FUNCTION_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          companyName: companyName.trim(), industry, jurisdiction, companySize, businessModel,
-          softwareStack: softwareStack.length > 0 ? softwareStack : ["internal system"],
-          departments: selectedDepartments, format: "json",
-          riskAppetite, brandTone, complianceReqs,
-        }),
+      batchResult = await api.generate.batch({
+        companyName: companyName.trim(), industry, jurisdiction, companySize, businessModel,
+        softwareStack: softwareStack.length > 0 ? softwareStack : ["internal system"],
+        departments: selectedDepartments, format: "json",
+        riskAppetite, brandTone, complianceReqs,
       });
-      if (res.ok) { const data = await res.json(); batchResult = data; }
-      else throw new Error("remote fail");
     } catch {
       batchResult = generateBatchPackage({
         companyName: companyName.trim(), industry, companySize, businessModel,
@@ -219,7 +212,11 @@ export default function BatchPage() {
     addNotification({ type: "sop_generated", title: "Batch SOPs Generated", message: `${batchResult.totalCount} SOPs generated across ${selectedDepartments.length} departments for ${industry}.` });
   };
 
-  if (!session || !company) return null;
+  if (!session || !company) return (
+    <div style={{ maxWidth: "1120px", margin: "0 auto", padding: "32px 24px", textAlign: "center" }}>
+      <p style={{ color: "#64748B", fontSize: "14px" }}>Loading...</p>
+    </div>
+  );
 
   const isHalfPackage = selectedDepartments.length <= 7;
 

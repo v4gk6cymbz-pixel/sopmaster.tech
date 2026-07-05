@@ -265,7 +265,11 @@ export default function ChecklistPage() {
     URL.revokeObjectURL(url);
   };
 
-  if (!session || !company) return null;
+  if (!session || !company) return (
+    <div style={{ maxWidth: "960px", margin: "0 auto", padding: "32px 24px", textAlign: "center" }}>
+      <p style={{ color: "#64748B", fontSize: "14px" }}>Loading...</p>
+    </div>
+  );
 
   return (
     <div style={{ maxWidth: "960px", margin: "0 auto", padding: "32px 24px" }} className="fade-in">

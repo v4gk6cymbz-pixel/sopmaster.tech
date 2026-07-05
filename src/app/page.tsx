@@ -59,7 +59,7 @@ export default function HomePage() {
         setStripeSuccess(`${result.tier} subscription activated`);
       }
     }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 
 

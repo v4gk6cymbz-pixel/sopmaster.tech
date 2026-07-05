@@ -2,12 +2,11 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useStore } from "@/lib/store";
+import { api } from "@/lib/api/client";
 import { generateSOPDocument } from "@/lib/sop-generator";
 import { generateHash, generateVerificationHash, formatDate, JURISDICTION_REGULATORY, buildSopHtml } from "@/lib/utils";
 import type { CompanySize, Jurisdiction, SOP, Industry } from "@/types";
 import { useRouter } from "next/navigation";
-
-const SOP_FUNCTION_URL = "/api/generate/sop";
 
 const SYSTEMS_PRESETS = ["Slack", "HubSpot", "Stripe", "Salesforce", "Notion", "Asana", "ClickUp", "Zendesk", "QuickBooks", "Xero", "Microsoft Teams", "Shopify"];
 
@@ -147,26 +146,16 @@ export default function ForgePage() {
     const logInterval = setInterval(tick, 3500);
 
     try {
-      const res = await fetch(SOP_FUNCTION_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title, company: compName, systems: softwareStack.join(", "), headcount,
-          jurisdiction, complexity: size, industry, sopType, format: "json",
-          growthStage, businessModel, riskLevel, brandTone, complianceReqs,
-          departments, services, processName, processPurpose, processGoal,
-          processOwner, processDept, processTrigger, processFrequency,
-          processDuration, processRisk, processKpis, workflowSteps, decisionPoint,
-          decisionYes, decisionNo,
-        }),
-        signal: abortRef.current.signal,
+      const data = await api.generate.sop({
+        title, company: compName, systems: softwareStack.join(", "), headcount,
+        jurisdiction, complexity: size, industry, sopType, format: "json",
+        growthStage, businessModel, riskLevel, brandTone, complianceReqs,
+        departments, services, processName, processPurpose, processGoal,
+        processOwner, processDept, processTrigger, processFrequency,
+        processDuration, processRisk, processKpis, workflowSteps, decisionPoint,
+        decisionYes, decisionNo,
       });
-      if (res.ok) {
-        const data = await res.json();
-        sopDoc = data.document;
-      } else {
-        throw new Error("remote fail");
-      }
+      sopDoc = data.document;
     } catch {
       if (abortRef.current?.signal.aborted) { clearInterval(logInterval); return; }
       sopDoc = generateSOPDocument(title, compName, softwareStack.join(", "), headcount, jurisdiction as Jurisdiction, size, industry, sopType);
@@ -207,7 +196,11 @@ export default function ForgePage() {
     URL.revokeObjectURL(url);
   };
 
-  if (!session || !company) return null;
+  if (!session || !company) return (
+    <div style={{ maxWidth: "1024px", margin: "0 auto", padding: "32px 24px", textAlign: "center" }}>
+      <p style={{ color: "#64748B", fontSize: "14px" }}>Loading...</p>
+    </div>
+  );
 
   return (
     <div style={{ maxWidth: "1024px", margin: "0 auto", padding: "32px 24px" }} className="fade-in">

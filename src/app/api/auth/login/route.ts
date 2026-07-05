@@ -30,21 +30,6 @@ export async function POST(req: NextRequest) {
       if (!company) return badRequest("Invalid credentials");
     }
 
-    if (company.email === DIRECTOR_EMAIL) {
-      const tokenPayload = {
-        companyId: company.id,
-        companyName: company.name,
-        name: "Director",
-        role: "director",
-        email: company.email,
-        isDirector: true,
-      };
-      const token = signToken(tokenPayload);
-      await prisma.session.create({ data: { token, companyId: company.id } });
-      const vault = await prisma.sOP.findMany({ where: { companyId: company.id } });
-      return ok({ token, session: tokenPayload, company: formatCompany(company), vault });
-    }
-
     if (!pin || !verifyPin(pin, company.pinHash)) return badRequest("Invalid credentials");
 
     const isDirector = company.email === DIRECTOR_EMAIL;

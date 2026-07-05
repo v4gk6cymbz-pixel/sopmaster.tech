@@ -29,7 +29,11 @@ export default function SettingsPage() {
   const [pinSuccess, setPinSuccess] = useState(false);
   const [inviteCopied, setInviteCopied] = useState(false);
 
-  if (!session || !company) return null;
+  if (!session || !company) return (
+    <div style={{ maxWidth: "960px", margin: "0 auto", padding: "32px 24px", textAlign: "center" }}>
+      <p style={{ color: "#64748B", fontSize: "14px" }}>Loading...</p>
+    </div>
+  );
   const isDirector = session.isDirector;
   const limits = getTierLimits(company.tier);
   const inviteLink = typeof window !== "undefined" ? `${window.location.origin}/login?company=${encodeURIComponent(company.name)}` : "";

@@ -24,7 +24,11 @@ export default function ChooseFocusPage() {
     }
   };
 
-  if (!session) return null;
+  if (!session) return (
+    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#0F172A" }}>
+      <p style={{ color: "#64748B", fontSize: "14px" }}>Loading...</p>
+    </div>
+  );
 
   return (
     <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "24px", background: "#0F172A" }}>
