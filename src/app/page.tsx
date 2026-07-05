@@ -1,0 +1,746 @@
+"use client";
+
+import { useStore } from "@/lib/store";
+import { useRouter } from "next/navigation";
+import { useEffect, useState, useRef } from "react";
+import { getStripeRedirectResult, clearStripeRedirectParams, getTierLimits } from "@/lib/utils";
+import type { FirmTier } from "@/types";
+
+function getCompanySopCount(companyId: string): number {
+  const companies = useStore.getState().companies;
+  const c = companies.find(c => c.id === companyId);
+  return c?.sopCount ?? 0;
+}
+
+export default function HomePage() {
+  const session = useStore((s) => s.session);
+  const getCompany = useStore((s) => s.getCompany);
+  const dismissNotification = useStore((s) => s.dismissNotification);
+  const clearNotifications = useStore((s) => s.clearNotifications);
+  const addCredits = useStore((s) => s.addCredits);
+  const activateSubscription = useStore((s) => s.activateSubscription);
+  const addNotification = useStore((s) => s.addNotification);
+  const notifications = useStore((s) => s.notifications);
+  const vault = useStore((s) => s.vault);
+  const allCompanies = useStore((s) => s.companies);
+  const deleteCompany = useStore((s) => s.deleteCompany);
+  const adminSetSubscription = useStore((s) => s.adminSetSubscription);
+  const adminSetCredits = useStore((s) => s.adminSetCredits);
+  const adminSetTier = useStore((s) => s.adminSetTier);
+  const router = useRouter();
+  const company = getCompany();
+  const [greeting, setGreeting] = useState("");
+  const [activeFaq, setActiveFaq] = useState<number | null>(null);
+  const [editCreditsId, setEditCreditsId] = useState<string | null>(null);
+  const [creditsAmount, setCreditsAmount] = useState("100");
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+  const [stripeSuccess, setStripeSuccess] = useState<string | null>(null);
+  const faqRef = useRef<HTMLDivElement>(null);
+  const pricingRef = useRef<HTMLDivElement>(null);
+  const featuresRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const h = new Date().getHours();
+    if (h < 12) setGreeting("Good morning");
+    else if (h < 17) setGreeting("Good afternoon");
+    else setGreeting("Good evening");
+
+    const result = getStripeRedirectResult();
+    if (result) {
+      clearStripeRedirectParams();
+      if (result.type === "credits" && result.amount) {
+        addCredits(result.amount);
+        addNotification({ type: "credits_added", title: "Credits Added", message: `${result.amount} credits have been added to your account.` });
+        setStripeSuccess(`${result.amount} credits added`);
+      } else if (result.type === "subscription" && result.tier) {
+        activateSubscription(result.tier as FirmTier);
+        if (session) adminSetTier(session.companyId, result.tier as FirmTier);
+        addNotification({ type: "subscription_renewed", title: "Subscription Active", message: `Your ${result.tier} subscription is now live.` });
+        setStripeSuccess(`${result.tier} subscription activated`);
+      }
+    }
+  }, []);
+
+
+
+  if (!session || !company) {
+    return (
+      <div className="fade-in">
+        <section className="landing-hero" style={{
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "0 24px",
+          position: "relative",
+          overflow: "hidden",
+        }}>
+          <div style={{
+            position: "absolute",
+            inset: 0,
+            background: "radial-gradient(ellipse 80% 50% at 50% 40%, rgba(59,130,246,0.06) 0%, transparent 70%)",
+            pointerEvents: "none",
+          }} />
+          <div style={{
+            position: "absolute",
+            inset: 0,
+            backgroundImage: "radial-gradient(1px 1px at 20% 30%, rgba(148,163,184,0.15) 0%, transparent 50%), radial-gradient(1px 1px at 40% 70%, rgba(148,163,184,0.1) 0%, transparent 50%), radial-gradient(1px 1px at 60% 20%, rgba(148,163,184,0.12) 0%, transparent 50%), radial-gradient(1px 1px at 80% 60%, rgba(148,163,184,0.08) 0%, transparent 50%)",
+            backgroundSize: "200px 200px",
+            pointerEvents: "none",
+          }} />
+          <div style={{
+            position: "absolute",
+            top: "20%",
+            left: "10%",
+            width: "300px",
+            height: "300px",
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(59,130,246,0.03) 0%, transparent 70%)",
+            pointerEvents: "none",
+          }} />
+          <div style={{
+            position: "absolute",
+            bottom: "15%",
+            right: "15%",
+            width: "400px",
+            height: "400px",
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(59,130,246,0.02) 0%, transparent 70%)",
+            pointerEvents: "none",
+          }} />
+
+          <div style={{ maxWidth: "640px", textAlign: "center", position: "relative", zIndex: 1 }}>
+            <div style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "10px",
+              marginBottom: "24px",
+              padding: "8px 20px",
+              border: "1px solid rgba(59,130,246,0.2)",
+              borderRadius: "8px",
+              background: "rgba(59,130,246,0.04)",
+            }}>
+              <span style={{ fontSize: "11px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", color: "#3B82F6" }}>
+                Consultant Systems Platform
+              </span>
+            </div>
+            <h1 style={{
+              fontSize: "36px",
+              fontWeight: 700,
+              lineHeight: 1.15,
+              color: "#F1F5F9",
+              marginBottom: "16px",
+              letterSpacing: "-0.02em",
+            }}>
+              SOP<span style={{ color: "#3B82F6" }}>Master</span>
+            </h1>
+            <p style={{
+              fontSize: "16px",
+              lineHeight: 1.6,
+              color: "#94A3B8",
+              marginBottom: "36px",
+              maxWidth: "480px",
+              margin: "0 auto 36px",
+            }}>
+              The operating system for consultants who run structured delivery. We don&apos;t help you &quot;write SOPs.&quot; We help you turn consulting work into repeatable systems, client delivery frameworks, and operational structure that scales.
+            </p>
+            <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
+              <button onClick={() => router.push("/register")} className="btn btn-primary" style={{ padding: "10px 28px", fontSize: "14px" }}>
+                Get Started
+              </button>
+              <button onClick={() => router.push("/login")} className="btn btn-secondary" style={{ padding: "10px 28px", fontSize: "14px" }}>
+                Sign In
+              </button>
+              <button onClick={() => featuresRef.current?.scrollIntoView({ behavior: "smooth" })} className="btn btn-ghost" style={{ padding: "10px 28px", fontSize: "14px" }}>
+                Learn More
+              </button>
+            </div>
+            <p style={{
+              fontSize: "13px",
+              lineHeight: 1.5,
+              color: "#64748B",
+              marginTop: "32px",
+              fontStyle: "italic",
+            }}>
+              Used by solo consultants, freelancers, and consulting firms that take delivery seriously.
+            </p>
+          </div>
+
+          <div style={{ position: "absolute", bottom: "32px", left: "50%", transform: "translateX(-50%)" }}>
+            <button onClick={() => featuresRef.current?.scrollIntoView({ behavior: "smooth" })}
+              style={{ background: "none", border: "none", cursor: "pointer", color: "#64748B", fontSize: "20px", opacity: 0.6 }}>
+              ↓
+            </button>
+          </div>
+        </section>
+
+        <section style={{ padding: "60px 24px", borderTop: "1px solid #1E293B" }}>
+          <div style={{ maxWidth: "640px", margin: "0 auto", textAlign: "center" }}>
+            <p style={{ fontSize: "20px", fontWeight: 500, color: "#F1F5F9", lineHeight: 1.5, marginBottom: "8px" }}>
+              Everything you do becomes a system.
+            </p>
+            <p style={{ fontSize: "16px", color: "#94A3B8", lineHeight: 1.6 }}>
+              Every client becomes structured. Every process becomes repeatable.
+            </p>
+          </div>
+        </section>
+
+        <section ref={featuresRef} style={{ padding: "80px 24px", borderTop: "1px solid #1E293B" }}>
+          <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+            <div style={{ textAlign: "center", marginBottom: "48px" }}>
+              <h2 style={{ fontSize: "24px", fontWeight: 700, color: "#F1F5F9", marginBottom: "8px" }}>What It Does</h2>
+              <p style={{ fontSize: "14px", color: "#64748B", maxWidth: "520px", margin: "0 auto" }}>
+                SOPMaster turns real consulting work into operational systems you can reuse across clients.
+              </p>
+            </div>
+            <div className="card" style={{ padding: "32px" }}>
+              <div className="features-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+                {[
+                  "SOPs built from real workflows",
+                  "Client delivery frameworks",
+                  "Repeatable consulting processes",
+                  "Standardised internal operations",
+                  "Instant system capture via extension",
+                  "Reusable consulting assets instead of one-off work",
+                ].map((item, i) => (
+                  <div key={i} style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                    <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#3B82F6", flexShrink: 0 }}></div>
+                    <span style={{ fontSize: "14px", color: "#F1F5F9" }}>{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section style={{ padding: "80px 24px", borderTop: "1px solid #1E293B" }}>
+          <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+            <div style={{ textAlign: "center", marginBottom: "48px" }}>
+              <h2 style={{ fontSize: "24px", fontWeight: 700, color: "#F1F5F9", marginBottom: "8px" }}>Who It&apos;s For</h2>
+              <p style={{ fontSize: "14px", color: "#64748B" }}>
+                Built for consultants who don&apos;t run messy operations.
+              </p>
+            </div>
+            <div className="card">
+              {[
+                { type: "Solo Consultants", desc: "You stop operating like a freelancer and start working like a system." },
+                { type: "Freelancers", desc: "Your delivery becomes consistent, structured, and client-ready." },
+                { type: "Small Consulting Firms", desc: "Your team stops working differently on every client. You standardise delivery." },
+                { type: "Medium Consulting Firms", desc: "You scale output without losing process control." },
+                { type: "Large Consulting Firms", desc: "You operate with structured delivery systems across teams, clients, and workflows." },
+              ].map((item, i) => (
+                <div key={i} style={{
+                  display: "flex", gap: "16px", padding: "16px 0",
+                  borderBottom: i < 4 ? "1px solid #334155" : "none",
+                }}>
+                  <div style={{
+                    width: "28px", height: "28px", borderRadius: "50%",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: "12px", fontWeight: 600, color: "#3B82F6",
+                    border: "1px solid rgba(59,130,246,0.3)", flexShrink: 0,
+                  }}>
+                    {i + 1}
+                  </div>
+                  <div>
+                    <h3 style={{ fontSize: "14px", fontWeight: 600, color: "#F1F5F9", marginBottom: "4px" }}>{item.type}</h3>
+                    <p style={{ fontSize: "13px", color: "#94A3B8", lineHeight: 1.5 }}>{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section style={{ padding: "80px 24px", borderTop: "1px solid #1E293B" }}>
+          <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+            <div style={{ textAlign: "center", marginBottom: "48px" }}>
+              <h2 style={{ fontSize: "24px", fontWeight: 700, color: "#F1F5F9", marginBottom: "8px" }}>What Makes It Different</h2>
+              <p style={{ fontSize: "14px", color: "#64748B", maxWidth: "520px", margin: "0 auto" }}>
+                Most tools document work. SOPMaster structures how work is delivered.
+              </p>
+            </div>
+            <div className="card" style={{ padding: "32px", textAlign: "center" }}>
+              <p style={{ fontSize: "15px", color: "#F1F5F9", lineHeight: 1.6, marginBottom: "0" }}>
+                We don&apos;t store information. We turn it into systems that can be reused, sold, and scaled.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section style={{ padding: "80px 24px", borderTop: "1px solid #1E293B" }}>
+          <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+            <div style={{ textAlign: "center", marginBottom: "48px" }}>
+              <h2 style={{ fontSize: "24px", fontWeight: 700, color: "#F1F5F9", marginBottom: "8px" }}>Positioning</h2>
+              <p style={{ fontSize: "14px", color: "#64748B" }}>
+                For consultants who think in systems, not tasks.
+              </p>
+            </div>
+            <div className="card" style={{ padding: "32px", textAlign: "center" }}>
+              <p style={{ fontSize: "15px", color: "#F1F5F9", lineHeight: 1.6, marginBottom: "16px" }}>
+                SOPMaster is built for consultants who don&apos;t run messy operations.
+              </p>
+              <p style={{ fontSize: "14px", color: "#94A3B8", lineHeight: 1.6, marginBottom: "0" }}>
+                It&apos;s for people who think in systems, not tasks.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section style={{ padding: "80px 24px", borderTop: "1px solid #1E293B" }}>
+          <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+            <div style={{ textAlign: "center", marginBottom: "48px" }}>
+              <h2 style={{ fontSize: "24px", fontWeight: 700, color: "#F1F5F9", marginBottom: "8px" }}>Industry Intelligence</h2>
+              <p style={{ fontSize: "14px", color: "#64748B" }}>
+                Sector-specific regulatory context for every document generated.
+              </p>
+            </div>
+            <div className="card who-grid">
+              {[
+                { industry: "Financial Services", focus: "FCA compliance, AML/KYC frameworks, transaction reporting, reconciliation controls" },
+                { industry: "Healthcare", focus: "CQC compliance, PHI protection, clinical governance, information governance" },
+                { industry: "Construction", focus: "CDM regulations, health & safety, site governance, supply chain compliance" },
+                { industry: "Professional Services", focus: "Client onboarding, engagement management, conflict checking, data protection" },
+                { industry: "Manufacturing", focus: "ISO standards, quality management, supply chain controls, operational safety" },
+                { industry: "Technology", focus: "Data governance, SaaS compliance, incident response, SLA management" },
+              ].map((item, i) => (
+                <div key={i} className="data-row" style={{ borderBottom: i < 5 ? "1px solid #334155" : "none" }}>
+                  <span className="data-label" style={{ fontWeight: 500, minWidth: "180px" }}>{item.industry}</span>
+                  <span className="data-value" style={{ fontWeight: 400, color: "#94A3B8", fontSize: "12px" }}>{item.focus}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section style={{ padding: "80px 24px", borderTop: "1px solid #1E293B" }}>
+          <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+            <div style={{ textAlign: "center", marginBottom: "48px" }}>
+              <h2 style={{ fontSize: "24px", fontWeight: 700, color: "#F1F5F9", marginBottom: "8px" }}>Professional Documentation</h2>
+              <p style={{ fontSize: "14px", color: "#64748B" }}>
+                Word-compatible HTML documents with full governance structure.
+              </p>
+            </div>
+            <div className="card">
+              <div className="doc-grid-2" style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "20px" }}>
+                {[
+                  { label: "Format", value: "Word-compatible HTML" },
+                  { label: "Classification", value: "Controlled Document" },
+                  { label: "Structure", value: "Governance → Procedure → Controls → Audit" },
+                  { label: "Verification", value: "Cryptographic hash per document" },
+                  { label: "Compliance", value: "Jurisdiction-specific regulatory triggers" },
+                  { label: "Retention", value: "Configurable retention schedules" },
+                ].map((d, i) => (
+                  <div key={i}>
+                    <p style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.04em", color: "#64748B", marginBottom: "2px" }}>{d.label}</p>
+                    <p style={{ fontSize: "14px", color: "#F1F5F9", fontWeight: 500 }}>{d.value}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section ref={faqRef} style={{ padding: "80px 24px", borderTop: "1px solid #1E293B" }}>
+          <div style={{ maxWidth: "720px", margin: "0 auto" }}>
+            <div style={{ textAlign: "center", marginBottom: "48px" }}>
+              <h2 style={{ fontSize: "24px", fontWeight: 700, color: "#F1F5F9", marginBottom: "8px" }}>Frequently Asked Questions</h2>
+            </div>
+            {[
+              { q: "What is SOPMaster?", a: "SOPMaster is a consultant operating system for turning consulting work into repeatable systems, client delivery frameworks, and operational structure. Built for consultants who take delivery seriously." },
+              { q: "How does SOP generation work?", a: "Set your consulting context — jurisdiction, industry, and delivery workflows. SOPMaster generates structured, consultant-grade documents that you can reuse across clients and engagements." },
+              { q: "What formats are supported?", a: "All documents are generated as Word-compatible HTML files. They open directly in Microsoft Word, Google Docs, or any browser with full formatting preserved." },
+              { q: "How do credits work?", a: "Each SOP or Checklist generation consumes one credit. New accounts receive 300 complimentary credits. Additional credits can be purchased through your Administration panel." },
+              { q: "Which jurisdictions are supported?", a: "UK, Scotland, Wales, England, US Federal & state-level (New York, California, Texas, Florida, Delaware), EU (GDPR, Pay Transparency), Canada (Federal, Ontario), Australia, and Dubai Global." },
+              { q: "Can I generate documents for any industry?", a: "Yes. SOPMaster supports Financial Services, Healthcare, Construction, Professional Services, Technology, Manufacturing, Logistics and more. Each document is tailored to the selected context." },
+            ].map((faq, i) => (
+              <div key={i} style={{
+                borderBottom: "1px solid #334155",
+                padding: "16px 0",
+                cursor: "pointer",
+              }} onClick={() => setActiveFaq(activeFaq === i ? null : i)}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <h3 style={{ fontSize: "14px", fontWeight: 500, color: "#F1F5F9", margin: 0 }}>{faq.q}</h3>
+                  <span style={{ fontSize: "14px", color: "#64748B", transition: "transform 0.2s", transform: activeFaq === i ? "rotate(180deg)" : "none" }}>
+                    {activeFaq === i ? "−" : "+"}
+                  </span>
+                </div>
+                {activeFaq === i && (
+                  <p style={{ fontSize: "13px", color: "#94A3B8", lineHeight: 1.6, marginTop: "12px" }}>{faq.a}</p>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section ref={pricingRef} style={{ padding: "80px 24px", borderTop: "1px solid #1E293B" }}>
+          <div style={{ maxWidth: "960px", margin: "0 auto" }}>
+            <div style={{ textAlign: "center", marginBottom: "48px" }}>
+              <h2 style={{ fontSize: "24px", fontWeight: 700, color: "#F1F5F9", marginBottom: "8px" }}>Pricing</h2>
+              <p style={{ fontSize: "14px", color: "#64748B" }}>
+                Choose the plan that fits your organisation.
+              </p>
+            </div>
+            <div className="pricing-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "16px" }}>
+              {[
+                { tier: "solo", name: "Solo Professional", price: "£400", credits: "300/mo", tag: "" },
+                { tier: "small", name: "Small Consultancy", price: "£2,500", credits: "2,500/mo", tag: "Popular" },
+                { tier: "medium", name: "Medium Consultancy", price: "£5,100", credits: "6,000/mo", tag: "" },
+                { tier: "large", name: "Large Consultancy", price: "£9,000", credits: "12,000/mo", tag: "" },
+              ].map((p, i) => (
+                <div key={i} className="card" style={{
+                  display: "flex", flexDirection: "column",
+                  borderColor: p.tag ? "#3B82F6" : "#334155",
+                  position: "relative",
+                }}>
+                  {p.tag && (
+                    <div style={{
+                      position: "absolute", top: "-1px", left: "50%", transform: "translateX(-50%)",
+                      fontSize: "10px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em",
+                      color: "#3B82F6", background: "#0F172A", padding: "2px 12px",
+                      border: "1px solid #3B82F6", borderTop: "none", borderRadius: "0 0 6px 6px",
+                    }}>
+                      {p.tag}
+                    </div>
+                  )}
+                  <h3 style={{ fontSize: "13px", fontWeight: 600, color: "#F1F5F9", marginBottom: "8px" }}>{p.name}</h3>
+                  <p style={{ fontSize: "28px", fontWeight: 700, color: "#F1F5F9", marginBottom: "4px" }}>{p.price}<span style={{ fontSize: "13px", fontWeight: 400, color: "#64748B" }}>/month</span></p>
+                  <p style={{ fontSize: "12px", color: "#64748B", marginBottom: "16px" }}>{p.credits}</p>
+                  <button onClick={() => router.push("/register")} className="btn btn-primary" style={{ width: "100%", marginTop: "auto" }}>
+                    Get Started
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <footer style={{
+          padding: "40px 24px 24px",
+          borderTop: "1px solid #1E293B",
+          background: "#0A0F1C",
+        }}>
+          <div style={{ maxWidth: "1024px", margin: "0 auto" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr", gap: "32px", marginBottom: "32px" }}>
+              <div>
+                <p style={{ fontSize: "15px", fontWeight: 600, color: "#F1F5F9", marginBottom: "8px" }}>SOPMaster</p>
+                <p style={{ fontSize: "12px", color: "#64748B", lineHeight: 1.6 }}>
+                  The consultant operating system for structured delivery. Turn consulting work into repeatable systems, client delivery frameworks, and operational structure that scales.
+                </p>
+              </div>
+              <div>
+                <p style={{ fontSize: "11px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em", color: "#64748B", marginBottom: "12px" }}>Platform</p>
+                {["SOP Builder", "Checklist Builder", "Batch Generation", "Document Vault"].map((l, i) => (
+                  <p key={i} style={{ fontSize: "12px", color: "#94A3B8", marginBottom: "6px" }}>{l}</p>
+                ))}
+              </div>
+              <div>
+                <p style={{ fontSize: "11px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em", color: "#64748B", marginBottom: "12px" }}>Company</p>
+                {["About", "Contact", "Privacy", "Terms"].map((l, i) => (
+                  <p key={i} style={{ fontSize: "12px", color: "#94A3B8", marginBottom: "6px" }}>{l}</p>
+                ))}
+              </div>
+              <div>
+                <p style={{ fontSize: "11px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em", color: "#64748B", marginBottom: "12px" }}>Legal</p>
+                <p style={{ fontSize: "11px", color: "#64748B", marginBottom: "4px" }}>Dubai Global Tax Code</p>
+                <p style={{ fontSize: "11px", color: "#94A3B8" }}>txcd_20030000 &middot; 0% VAT</p>
+              </div>
+            </div>
+            <div style={{ borderTop: "1px solid #1E293B", paddingTop: "16px", textAlign: "center" }}>
+              <p style={{ fontSize: "11px", color: "#475569" }}>© {new Date().getFullYear()} SOPMaster. All rights reserved.</p>
+            </div>
+          </div>
+        </footer>
+      </div>
+    );
+  }
+
+  const activeCount = vault.filter((s) => s.status === "active").length;
+  const unreadNotifs = notifications.filter((n) => !n.read);
+
+  if (session.isDirector) {
+    const totalSops = allCompanies.reduce((sum, c) => sum + getCompanySopCount(c.id), 0);
+    const subscribedCount = allCompanies.filter(c => c.subscriptionActive).length;
+
+    return (
+      <div style={{ maxWidth: "1120px", margin: "0 auto", padding: "32px 24px" }} className="fade-in">
+        <div style={{ marginBottom: "32px" }}>
+          <h1 style={{ fontSize: "22px", fontWeight: 600, color: "#F1F5F9", marginBottom: "4px" }}>
+            Admin Dashboard
+          </h1>
+          <p style={{ fontSize: "13px", color: "#64748B" }}>
+            Platform overview &middot; {allCompanies.length} registered firms
+          </p>
+        </div>
+
+        <div className="admin-stats" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "16px", marginBottom: "24px" }}>
+          <div className="card" style={{ textAlign: "center" }}>
+            <div className="stat-label">Registered Firms</div>
+            <div className="stat-value">{allCompanies.length}</div>
+          </div>
+          <div className="card" style={{ textAlign: "center" }}>
+            <div className="stat-label">Total SOPs</div>
+            <div className="stat-value">{totalSops}</div>
+          </div>
+          <div className="card" style={{ textAlign: "center" }}>
+            <div className="stat-label">Subscribed</div>
+            <div className="stat-value">{subscribedCount}</div>
+          </div>
+          <div className="card" style={{ textAlign: "center" }}>
+            <div className="stat-label">Unsubscribed</div>
+            <div className="stat-value">{allCompanies.length - subscribedCount}</div>
+          </div>
+        </div>
+
+        <div className="card">
+          <div className="card-header">All Firms</div>
+          <div className="table-wrap">
+            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px" }}>
+              <thead>
+                <tr style={{ borderBottom: "1px solid #334155" }}>
+                  <th style={{ textAlign: "left", padding: "10px 8px", color: "#64748B", fontWeight: 500, fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.04em" }}>Firm</th>
+                  <th style={{ textAlign: "left", padding: "10px 8px", color: "#64748B", fontWeight: 500, fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.04em" }}>SOPs</th>
+                  <th style={{ textAlign: "left", padding: "10px 8px", color: "#64748B", fontWeight: 500, fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.04em" }}>Plan</th>
+                  <th style={{ textAlign: "left", padding: "10px 8px", color: "#64748B", fontWeight: 500, fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.04em" }}>Credits</th>
+                  <th style={{ textAlign: "left", padding: "10px 8px", color: "#64748B", fontWeight: 500, fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.04em" }}>Subscription</th>
+                  <th style={{ textAlign: "left", padding: "10px 8px", color: "#64748B", fontWeight: 500, fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.04em" }}>Registered</th>
+                  <th style={{ textAlign: "right", padding: "10px 8px", color: "#64748B", fontWeight: 500, fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.04em" }}>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {allCompanies.map((c) => {
+                  const isDirectorCompany = c.email === session.email;
+                  const sopCount = getCompanySopCount(c.id);
+                  return (
+                    <tr key={c.id} style={{ borderBottom: "1px solid #1E293B" }}>
+                      <td style={{ padding: "10px 8px", color: "#F1F5F9", fontWeight: 500 }}>
+                        {c.name}
+                        {isDirectorCompany && <span className="tag" style={{ marginLeft: "8px", fontSize: "10px" }}>Admin</span>}
+                      </td>
+                      <td style={{ padding: "10px 8px", color: "#94A3B8" }}>{sopCount}</td>
+                      <td style={{ padding: "10px 8px" }}>
+                        {isDirectorCompany ? (
+                          <span style={{ color: "#94A3B8" }}>{getTierLimits(c.tier).label}</span>
+                        ) : (
+                          <select value={c.tier} onChange={(e) => adminSetTier(c.id, e.target.value as FirmTier)}
+                            style={{ background: "transparent", border: "1px solid #334155", borderRadius: "4px", color: "#94A3B8", fontSize: "12px", padding: "2px 4px" }}>
+                            <option value="solo">Solo Professional</option>
+                            <option value="small">Small Firm Protocol</option>
+                            <option value="medium">Medium Firm Protocol</option>
+                            <option value="large">Large Firm Protocol</option>
+                          </select>
+                        )}
+                      </td>
+                      <td style={{ padding: "10px 8px", color: "#94A3B8" }}>
+                        {isDirectorCompany ? (
+                          <span>{c.credits}</span>
+                        ) : editCreditsId === c.id ? (
+                          <div style={{ display: "flex", gap: "4px", alignItems: "center" }}>
+                            <input type="number" value={creditsAmount} onChange={(e) => setCreditsAmount(e.target.value)}
+                              style={{ width: "60px", background: "#1E293B", border: "1px solid #334155", borderRadius: "4px", color: "#F1F5F9", padding: "2px 4px", fontSize: "12px" }} />
+                            <button onClick={() => { adminSetCredits(c.id, parseInt(creditsAmount) || 0); setEditCreditsId(null); }} className="btn btn-primary" style={{ fontSize: "10px", padding: "2px 6px" }}>Set</button>
+                            <button onClick={() => setEditCreditsId(null)} className="btn-ghost" style={{ fontSize: "10px", padding: "2px 6px" }}>x</button>
+                          </div>
+                        ) : (
+                          <span onClick={() => { setEditCreditsId(c.id); setCreditsAmount(String(c.credits)); }} style={{ cursor: "pointer", borderBottom: "1px dashed #475569" }}>{c.credits}</span>
+                        )}
+                      </td>
+                      <td style={{ padding: "10px 8px" }}>
+                        {isDirectorCompany ? (
+                          <span style={{ color: "#22C55E", fontSize: "11px" }}>Active</span>
+                        ) : (
+                          <button onClick={() => adminSetSubscription(c.id, !c.subscriptionActive)}
+                            className={`btn ${c.subscriptionActive ? "btn-secondary" : "btn-primary"}`}
+                            style={{ fontSize: "10px", padding: "2px 8px" }}>
+                            {c.subscriptionActive ? "Deactivate" : "Activate"}
+                          </button>
+                        )}
+                      </td>
+                      <td style={{ padding: "10px 8px", color: "#64748B", fontSize: "12px" }}>{c.createdAt}</td>
+                      <td style={{ padding: "10px 8px", textAlign: "right" }}>
+                        {isDirectorCompany ? (
+                          <span style={{ color: "#475569", fontSize: "11px" }}>Protected</span>
+                        ) : deleteConfirmId === c.id ? (
+                          <div style={{ display: "flex", gap: "4px", justifyContent: "flex-end" }}>
+                            <button onClick={() => { deleteCompany(c.id); setDeleteConfirmId(null); }} className="btn btn-primary" style={{ fontSize: "10px", padding: "2px 6px", background: "#DC2626", borderColor: "#DC2626" }}>Confirm</button>
+                            <button onClick={() => setDeleteConfirmId(null)} className="btn-ghost" style={{ fontSize: "10px", padding: "2px 6px" }}>Cancel</button>
+                          </div>
+                        ) : (
+                          <button onClick={() => setDeleteConfirmId(c.id)} className="btn-ghost" style={{ fontSize: "11px", color: "#DC2626", padding: "2px 6px" }}>Delete</button>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ maxWidth: "1120px", margin: "0 auto", padding: "32px 24px" }} className="fade-in">
+      <div style={{ marginBottom: "32px" }}>
+        <h1 style={{ fontSize: "22px", fontWeight: 600, color: "#F1F5F9", marginBottom: "4px" }}>
+          {greeting}, {session.name}
+        </h1>
+        <p style={{ fontSize: "13px", color: "#64748B" }}>
+          {company.name} &middot; {getTierLimits(company.tier).label}
+        </p>
+      </div>
+
+      {stripeSuccess && (
+        <div className="card" style={{ marginBottom: "24px", padding: "16px 20px", borderColor: "#22C55E" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div>
+              <p style={{ fontSize: "14px", fontWeight: 600, color: "#22C55E", marginBottom: "4px" }}>
+                Payment successful
+              </p>
+              <p style={{ fontSize: "13px", color: "#94A3B8" }}>{stripeSuccess}</p>
+            </div>
+            <button onClick={() => setStripeSuccess(null)} className="btn btn-secondary" style={{ fontSize: "12px" }}>
+              Dismiss
+            </button>
+          </div>
+        </div>
+      )}
+
+      {unreadNotifs.length > 0 && (
+        <div className="card" style={{ marginBottom: "24px", padding: "16px 20px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+            <span style={{ fontSize: "11px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em", color: "#64748B" }}>
+              Notifications ({unreadNotifs.length})
+            </span>
+            <button onClick={clearNotifications} className="btn-ghost" style={{ fontSize: "11px", padding: "2px 8px" }}>
+              Clear all
+            </button>
+          </div>
+          {unreadNotifs.slice(0, 3).map((n) => (
+            <div key={n.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 0", borderBottom: "1px solid #334155" }}>
+              <div>
+                <p style={{ fontSize: "13px", fontWeight: 500, color: "#F1F5F9" }}>{n.title}</p>
+                <p style={{ fontSize: "12px", color: "#94A3B8" }}>{n.message}</p>
+              </div>
+              <button onClick={() => dismissNotification(n.id)} className="btn-ghost" style={{ fontSize: "11px", padding: "2px 8px" }}>
+                Dismiss
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="dash-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px", marginBottom: "24px" }}>
+        <div className="card">
+          <div className="card-header">Company Overview</div>
+          <div className="data-row"><span className="data-label">Company</span><span className="data-value">{company.name}</span></div>
+          <div className="data-row"><span className="data-label">Plan</span><span className="data-value">{getTierLimits(company.tier).label}</span></div>
+          <div className="data-row"><span className="data-label">Jurisdiction</span><span className="data-value accent">{company.jurisdiction}</span></div>
+          <div className="data-row"><span className="data-label">Subscription</span><span className="data-value">{company.subscriptionActive ? "Active" : "Inactive"}</span></div>
+          <div className="data-row"><span className="data-label">Users</span><span className="data-value">{company.team.length}</span></div>
+        </div>
+
+        <div className="card">
+          <div className="card-header">Operational Activity</div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+            <div>
+              <div className="stat-label">SOPs Generated</div>
+              <div className="stat-value">{vault.length}</div>
+            </div>
+            <div>
+              <div className="stat-label">Active Documents</div>
+              <div className="stat-value">{activeCount}</div>
+            </div>
+            <div>
+              <div className="stat-label">Credits Remaining</div>
+              <div className="stat-value">{company.credits}</div>
+            </div>
+            <div>
+              <div className="stat-label">Credits Used</div>
+              <div className="stat-value">{company.lifetimeCredits}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="dash-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px", marginBottom: "24px" }}>
+        <div className="card">
+          <div className="card-header">System Status</div>
+          <div className="data-row"><span className="data-label">Platform</span><span className="data-value"><span className="status-dot active" style={{ marginRight: "6px" }}></span>Operational</span></div>
+          <div className="data-row"><span className="data-label">Jurisdiction Active</span><span className="data-value">{company.jurisdiction}</span></div>
+          <div className="data-row"><span className="data-label">Library Version</span><span className="data-value">2026.2</span></div>
+          <div className="data-row"><span className="data-label">Documents in Vault</span><span className="data-value">{vault.length}</span></div>
+        </div>
+
+        <div className="card">
+          <div className="card-header">Quick Actions</div>
+          {!company.focus ? (
+            <div style={{ textAlign: "center", padding: "16px 0" }}>
+              <p style={{ fontSize: "13px", color: "#94A3B8", marginBottom: "12px" }}>
+                Choose what you want to create to unlock tools.
+              </p>
+              <button onClick={() => router.push("/choose-focus")} className="btn btn-primary" style={{ width: "100%" }}>
+                Choose Focus
+              </button>
+            </div>
+          ) : (
+            <>
+              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                {company.focus === "sops" ? (
+                  <button onClick={() => router.push("/forge")} className="btn btn-primary" style={{ width: "100%" }}>
+                    Generate SOP
+                  </button>
+                ) : (
+                  <button disabled className="btn btn-secondary" style={{ width: "100%", opacity: 0.5, cursor: "not-allowed" }} title="Switch focus to SOPs to access">
+                    Generate SOP 🔒
+                  </button>
+                )}
+                {company.focus === "checklists" ? (
+                  <button onClick={() => router.push("/checklist")} className="btn btn-primary" style={{ width: "100%" }}>
+                    Create Checklist
+                  </button>
+                ) : (
+                  <button disabled className="btn btn-secondary" style={{ width: "100%", opacity: 0.5, cursor: "not-allowed" }} title="Switch focus to Checklists to access">
+                    Create Checklist 🔒
+                  </button>
+                )}
+                <button disabled className="btn btn-secondary" style={{ width: "100%", opacity: 0.5, cursor: "not-allowed" }} title="Batch generation is a paid upgrade">
+                  Batch Generation 🔒
+                </button>
+                <button onClick={() => router.push("/armory")} className="btn btn-secondary" style={{ width: "100%" }}>
+                  Open Document Vault
+                </button>
+                <button onClick={() => router.push("/settings")} className="btn btn-secondary" style={{ width: "100%" }}>
+                  Administration
+                </button>
+              </div>
+              <div style={{ marginTop: "12px", paddingTop: "12px", borderTop: "1px solid #334155", textAlign: "center" }}>
+                <span style={{ fontSize: "11px", color: "#64748B" }}>
+                  Focus: <span style={{ color: company.focus === "sops" ? "#3B82F6" : "#22C55E", fontWeight: 600 }}>{company.focus === "sops" ? "SOPs" : "Checklists"}</span>
+                </span>
+                <button onClick={() => router.push("/choose-focus")} className="btn-ghost" style={{ fontSize: "11px", marginLeft: "8px", padding: "2px 8px", textDecoration: "underline" }}>
+                  Change
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
+      {vault.length > 0 && (
+        <div className="card">
+          <div className="card-header">Latest Documents</div>
+          {vault.slice(-5).reverse().map((sop) => (
+            <div key={sop.id} className="doc-row">
+              <span className="status-dot" style={{ background: sop.status === "active" ? "#22C55E" : "#64748B", flexShrink: 0 }}></span>
+              <span style={{ flex: 1, color: "#F1F5F9", fontWeight: 500 }}>{sop.title}</span>
+              <span style={{ fontSize: "12px", color: "#64748B", width: "100px" }}>{sop.dateCreated}</span>
+              <span className="tag" style={{ width: "auto" }}>{sop.jurisdiction}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}

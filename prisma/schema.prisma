@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Company {
+  id                 String   @id @default(cuid())
+  name               String   @unique
+  email              String   @unique
+  pinHash            String
+  tier               String   @default("solo")
+  subscriptionActive Boolean  @default(false)
+  credits            Int      @default(100)
+  lifetimeCredits    Int      @default(100)
+  createdAt          DateTime @default(now())
+  jurisdiction       String   @default("UK")
+  focus              String?
+
+  team     TeamMember[]
+  vault    SOP[]
+  sessions Session[]
+  profile  CompanyProfile?
+}
+
+model TeamMember {
+  id        String   @id @default(cuid())
+  name      String
+  role      String
+  email     String?
+  joinedAt  DateTime @default(now())
+  companyId String
+  owner     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+}
+
+model SOP {
+  id               String   @id
+  title            String
+  companyName      String
+  systems          String   @default("")
+  headcount        String   @default("")
+  jurisdiction     String
+  complexity       String   @default("1-10")
+  hash             String
+  verificationHash String
+  dateCreated      String
+  dateCategorized  String
+  lastModified     String
+  version          Int      @default(1)
+  status           String   @default("active")
+  createdBy        String   @default("")
+  industry         String?
+  department       String?
+  favorite         Boolean  @default(false)
+  sopType          String?
+  companyId        String
+  owner            Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  companyId String
+  owner     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+model CompanyProfile {
+  id                    String  @id @default(cuid())
+  industry              String?
+  jurisdiction          String?
+  companySize           String?
+  departments           String?
+  softwareStack         String?
+  businessGoals         String?
+  operationalChallenges String?
+  companyId             String  @unique
+  owner                 Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+}
