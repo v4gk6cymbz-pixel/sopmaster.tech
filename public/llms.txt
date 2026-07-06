@@ -1,25 +1,46 @@
 # SOPMaster
-> Professional operational documentation platform for consultants, consultancy firms and documentation professionals. Create, manage and maintain structured Standard Operating Procedures, operational checklists and department-level documentation.
+> Structured consulting systems, client delivery frameworks, and operational standards for professionals and firms. This site provides authoritative, evergreen content on turning consulting work into repeatable, scalable systems, compliant documentation formats, industry-specific frameworks, and operational best practices.
+
+SOPMaster is a comprehensive operating system for consultants aiming to transform their work into standardized, reusable processes. It offers a structured approach to documenting workflows, ensuring compliance, and scaling delivery across different client projects and organizational sizes. This resource is valuable for understanding how to organize consulting deliverables, generate compliant documentation, and leverage systems thinking within professional services.
+
+## Core Content
+
+- [What SOPMaster Does](https://sopmaster.tech/#what-it-does)
+- [Consultant Types and Use Cases](https://sopmaster.tech/#who-its-for)
+- [How SOPs Are Built from Workflows](https://sopmaster.tech/#what-it-does)
+- [Industry-specific Regulatory Contexts](https://sopmaster.tech/#industry-intelligence)
+- [Document Structuring and Governance](https://sopmaster.tech/#professional-documentation)
+- [Frequently Asked Questions](https://sopmaster.tech/#faqs)
+
+## Resources
+
+- [Pricing Plans](https://sopmaster.tech/#pricing)
+- [About SOPMaster](https://sopmaster.tech/about)
+- [Contact Support](https://sopmaster.tech/contact)
 
 ## Platform
-- SOP Builder: https://sopmaster.tech/forge
-- Checklist Builder: https://sopmaster.tech/checklist
-- Batch Generator: https://sopmaster.tech/batch
-- Document Vault: https://sopmaster.tech/armory
-- Administration: https://sopmaster.tech/settings
 
-## Company
-- About: https://sopmaster.tech/about
-- Contact: https://sopmaster.tech/contact
-- Privacy Policy: https://sopmaster.tech/privacy
-- Terms & Conditions: https://sopmaster.tech/terms
+- [SOP Builder](https://sopmaster.tech/forge)
+- [Checklist Builder](https://sopmaster.tech/checklist)
+- [Batch Generator](https://sopmaster.tech/batch)
+- [Document Vault](https://sopmaster.tech/armory)
+- [Administration](https://sopmaster.tech/settings)
 
-## Auth
-- Login: https://sopmaster.tech/login
-- Register: https://sopmaster.tech/register
+## Legal
 
-## Pricing
-- Solo Professional - £400/mo: 300 credits
-- Small Consultancy - £2,500/mo: 2,500 credits
-- Medium Consultancy - £5,100/mo: 6,000 credits
-- Large Consultancy - £9,000/mo: 12,000 credits
+- [Privacy Policy](https://sopmaster.tech/privacy)
+- [Terms & Conditions](https://sopmaster.tech/terms)
+
+## Industry Standards & Compliance
+- Financial Services: FCA compliance, AML/KYC, transaction reporting
+- Healthcare: CQC standards, PHI protection, clinical governance
+- Construction: CDM, health & safety, site governance
+- Professional Services: onboarding, engagement, data protection
+- Manufacturing: ISO standards, quality control
+- Technology: SaaS compliance, incident response, SLA management
+
+## Optional
+
+- Industry-specific workflows and frameworks
+- Detailed documentation format specifications
+- Regulatory compliance guides for various jurisdictions

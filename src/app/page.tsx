@@ -189,7 +189,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section ref={featuresRef} style={{ padding: "80px 24px", borderTop: "1px solid #1E293B" }}>
+        <section id="what-it-does" ref={featuresRef} style={{ padding: "80px 24px", borderTop: "1px solid #1E293B" }}>
           <div style={{ maxWidth: "800px", margin: "0 auto" }}>
             <div style={{ textAlign: "center", marginBottom: "48px" }}>
               <h2 style={{ fontSize: "24px", fontWeight: 700, color: "#F1F5F9", marginBottom: "8px" }}>What It Does</h2>
@@ -217,7 +217,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section style={{ padding: "80px 24px", borderTop: "1px solid #1E293B" }}>
+        <section id="who-its-for" style={{ padding: "80px 24px", borderTop: "1px solid #1E293B" }}>
           <div style={{ maxWidth: "800px", margin: "0 auto" }}>
             <div style={{ textAlign: "center", marginBottom: "48px" }}>
               <h2 style={{ fontSize: "24px", fontWeight: 700, color: "#F1F5F9", marginBottom: "8px" }}>Who It&apos;s For</h2>
@@ -255,7 +255,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section style={{ padding: "80px 24px", borderTop: "1px solid #1E293B" }}>
+        <section id="what-makes-it-different" style={{ padding: "80px 24px", borderTop: "1px solid #1E293B" }}>
           <div style={{ maxWidth: "800px", margin: "0 auto" }}>
             <div style={{ textAlign: "center", marginBottom: "48px" }}>
               <h2 style={{ fontSize: "24px", fontWeight: 700, color: "#F1F5F9", marginBottom: "8px" }}>What Makes It Different</h2>
@@ -271,7 +271,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section style={{ padding: "80px 24px", borderTop: "1px solid #1E293B" }}>
+        <section id="positioning" style={{ padding: "80px 24px", borderTop: "1px solid #1E293B" }}>
           <div style={{ maxWidth: "800px", margin: "0 auto" }}>
             <div style={{ textAlign: "center", marginBottom: "48px" }}>
               <h2 style={{ fontSize: "24px", fontWeight: 700, color: "#F1F5F9", marginBottom: "8px" }}>Positioning</h2>
@@ -290,7 +290,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section style={{ padding: "80px 24px", borderTop: "1px solid #1E293B" }}>
+        <section id="industry-intelligence" style={{ padding: "80px 24px", borderTop: "1px solid #1E293B" }}>
           <div style={{ maxWidth: "800px", margin: "0 auto" }}>
             <div style={{ textAlign: "center", marginBottom: "48px" }}>
               <h2 style={{ fontSize: "24px", fontWeight: 700, color: "#F1F5F9", marginBottom: "8px" }}>Industry Intelligence</h2>
@@ -316,7 +316,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section style={{ padding: "80px 24px", borderTop: "1px solid #1E293B" }}>
+        <section id="professional-documentation" style={{ padding: "80px 24px", borderTop: "1px solid #1E293B" }}>
           <div style={{ maxWidth: "800px", margin: "0 auto" }}>
             <div style={{ textAlign: "center", marginBottom: "48px" }}>
               <h2 style={{ fontSize: "24px", fontWeight: 700, color: "#F1F5F9", marginBottom: "8px" }}>Professional Documentation</h2>
@@ -344,7 +344,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section ref={faqRef} style={{ padding: "80px 24px", borderTop: "1px solid #1E293B" }}>
+        <section id="faqs" ref={faqRef} style={{ padding: "80px 24px", borderTop: "1px solid #1E293B" }}>
           <div style={{ maxWidth: "720px", margin: "0 auto" }}>
             <div style={{ textAlign: "center", marginBottom: "48px" }}>
               <h2 style={{ fontSize: "24px", fontWeight: 700, color: "#F1F5F9", marginBottom: "8px" }}>Frequently Asked Questions</h2>
@@ -376,7 +376,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section ref={pricingRef} style={{ padding: "80px 24px", borderTop: "1px solid #1E293B" }}>
+        <section id="pricing" ref={pricingRef} style={{ padding: "80px 24px", borderTop: "1px solid #1E293B" }}>
           <div style={{ maxWidth: "960px", margin: "0 auto" }}>
             <div style={{ textAlign: "center", marginBottom: "48px" }}>
               <h2 style={{ fontSize: "24px", fontWeight: 700, color: "#F1F5F9", marginBottom: "8px" }}>Pricing</h2>
