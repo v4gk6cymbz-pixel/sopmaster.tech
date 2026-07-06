@@ -2,6 +2,7 @@
 
 import { useStore } from "@/lib/store";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
 import { getStripeRedirectResult, clearStripeRedirectParams, getTierLimits } from "@/lib/utils";
 import type { FirmTier } from "@/types";
@@ -438,9 +439,10 @@ export default function HomePage() {
               </div>
               <div>
                 <p style={{ fontSize: "11px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em", color: "#64748B", marginBottom: "12px" }}>Company</p>
-                {["About", "Contact", "Privacy", "Terms"].map((l, i) => (
-                  <p key={i} style={{ fontSize: "12px", color: "#94A3B8", marginBottom: "6px" }}>{l}</p>
-                ))}
+                <p style={{ fontSize: "12px", color: "#94A3B8", marginBottom: "6px" }}><Link href="/about" style={{ color: "#94A3B8", textDecoration: "none" }}>About</Link></p>
+                <p style={{ fontSize: "12px", color: "#94A3B8", marginBottom: "6px" }}><Link href="/contact" style={{ color: "#94A3B8", textDecoration: "none" }}>Contact</Link></p>
+                <p style={{ fontSize: "12px", color: "#94A3B8", marginBottom: "6px" }}><Link href="/privacy" style={{ color: "#94A3B8", textDecoration: "none" }}>Privacy</Link></p>
+                <p style={{ fontSize: "12px", color: "#94A3B8", marginBottom: "6px" }}><Link href="/terms" style={{ color: "#94A3B8", textDecoration: "none" }}>Terms</Link></p>
               </div>
               <div>
                 <p style={{ fontSize: "11px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em", color: "#64748B", marginBottom: "12px" }}>Legal</p>
