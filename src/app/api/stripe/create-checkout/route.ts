@@ -15,12 +15,14 @@ export async function POST(req: NextRequest) {
       const priceId = STRIPE_PRICES[tier];
       if (!priceId) return badRequest("Invalid tier");
 
+      const meta = { companyId: auth.companyId, type: "subscription", tier };
       const session = await getStripe().checkout.sessions.create({
         mode: "subscription",
         payment_method_types: ["card"],
         line_items: [{ price: priceId, quantity: 1 }],
         client_reference_id: auth.companyId,
-        metadata: { companyId: auth.companyId, type: "subscription", tier },
+        metadata: meta,
+        subscription_data: { metadata: meta },
         success_url: `${origin}/?stripe_success=subscription&tier=${tier}&session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${origin}/settings`,
       });

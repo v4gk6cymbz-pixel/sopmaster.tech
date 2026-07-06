@@ -137,12 +137,11 @@ export default function SettingsPage() {
               <div className="data-row"><span className="data-label">Rate</span><span className="data-value">£{limits.price.toLocaleString()}/mo</span></div>
               <div className="data-row"><span className="data-label">Status</span><span className="data-value"><span className="status-dot active" style={{ marginRight: "4px" }}></span>Active</span></div>
               <div style={{ display: "flex", gap: "8px", marginTop: "12px" }}>
-                <a href={process.env.NEXT_PUBLIC_STRIPE_CUSTOMER_PORTAL_LINK || "#"} target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
-                  Manage in Stripe
-                </a>
-                <button onClick={cancelSubscription} className="btn btn-danger">
-                  Cancel Subscription
-                </button>
+                {process.env.NEXT_PUBLIC_STRIPE_CUSTOMER_PORTAL_LINK && (
+                  <a href={process.env.NEXT_PUBLIC_STRIPE_CUSTOMER_PORTAL_LINK} target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
+                    Manage in Stripe
+                  </a>
+                )}
               </div>
               {session.isDirector && <p style={{ fontSize: "12px", color: "#F59E0B", marginTop: "8px" }}>Director override: unlimited credits.</p>}
             </div>
