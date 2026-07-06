@@ -212,10 +212,6 @@ export default function ChecklistPage() {
       setError("Company name is required.");
       return;
     }
-    if (!company?.subscriptionActive && !session?.isDirector) {
-      setError("Checklists require an active subscription. Subscribe in Administration.");
-      return;
-    }
     const canDeduct = await deductCredit();
     if (!canDeduct && !session?.isDirector) {
       setError("Insufficient credits. Purchase more in Administration.");
@@ -282,13 +278,6 @@ export default function ChecklistPage() {
         </p>
       </div>
 
-      {!company.subscriptionActive && !session?.isDirector && (
-        <div className="card" style={{ marginBottom: "20px", padding: "16px 20px", borderColor: "#F59E0B" }}>
-          <p style={{ fontSize: "13px", color: "#F59E0B", fontWeight: 500 }}>Subscription required</p>
-          <p style={{ fontSize: "12px", color: "#94A3B8", marginTop: "4px" }}>Checklists require an active subscription. Go to Administration to subscribe.</p>
-        </div>
-      )}
-
       {step === "input" && company.credits <= 0 && !session?.isDirector && (
         <div className="card" style={{ marginBottom: "20px", padding: "16px 20px", borderColor: "#EF4444" }}>
           <p style={{ fontSize: "13px", color: "#EF4444", fontWeight: 500 }}>No credits remaining.</p>
@@ -298,23 +287,6 @@ export default function ChecklistPage() {
 
       {step === "input" && (
         <div style={{ position: "relative" }}>
-          {!company.subscriptionActive && !session?.isDirector && (
-            <div style={{
-              position: "absolute", inset: 0, background: "rgba(15,23,42,0.85)", zIndex: 20,
-              display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-              borderRadius: "8px", minHeight: "400px",
-            }}>
-              <div className="card" style={{ maxWidth: "400px", textAlign: "center", borderColor: "#F59E0B" }}>
-                <p style={{ fontSize: "15px", fontWeight: 600, color: "#F59E0B", marginBottom: "8px" }}>Subscription Required</p>
-                <p style={{ fontSize: "13px", color: "#94A3B8", marginBottom: "16px", lineHeight: 1.5 }}>
-                  Checklist Builder requires an active subscription. Subscribe in Administration to unlock this feature.
-                </p>
-                <button onClick={() => router.push("/settings")} className="btn btn-primary" style={{ padding: "8px 20px" }}>
-                  Go to Administration
-                </button>
-              </div>
-            </div>
-          )}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
             <div className="card">
               <div className="card-header">Organisation</div>
