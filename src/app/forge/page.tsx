@@ -153,12 +153,13 @@ export default function ForgePage() {
         departments, services, processName, processPurpose, processGoal,
         processOwner, processDept, processTrigger, processFrequency,
         processDuration, processRisk, processKpis, workflowSteps, decisionPoint,
-        decisionYes, decisionNo,
+        decisionYes, decisionNo, creditCost: 10,
       });
       sopDoc = data.document;
     } catch {
       if (abortRef.current?.signal.aborted) { clearInterval(logInterval); return; }
       sopDoc = generateSOPDocument(title, compName, softwareStack.join(", "), headcount, jurisdiction as Jurisdiction, size, industry, sopType);
+      await deductCredit(10);
     }
 
     const remaining = 30000 - (Date.now() - startedAt);
@@ -166,8 +167,6 @@ export default function ForgePage() {
 
     clearInterval(logInterval);
     setProgress(100); setLogs((l) => [...l, "Complete"]);
-
-    await deductCredit(10);
     const hash = generateHash();
     const vHash = generateVerificationHash();
     const now = new Date();

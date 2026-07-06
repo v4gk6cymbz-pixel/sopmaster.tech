@@ -189,7 +189,7 @@ export default function BatchPage() {
         companyName: companyName.trim(), industry, jurisdiction, companySize, businessModel,
         softwareStack: softwareStack.length > 0 ? softwareStack : ["internal system"],
         departments: selectedDepartments, format: "json",
-        riskAppetite, brandTone, complianceReqs,
+        riskAppetite, brandTone, complianceReqs, creditCost: batchCost,
       });
     } catch {
       batchResult = generateBatchPackage({
@@ -197,6 +197,7 @@ export default function BatchPage() {
         softwareStack: softwareStack.length > 0 ? softwareStack : ["internal system"],
         businessGoals, operationalChallenges, departments: selectedDepartments,
       });
+      await deductCredit(batchCost);
     }
 
     const elapsed = Date.now() - startedAt;
@@ -205,7 +206,6 @@ export default function BatchPage() {
 
     clearInterval(interval);
     setProgress(100);
-    await deductCredit(batchCost);
     setResult(batchResult);
     setLogs(l => [...l, `Package complete: ${batchResult.totalCount} SOPs across ${selectedDepartments.length} departments`]);
     setGenerating(false);

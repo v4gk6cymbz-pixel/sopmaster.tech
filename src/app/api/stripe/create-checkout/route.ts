@@ -9,7 +9,10 @@ export async function POST(req: NextRequest) {
     if (!auth) return unauthorized();
 
     const { type, tier, amount } = await req.json();
-    const origin = process.env["NEXT_PUBLIC_APP_URL"] || "http://localhost:3000";
+    const origin = process.env["NEXT_PUBLIC_APP_URL"];
+    if (!origin) return badRequest("NEXT_PUBLIC_APP_URL is not configured");
+
+
 
     if (type === "subscription") {
       const priceId = STRIPE_PRICES[tier];
