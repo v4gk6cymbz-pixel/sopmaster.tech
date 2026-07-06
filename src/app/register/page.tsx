@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useStore } from "@/lib/store";
 import { useRouter } from "next/navigation";
+import { DIRECTOR_EMAIL } from "@/lib/config";
 
 const SIZE_OPTIONS = [
   { value: "solo", label: "Solo / Owner", desc: "Just me — £400/mo" },
@@ -14,7 +15,6 @@ const SIZE_OPTIONS = [
 export default function RegisterPage() {
   const register = useStore((s) => s.register);
   const router = useRouter();
-  const DIRECTOR_EMAIL = process.env.NEXT_PUBLIC_DIRECTOR_EMAIL || "jvaughan@sopmaster.tech";
   const [company, setCompany] = useState("");
   const [email, setEmail] = useState("");
   const [pin, setPin] = useState("");

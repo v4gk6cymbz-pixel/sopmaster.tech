@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useStore } from "@/lib/store";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { DIRECTOR_EMAIL } from "@/lib/config";
 
 function LoginForm() {
   const login = useStore((s) => s.login);
@@ -28,7 +29,6 @@ function LoginForm() {
       setError("Email is required.");
       return;
     }
-    const DIRECTOR_EMAIL = process.env.NEXT_PUBLIC_DIRECTOR_EMAIL || "jvaughan@sopmaster.tech";
     if (dirEmail.trim().toLowerCase() !== DIRECTOR_EMAIL) {
       setError("Invalid credentials.");
       return;

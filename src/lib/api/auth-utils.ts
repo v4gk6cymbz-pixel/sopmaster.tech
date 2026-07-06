@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { DIRECTOR_EMAIL } from "@/lib/config";
 
 function getJwtSecret(): string {
   const secret = process.env.JWT_SECRET;
@@ -50,4 +51,4 @@ export function unauthorized() {
   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 }
 
-export const DIRECTOR_EMAIL = process.env["NEXT_PUBLIC_DIRECTOR_EMAIL"] || "jvaughan@sopmaster.tech";
+export { DIRECTOR_EMAIL };

@@ -74,14 +74,8 @@ export function clearStripeRedirectParams() {
 }
 
 export function clearAllData() {
-  const keys = ["sop_companies", "sop_session", "sop_vault", "sop_tour", "sop_notifications", "sop_company_profile", "sop_pending_purchase"];
+  const keys = ["sopmaster_token"];
   keys.forEach(key => localStorage.removeItem(key));
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (key && key.startsWith("sop_vault_")) {
-      localStorage.removeItem(key);
-    }
-  }
 }
 
 export function buildSopHtml(title: string, company: string, jurisdiction: string, id: string, verificationHash: string, industry: string, complexity: string, sopType: string, dateCreated: string, createdBy: string, version: number, sections: { heading: string; content: string[] }[]): string {
