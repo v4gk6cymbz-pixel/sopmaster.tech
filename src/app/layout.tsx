@@ -20,7 +20,7 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: "SOPMaster | Operational Documentation Platform for Consultants",
+    default: "SOPMaster | Operational Documentation for Consultants",
     template: "%s | SOPMaster",
   },
   description:
@@ -61,7 +61,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_GB",
     siteName: "SOPMaster",
-    title: "SOPMaster | Operational Documentation Platform for Consultants",
+    title: "SOPMaster | Operational Documentation for Consultants",
     description:
       "Operational documentation platform for consultants. Create, manage and maintain structured SOPs, operational checklists and department documentation.",
     url: "https://sopmaster.tech",
@@ -69,7 +69,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "SOPMaster | Operational Documentation Platform for Consultants",
+    title: "SOPMaster | Operational Documentation for Consultants",
     description:
       "Operational documentation platform for consultants. Create, manage and maintain structured SOPs, operational checklists and department documentation.",
   },

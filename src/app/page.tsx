@@ -182,10 +182,10 @@ export default function HomePage() {
         <section style={{ padding: "60px 24px", borderTop: "1px solid #1E293B" }}>
           <div style={{ maxWidth: "640px", margin: "0 auto", textAlign: "center" }}>
             <p style={{ fontSize: "20px", fontWeight: 500, color: "#F1F5F9", lineHeight: 1.5, marginBottom: "8px" }}>
-              Everything you do becomes a system.
+              Operational Documentation Platform for Consultants.
             </p>
             <p style={{ fontSize: "16px", color: "#94A3B8", lineHeight: 1.6 }}>
-              Every client becomes structured. Every process becomes repeatable.
+              Everything you do becomes a system. Every client becomes structured. Every process becomes repeatable.
             </p>
           </div>
         </section>
