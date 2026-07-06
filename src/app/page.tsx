@@ -136,7 +136,8 @@ export default function HomePage() {
               marginBottom: "16px",
               letterSpacing: "-0.02em",
             }}>
-              SOP<span style={{ color: "#3B82F6" }}>Master</span>
+              <span style={{ display: "block" }}>SOP<span style={{ color: "#3B82F6" }}>Master</span></span>
+              <span style={{ display: "block", fontSize: "18px", fontWeight: 400, color: "#94A3B8", marginTop: "4px" }}>Operational Documentation Platform for Consultants</span>
             </h1>
             <p style={{
               fontSize: "16px",
@@ -193,8 +194,8 @@ export default function HomePage() {
           <div style={{ maxWidth: "800px", margin: "0 auto" }}>
             <div style={{ textAlign: "center", marginBottom: "48px" }}>
               <h2 style={{ fontSize: "24px", fontWeight: 700, color: "#F1F5F9", marginBottom: "8px" }}>What It Does</h2>
-              <p style={{ fontSize: "14px", color: "#64748B", maxWidth: "520px", margin: "0 auto" }}>
-                SOPMaster turns real consulting work into operational systems you can reuse across clients.
+              <p style={{ fontSize: "14px", color: "#64748B", maxWidth: "560px", margin: "0 auto" }}>
+                SOPMaster turns real consulting work into operational systems you can reuse across clients. Instead of writing documents from scratch for each engagement, you build once and deploy across your entire practice.
               </p>
             </div>
             <div className="card" style={{ padding: "32px" }}>
@@ -204,7 +205,7 @@ export default function HomePage() {
                   "Client delivery frameworks",
                   "Repeatable consulting processes",
                   "Standardised internal operations",
-                  "Instant system capture via extension",
+                  "Instant system capture",
                   "Reusable consulting assets instead of one-off work",
                 ].map((item, i) => (
                   <div key={i} style={{ display: "flex", alignItems: "center", gap: "10px" }}>
@@ -214,6 +215,9 @@ export default function HomePage() {
                 ))}
               </div>
             </div>
+            <p style={{ fontSize: "14px", color: "#94A3B8", lineHeight: 1.6, textAlign: "center", marginTop: "24px" }}>
+              Generate your first <Link href="/forge" style={{ color: "#3B82F6", textDecoration: "underline" }}>SOP document</Link> or build a <Link href="/checklist" style={{ color: "#3B82F6", textDecoration: "underline" }}>compliance checklist</Link> directly from your workflows.
+            </p>
           </div>
         </section>
 
@@ -259,13 +263,16 @@ export default function HomePage() {
           <div style={{ maxWidth: "800px", margin: "0 auto" }}>
             <div style={{ textAlign: "center", marginBottom: "48px" }}>
               <h2 style={{ fontSize: "24px", fontWeight: 700, color: "#F1F5F9", marginBottom: "8px" }}>What Makes It Different</h2>
-              <p style={{ fontSize: "14px", color: "#64748B", maxWidth: "520px", margin: "0 auto" }}>
-                Most tools document work. SOPMaster structures how work is delivered.
+              <p style={{ fontSize: "14px", color: "#64748B", maxWidth: "560px", margin: "0 auto" }}>
+                Most tools store information. SOPMaster structures how work is delivered, governed, and scaled across clients and teams.
               </p>
             </div>
             <div className="card" style={{ padding: "32px", textAlign: "center" }}>
-              <p style={{ fontSize: "15px", color: "#F1F5F9", lineHeight: 1.6, marginBottom: "0" }}>
+              <p style={{ fontSize: "15px", color: "#F1F5F9", lineHeight: 1.6, marginBottom: "16px" }}>
                 We don&apos;t store information. We turn it into systems that can be reused, sold, and scaled.
+              </p>
+              <p style={{ fontSize: "14px", color: "#94A3B8", lineHeight: 1.6, marginBottom: "0" }}>
+                Unlike generic document tools or template libraries, SOPMaster builds jurisdiction-aware compliance documents with governance controls, team collaboration, and document verification baked in. Every document includes industry-specific regulatory triggers, cryptographic verification hashes, and configurable retention policies.
               </p>
             </div>
           </div>
@@ -275,16 +282,16 @@ export default function HomePage() {
           <div style={{ maxWidth: "800px", margin: "0 auto" }}>
             <div style={{ textAlign: "center", marginBottom: "48px" }}>
               <h2 style={{ fontSize: "24px", fontWeight: 700, color: "#F1F5F9", marginBottom: "8px" }}>Positioning</h2>
-              <p style={{ fontSize: "14px", color: "#64748B" }}>
-                For consultants who think in systems, not tasks.
+              <p style={{ fontSize: "14px", color: "#64748B", maxWidth: "520px", margin: "0 auto" }}>
+                For consultants who think in systems, not tasks. SOPMaster replaces ad-hoc document creation with structured, repeatable frameworks that scale across your entire practice.
               </p>
             </div>
             <div className="card" style={{ padding: "32px", textAlign: "center" }}>
               <p style={{ fontSize: "15px", color: "#F1F5F9", lineHeight: 1.6, marginBottom: "16px" }}>
-                SOPMaster is built for consultants who don&apos;t run messy operations.
+                SOPMaster is purpose-built for consultants, not generic document platforms repurposed for compliance work.
               </p>
               <p style={{ fontSize: "14px", color: "#94A3B8", lineHeight: 1.6, marginBottom: "0" }}>
-                It&apos;s for people who think in systems, not tasks.
+                Whether you are a <Link href="/about" style={{ color: "#3B82F6", textDecoration: "underline" }}>solo practitioner</Link> standardising client delivery or a multi-team firm scaling operational governance across departments, SOPMaster adapts to your practice size and industry requirements. Learn more <Link href="/about" style={{ color: "#3B82F6", textDecoration: "underline" }}>about how SOPMaster works</Link> for different firm types.
               </p>
             </div>
           </div>
@@ -348,6 +355,9 @@ export default function HomePage() {
           <div style={{ maxWidth: "720px", margin: "0 auto" }}>
             <div style={{ textAlign: "center", marginBottom: "48px" }}>
               <h2 style={{ fontSize: "24px", fontWeight: 700, color: "#F1F5F9", marginBottom: "8px" }}>Frequently Asked Questions</h2>
+              <p style={{ fontSize: "14px", color: "#64748B", marginTop: "8px" }}>
+                Have a different question? <Link href="/contact" style={{ color: "#3B82F6", textDecoration: "underline" }}>Contact our team</Link>.
+              </p>
             </div>
             {[
               { q: "What is SOPMaster?", a: "SOPMaster is a consultant operating system for turning consulting work into repeatable systems, client delivery frameworks, and operational structure. Built for consultants who take delivery seriously." },
@@ -418,6 +428,18 @@ export default function HomePage() {
           </div>
         </section>
 
+        <section style={{ padding: "60px 24px", borderTop: "1px solid #1E293B", textAlign: "center" }}>
+          <div style={{ maxWidth: "600px", margin: "0 auto" }}>
+            <p style={{ fontSize: "13px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", color: "#64748B", marginBottom: "12px" }}>Connect</p>
+            <a href="https://www.linkedin.com/in/sopmaster" target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: "8px", color: "#94A3B8", fontSize: "14px", textDecoration: "none", padding: "10px 20px", border: "1px solid #334155", borderRadius: "8px", transition: "color 0.2s, border-color 0.2s" }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = "#3B82F6"; e.currentTarget.style.borderColor = "#3B82F6"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = "#94A3B8"; e.currentTarget.style.borderColor = "#334155"; }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+              Follow on LinkedIn
+            </a>
+          </div>
+        </section>
+
         <footer style={{
           padding: "40px 24px 24px",
           borderTop: "1px solid #1E293B",
@@ -433,9 +455,10 @@ export default function HomePage() {
               </div>
               <div>
                 <p style={{ fontSize: "11px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em", color: "#64748B", marginBottom: "12px" }}>Platform</p>
-                {["SOP Builder", "Checklist Builder", "Batch Generation", "Document Vault"].map((l, i) => (
-                  <p key={i} style={{ fontSize: "12px", color: "#94A3B8", marginBottom: "6px" }}>{l}</p>
-                ))}
+                <p style={{ fontSize: "12px", color: "#94A3B8", marginBottom: "6px" }}><Link href="/forge" style={{ color: "#94A3B8", textDecoration: "none" }}>SOP Builder</Link></p>
+                <p style={{ fontSize: "12px", color: "#94A3B8", marginBottom: "6px" }}><Link href="/checklist" style={{ color: "#94A3B8", textDecoration: "none" }}>Checklist Builder</Link></p>
+                <p style={{ fontSize: "12px", color: "#94A3B8", marginBottom: "6px" }}><Link href="/batch" style={{ color: "#94A3B8", textDecoration: "none" }}>Batch Generation</Link></p>
+                <p style={{ fontSize: "12px", color: "#94A3B8", marginBottom: "6px" }}><Link href="/armory" style={{ color: "#94A3B8", textDecoration: "none" }}>Document Vault</Link></p>
               </div>
               <div>
                 <p style={{ fontSize: "11px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em", color: "#64748B", marginBottom: "12px" }}>Company</p>
@@ -449,6 +472,13 @@ export default function HomePage() {
                 <p style={{ fontSize: "11px", color: "#64748B", marginBottom: "4px" }}>Dubai Global Tax Code</p>
                 <p style={{ fontSize: "11px", color: "#94A3B8" }}>txcd_20030000 &middot; 0% VAT</p>
               </div>
+            </div>
+            <div style={{ display: "flex", justifyContent: "center", gap: "24px", paddingBottom: "12px" }}>
+              <a href="https://www.linkedin.com/in/sopmaster" target="_blank" rel="noopener noreferrer" style={{ color: "#475569", fontSize: "12px", textDecoration: "none" }}
+                onMouseEnter={(e) => e.currentTarget.style.color = "#3B82F6"}
+                onMouseLeave={(e) => e.currentTarget.style.color = "#475569"}>
+                LinkedIn
+              </a>
             </div>
             <div style={{ borderTop: "1px solid #1E293B", paddingTop: "16px", textAlign: "center" }}>
               <p style={{ fontSize: "11px", color: "#475569" }}>© {new Date().getFullYear()} SOPMaster. All rights reserved.</p>

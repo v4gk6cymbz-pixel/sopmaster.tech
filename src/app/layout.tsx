@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     template: "%s | SOPMaster",
   },
   description:
-    "Professional operational documentation platform for consultants and consultancy firms. Create, manage and maintain structured SOPs, operational checklists and department documentation.",
+    "Operational documentation platform for consultants. Create, manage and maintain structured SOPs, operational checklists and department documentation.",
   keywords: [
     "operational documentation platform",
     "SOP software for consultants",
@@ -40,6 +40,7 @@ export const metadata: Metadata = {
   icons: {
     icon: "/favicon.svg",
     shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
   },
   metadataBase: new URL("https://sopmaster.tech"),
   alternates: {
@@ -62,7 +63,7 @@ export const metadata: Metadata = {
     siteName: "SOPMaster",
     title: "SOPMaster | Operational Documentation Platform for Consultants",
     description:
-      "Professional operational documentation platform for consultants and consultancy firms. Create, manage and maintain structured SOPs, operational checklists and department documentation.",
+      "Operational documentation platform for consultants. Create, manage and maintain structured SOPs, operational checklists and department documentation.",
     url: "https://sopmaster.tech",
     countryName: "United Kingdom",
   },
@@ -70,7 +71,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "SOPMaster | Operational Documentation Platform for Consultants",
     description:
-      "Professional operational documentation platform for consultants and consultancy firms. Create, manage and maintain structured SOPs, operational checklists and department documentation.",
+      "Operational documentation platform for consultants. Create, manage and maintain structured SOPs, operational checklists and department documentation.",
   },
   category: "business",
   classification: "Business Software",
