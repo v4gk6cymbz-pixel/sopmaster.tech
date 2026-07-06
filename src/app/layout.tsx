@@ -20,22 +20,22 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: "SOPMaster | Consultant Operating System for SOPs & Client Delivery",
+    default: "SOPMaster | Operational Documentation Platform for Consultants",
     template: "%s | SOPMaster",
   },
   description:
-    "SOPMaster is an operating system for consultants. Turn real work into structured SOPs, client delivery systems, and reusable consulting frameworks.",
+    "Professional operational documentation platform for consultants and consultancy firms. Create, manage and maintain structured SOPs, operational checklists and department documentation.",
   keywords: [
-    "consultant operating system",
+    "operational documentation platform",
     "SOP software for consultants",
-    "client delivery framework",
-    "consulting systems",
-    "operational governance consulting",
-    "SOP generator for consultants",
-    "consulting process standardisation",
-    "repeatable delivery systems",
-    "consulting firm operations",
-    "standard operating procedure consultant",
+    "consultancy documentation tools",
+    "standard operating procedures",
+    "operational governance",
+    "consulting delivery framework",
+    "process documentation",
+    "compliance documentation",
+    "professional services operations",
+    "SOP management system",
   ],
   icons: {
     icon: "/favicon.svg",
@@ -60,17 +60,17 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_GB",
     siteName: "SOPMaster",
-    title: "SOPMaster | Consultant Operating System for SOPs & Client Delivery",
+    title: "SOPMaster | Operational Documentation Platform for Consultants",
     description:
-      "SOPMaster is an operating system for consultants. Turn real work into structured SOPs, client delivery systems, and reusable consulting frameworks.",
+      "Professional operational documentation platform for consultants and consultancy firms. Create, manage and maintain structured SOPs, operational checklists and department documentation.",
     url: "https://sopmaster.tech",
     countryName: "United Kingdom",
   },
   twitter: {
     card: "summary_large_image",
-    title: "SOPMaster | Consultant Operating System for SOPs & Client Delivery",
+    title: "SOPMaster | Operational Documentation Platform for Consultants",
     description:
-      "SOPMaster is an operating system for consultants. Turn real work into structured SOPs, client delivery systems, and reusable consulting frameworks.",
+      "Professional operational documentation platform for consultants and consultancy firms. Create, manage and maintain structured SOPs, operational checklists and department documentation.",
   },
   category: "business",
   classification: "Business Software",
@@ -85,11 +85,11 @@ const jsonLd = {
       url: "https://sopmaster.tech",
       name: "SOPMaster",
       description:
-        "AI-powered platform for generating, managing, and governing standard operating procedures (SOPs) across regulated industries. Features jurisdiction-aware compliance triggers, document verification hashing, batch operations, and team collaboration.",
+        "Professional operational documentation platform for consultants and consultancy firms. Create, manage and maintain structured Standard Operating Procedures, operational checklists and department-level documentation.",
       inLanguage: "en-GB",
       applicationCategory: "BusinessApplication",
       keywords:
-        "SOP management, standard operating procedure software, compliance documentation, regulatory technology, AI SOP generator",
+        "SOP management, standard operating procedure software, compliance documentation, operational governance, consultancy documentation",
     },
     {
       "@type": "SoftwareApplication",
@@ -99,7 +99,7 @@ const jsonLd = {
       applicationCategory: "BusinessApplication",
       operatingSystem: "Web",
       description:
-        "SOPMaster is an intelligent SOP management platform that helps organisations create, manage, and govern standard operating procedures with AI-powered drafting, jurisdiction-aware regulatory compliance, document verification, and team collaboration tools.",
+        "SOPMaster is a professional operational documentation platform that helps consultants and organisations create, manage and govern standard operating procedures with structured workflows, jurisdiction-aware compliance references, document verification and team collaboration tools.",
       offers: {
         "@type": "AggregateOffer",
         priceCurrency: "GBP",
@@ -108,7 +108,7 @@ const jsonLd = {
         offerCount: "4",
       },
       featureList:
-        "AI SOP generation, jurisdiction-based compliance triggers, document verification hashing, batch document operations, team management, credit-based usage, multi-jurisdiction support, professional document export",
+        "structured SOP generation, jurisdiction-based compliance references, document verification hashing, batch document operations, team management, credit-based usage, multi-jurisdiction support, professional document export",
     },
     {
       "@type": "Organization",
@@ -116,7 +116,13 @@ const jsonLd = {
       url: "https://sopmaster.tech",
       name: "SOPMaster",
       description:
-        "SOPMaster provides AI-powered standard operating procedure management software for regulated industries including finance, healthcare, professional services, and technology.",
+        "SOPMaster provides professional operational documentation software for consultants, consultancy firms and documentation professionals across multiple industries including finance, healthcare, professional services and technology.",
+      email: "Support@sopmaster.tech",
+      contactPoint: {
+        "@type": "ContactPoint",
+        email: "Support@sopmaster.tech",
+        contactType: "customer support",
+      },
     },
   ],
 };
