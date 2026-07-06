@@ -62,6 +62,19 @@ export default function HomePage() {
         setShowTour(true);
       }
     }
+
+    router.prefetch("/register");
+    router.prefetch("/login");
+    router.prefetch("/forge");
+    router.prefetch("/checklist");
+    router.prefetch("/armory");
+    router.prefetch("/settings");
+    router.prefetch("/choose-focus");
+    router.prefetch("/about");
+    router.prefetch("/contact");
+    router.prefetch("/privacy");
+    router.prefetch("/terms");
+    router.prefetch("/batch");
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 

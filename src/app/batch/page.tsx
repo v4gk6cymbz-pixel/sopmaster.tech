@@ -130,6 +130,10 @@ export default function BatchPage() {
   }, [company, companyProfile]);
 
   useEffect(() => {
+    router.prefetch("/armory");
+  }, [router]);
+
+  useEffect(() => {
     if (!session?.isDirector) router.push("/");
   }, [session, router]);
 
@@ -158,31 +162,8 @@ export default function BatchPage() {
       if (!comp || comp.credits < batchCost) { setError(`Insufficient credits. Batch costs ${batchCost} credits (30/dept).`); return; }
     }
     setGenerating(true); setProgress(0); setLogs([]); setResult(null);
-
-    const BATCH_MS = selectedDepartments.length <= 7 ? 24000 : 40000;
-    const loadingLogs = [
-      "Phase 1/8 — Loading Company DNA...",
-      "Phase 2/8 — Mapping business processes across departments...",
-      "Phase 3/8 — Scoring process priority (risk, revenue, compliance)...",
-      "Phase 4/8 — Running SOP Factory — generating documents...",
-      "Phase 5/8 — Cross-linking SOPs to policies, risks, and systems...",
-      "Phase 6/8 — Building knowledge base (manuals, guides, glossary)...",
-      "Phase 7/8 — Running Improvement Engine — finding gaps...",
-      "Phase 8/8 — Assembling Operational Infrastructure Package...",
-      "Complete",
-    ];
-    const startedAt = Date.now();
-    let logIdx = 0;
+    setLogs(l => [...l, "Generating batch documents across selected departments..."]);
     let batchResult: any;
-
-    const tick = () => {
-      const elapsed = Date.now() - startedAt;
-      const pct = Math.min(95, Math.round((elapsed / BATCH_MS) * 95));
-      setProgress(pct);
-      if (logIdx < loadingLogs.length) { setLogs(l => [...l, loadingLogs[logIdx]]); logIdx++; }
-    };
-    tick();
-    const interval = setInterval(tick, BATCH_MS / loadingLogs.length);
 
     try {
       batchResult = await api.generate.batch({
@@ -200,11 +181,6 @@ export default function BatchPage() {
       await deductCredit(batchCost);
     }
 
-    const elapsed = Date.now() - startedAt;
-    const remaining = BATCH_MS - elapsed;
-    if (remaining > 0) await new Promise((r) => setTimeout(r, remaining));
-
-    clearInterval(interval);
     setProgress(100);
     setResult(batchResult);
     setLogs(l => [...l, `Package complete: ${batchResult.totalCount} SOPs across ${selectedDepartments.length} departments`]);

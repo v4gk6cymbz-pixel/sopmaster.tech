@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useStore } from "@/lib/store";
 import { generateHash, generateVerificationHash, formatDate, buildSopHtml } from "@/lib/utils";
 import type { SOP, Industry, Jurisdiction } from "@/types";
@@ -187,7 +187,6 @@ export default function ChecklistPage() {
   const [logs, setLogs] = useState<string[]>([]);
   const [document, setDocument] = useState<{ sections: { heading: string; content: string[] }[] } | null>(null);
   const [savedSop, setSavedSop] = useState<SOP | null>(null);
-  const progressRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (company) { setCompName(company.name); setJurisdiction(company.jurisdiction); }
@@ -195,8 +194,8 @@ export default function ChecklistPage() {
   }, [company, companyProfile]);
 
   useEffect(() => {
-    return () => { if (progressRef.current) clearInterval(progressRef.current); };
-  }, []);
+    router.prefetch("/armory");
+  }, [router]);
 
   useEffect(() => {
     if (company && (!company.focus || company.focus !== "checklists")) router.push("/");
@@ -219,32 +218,24 @@ export default function ChecklistPage() {
     }
 
     setStep("loading"); setProgress(0); setLogs([]);
-    const loadingLogs = ["Loading checklist template...", "Applying industry context...", "Formatting checklist...", "Saving to vault..."];
-    let i = 0;
-    progressRef.current = setInterval(() => {
-      setProgress((p) => Math.min(95, p + 25));
-      if (i < loadingLogs.length) { setLogs((l) => [...l, loadingLogs[i]]); i++; }
-    }, 3000);
+    setLogs((l) => [...l, "Generating checklist..."]);
 
-    setTimeout(() => {
-      if (progressRef.current) clearInterval(progressRef.current);
-      setProgress(100); setLogs((l) => [...l, "Complete"]);
-      const hash = generateHash();
-      const vHash = generateVerificationHash();
-      const now = new Date();
+    const hash = generateHash();
+    const vHash = generateVerificationHash();
+    const now = new Date();
 
-      const sections = generateChecklistContent(checklistType, industry, jurisdiction, compName);
-      setDocument({ sections });
+    const sections = generateChecklistContent(checklistType, industry, jurisdiction, compName);
+    setDocument({ sections });
+    setProgress(100); setLogs((l) => [...l, "Complete"]);
 
-      const sop: SOP = {
-        id: `CHK-${hash}`, title, company: compName, systems: "", headcount: "",
-        jurisdiction: jurisdiction as Jurisdiction, complexity: "1-10", hash, verificationHash: vHash,
-        dateCreated: formatDate(now), dateCategorized: formatDate(now), lastModified: formatDate(now),
-        version: 1, status: "active", companyId: session?.companyId || "", createdBy: session?.name || "",
-        industry, sopType: `Checklist — ${checklistType}`,
-      };
-      addSOP(sop); setSavedSop(sop); setStep("preview");
-    }, 12000);
+    const sop: SOP = {
+      id: `CHK-${hash}`, title, company: compName, systems: "", headcount: "",
+      jurisdiction: jurisdiction as Jurisdiction, complexity: "1-10", hash, verificationHash: vHash,
+      dateCreated: formatDate(now), dateCategorized: formatDate(now), lastModified: formatDate(now),
+      version: 1, status: "active", companyId: session?.companyId || "", createdBy: session?.name || "",
+      industry, sopType: `Checklist — ${checklistType}`,
+    };
+    addSOP(sop); setSavedSop(sop); setStep("preview");
   };
 
   const downloadHtml = () => {

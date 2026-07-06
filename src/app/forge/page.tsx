@@ -84,6 +84,10 @@ export default function ForgePage() {
   }, []);
 
   useEffect(() => {
+    router.prefetch("/armory");
+  }, [router]);
+
+  useEffect(() => {
     if (company && (!company.focus || company.focus !== "sops")) router.push("/");
   }, [company, router]);
 
@@ -119,33 +123,13 @@ export default function ForgePage() {
     }
 
     setStep("loading"); setProgress(0); setLogs([]);
-    const msgs = [
-      "Phase 1/8 — Building company intelligence profile...",
-      "Phase 2/8 — Analysing process intelligence...",
-      "Phase 3/8 — Mapping workflow and decision tree...",
-      "Phase 4/8 — Generating SOP document with full structure...",
-      "Phase 5/8 — Applying quality controls and risk register...",
-      "Phase 6/8 — Building operational assets...",
-      "Phase 7/8 — Running quality engine verification...",
-      "Phase 8/8 — Formatting presentation layer...",
-      "Complete",
-    ];
-    let msgIdx = 0;
-    const startedAt = Date.now();
+    setLogs((l) => [...l, "Building company intelligence profile..."]);
 
     abortRef.current = new AbortController();
     let sopDoc: any;
 
-    const tick = () => {
-      const elapsed = Date.now() - startedAt;
-      const pct = Math.min(95, Math.round((elapsed / 30000) * 95));
-      setProgress(pct);
-      if (msgIdx < msgs.length) { setLogs((l) => [...l, msgs[msgIdx]]); msgIdx++; }
-    };
-    tick();
-    const logInterval = setInterval(tick, 3500);
-
     try {
+      setLogs((l) => [...l, "Generating SOP document with full structure..."]);
       const data = await api.generate.sop({
         title, company: compName, systems: softwareStack.join(", "), headcount,
         jurisdiction, complexity: size, industry, sopType, format: "json",
@@ -157,15 +141,11 @@ export default function ForgePage() {
       });
       sopDoc = data.document;
     } catch {
-      if (abortRef.current?.signal.aborted) { clearInterval(logInterval); return; }
+      if (abortRef.current?.signal.aborted) return;
       sopDoc = generateSOPDocument(title, compName, softwareStack.join(", "), headcount, jurisdiction as Jurisdiction, size, industry, sopType);
       await deductCredit(10);
     }
 
-    const remaining = 30000 - (Date.now() - startedAt);
-    if (remaining > 0) await new Promise((r) => setTimeout(r, remaining));
-
-    clearInterval(logInterval);
     setProgress(100); setLogs((l) => [...l, "Complete"]);
     const hash = generateHash();
     const vHash = generateVerificationHash();
