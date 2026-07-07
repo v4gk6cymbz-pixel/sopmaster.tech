@@ -96,7 +96,17 @@ export default function ForgePage() {
     if (!session?.isDirector) { const c = getCompany(); if (!c || c.credits < 10) { setError("Insufficient credits. Purchase more in Administration."); return; } }
     setStep("loading"); setProgress(0); setLogs([]);
     setLogs((l) => [...l, "Building company intelligence profile..."]);
+    setLogs((l) => [...l, "Running governance engine diagnostics..."]);
     abortRef.current = new AbortController();
+    await new Promise<void>((resolve) => {
+      const totalSteps = 60;
+      let step = 0;
+      const timer = setInterval(() => {
+        step++;
+        setProgress(Math.min((step / totalSteps) * 90, 90));
+        if (step >= totalSteps) { clearInterval(timer); resolve(); }
+      }, 500);
+    });
     let sopDoc: any;
     try {
       setLogs((l) => [...l, "Generating SOP document with full structure..."]);
@@ -277,7 +287,7 @@ export default function ForgePage() {
         {step === "loading" && (
           <div className="glass" style={{ maxWidth: "560px", margin: "0 auto", textAlign: "center", padding: "48px 32px" }}>
             <h2 style={{ fontSize: "16px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "4px" }}>Generating Operational Infrastructure</h2>
-            <p style={{ fontSize: "13px", color: "var(--text-tertiary)", marginBottom: "24px" }}>Engineering SOP with full governance structure</p>
+            <p style={{ fontSize: "13px", color: "var(--text-tertiary)", marginBottom: "24px" }}>Engineering SOP with full governance structure — ~30 seconds</p>
             <div className="progress-bar" style={{ marginBottom: "12px", height: "6px" }}><div className="progress-fill" style={{ width: `${progress}%`, height: "6px" }} /></div>
             <p style={{ fontSize: "12px", color: "var(--accent)", fontWeight: 500, marginBottom: "20px" }}>{Math.round(progress)}%</p>
             <div style={{ textAlign: "left", padding: "12px 16px", background: "rgba(0,0,0,0.2)", borderRadius: "var(--radius)", maxHeight: "200px", overflowY: "auto", fontSize: "12px", fontFamily: "monospace" }}>

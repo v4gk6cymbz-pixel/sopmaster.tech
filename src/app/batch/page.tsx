@@ -93,6 +93,17 @@ export default function BatchPage() {
     if (!session?.isDirector) { const comp = getCompany(); if (!comp || comp.credits < batchCost) { setError(`Insufficient credits. Batch costs ${batchCost} credits (30/dept).`); return; } }
     setGenerating(true); setProgress(0); setLogs([]); setResult(null);
     setLogs(l => [...l, "Generating batch documents across selected departments..."]);
+    setLogs(l => [...l, `Analysing ${selectedDepartments.length} departments...`]);
+    const delayMs = Math.min(selectedDepartments.length * 30000, 300000);
+    const totalSteps = Math.round(delayMs / 500);
+    await new Promise<void>((resolve) => {
+      let step = 0;
+      const timer = setInterval(() => {
+        step++;
+        setProgress(Math.min((step / totalSteps) * 90, 90));
+        if (step >= totalSteps) { clearInterval(timer); resolve(); }
+      }, 500);
+    });
     let batchResult: any;
     try { batchResult = await api.generate.batch({ companyName: companyName.trim(), industry, jurisdiction, companySize, businessModel, softwareStack: softwareStack.length > 0 ? softwareStack : ["internal system"], departments: selectedDepartments, format: "json", riskAppetite, brandTone, complianceReqs, creditCost: batchCost }); }
     catch { batchResult = generateBatchPackage({ companyName: companyName.trim(), industry, companySize, businessModel, softwareStack: softwareStack.length > 0 ? softwareStack : ["internal system"], businessGoals, operationalChallenges, departments: selectedDepartments }); await deductCredit(batchCost); }
@@ -160,7 +171,7 @@ export default function BatchPage() {
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <button onClick={prevPhase} className="btn btn-secondary" style={{ padding: "10px 24px", fontSize: "14px" }}>← Back</button>
               <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-                {selectedDepartments.length > 0 && <span style={{ fontSize: "12px", color: "var(--text-tertiary)" }}>Est. {selectedDepartments.length <= 7 ? "~3 min" : "~5 min"}</span>}
+                {selectedDepartments.length > 0 && <span style={{ fontSize: "12px", color: "var(--text-tertiary)" }}>Est. ~{Math.min(Math.ceil(selectedDepartments.length * 30 / 60), 5)} min</span>}
                 <button onClick={nextPhase} className="btn btn-primary" style={{ padding: "10px 32px", fontSize: "14px" }}>Generate Package →</button>
               </div>
             </div>
@@ -170,7 +181,7 @@ export default function BatchPage() {
         {generating && (
           <div className="glass" style={{ maxWidth: "560px", margin: "0 auto", textAlign: "center", padding: "48px 32px" }}>
             <h2 style={{ fontSize: "16px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "4px" }}>Generating Operational Infrastructure</h2>
-            <p style={{ fontSize: "13px", color: "var(--text-tertiary)", marginBottom: "24px" }}>{selectedDepartments.length} departments · ~{selectedDepartments.length <= 7 ? "3" : "5"} minutes</p>
+            <p style={{ fontSize: "13px", color: "var(--text-tertiary)", marginBottom: "24px" }}>{selectedDepartments.length} departments · ~{Math.min(Math.ceil(selectedDepartments.length * 30 / 60), 5)} minutes</p>
             <div className="progress-bar" style={{ marginBottom: "12px", height: "6px" }}><div className="progress-fill" style={{ width: `${progress}%`, height: "6px" }} /></div>
             <p style={{ fontSize: "12px", color: "var(--accent)", fontWeight: 500, marginBottom: "20px" }}>{Math.round(progress)}%</p>
             <div style={{ textAlign: "left", padding: "12px 16px", background: "rgba(0,0,0,0.2)", borderRadius: "var(--radius)", maxHeight: "240px", overflowY: "auto", fontSize: "12px", fontFamily: "monospace" }}>
