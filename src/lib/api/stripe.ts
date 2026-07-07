@@ -29,3 +29,10 @@ export const STRIPE_CREDIT_PRICES: Record<number, string> = {
   500: validatePrice("STRIPE_PRICE_CREDITS_500", process.env["STRIPE_PRICE_CREDITS_500"]),
   1000: validatePrice("STRIPE_PRICE_CREDITS_1000", process.env["STRIPE_PRICE_CREDITS_1000"]),
 };
+
+export const TIER_CREDITS: Record<string, number> = {
+  solo: 300,
+  small: 1200,
+  medium: 3500,
+  large: 5000,
+};

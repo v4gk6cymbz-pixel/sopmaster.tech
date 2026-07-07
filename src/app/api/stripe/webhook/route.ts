@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getStripe } from "@/lib/api/stripe";
+import { getStripe, TIER_CREDITS } from "@/lib/api/stripe";
 import { prisma } from "@/lib/api/prisma";
 
 export async function POST(req: NextRequest) {
@@ -28,9 +28,16 @@ export async function POST(req: NextRequest) {
             });
           }
         } else if (session.metadata?.type === "subscription") {
+          const tier = session.metadata.tier || "solo";
+          const initialCredits = TIER_CREDITS[tier] || 0;
           await prisma.company.update({
             where: { id: companyId },
-            data: { subscriptionActive: "yes", tier: session.metadata.tier || "solo" },
+            data: {
+              subscriptionActive: "yes",
+              tier,
+              credits: { increment: initialCredits },
+              lifetimeCredits: { increment: initialCredits },
+            },
           });
         }
         break;
@@ -55,12 +62,23 @@ export async function POST(req: NextRequest) {
         if (subscriptionId && typeof subscriptionId === "string") {
           const subscription = await getStripe().subscriptions.retrieve(subscriptionId);
           const companyId = subscription.metadata?.companyId;
-          if (companyId && subscription.metadata?.type === "credits") {
+          if (!companyId) break;
+
+          if (subscription.metadata?.type === "credits") {
             const credits = parseInt(subscription.metadata.credits || "0", 10);
             if (credits > 0) {
               await prisma.company.update({
                 where: { id: companyId },
                 data: { credits: { increment: credits }, lifetimeCredits: { increment: credits } },
+              });
+            }
+          } else {
+            const tier = subscription.metadata?.tier || "solo";
+            const monthlyCredits = TIER_CREDITS[tier] || 0;
+            if (monthlyCredits > 0) {
+              await prisma.company.update({
+                where: { id: companyId },
+                data: { credits: { increment: monthlyCredits }, lifetimeCredits: { increment: monthlyCredits } },
               });
             }
           }
