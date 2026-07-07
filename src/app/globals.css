@@ -596,8 +596,49 @@ label {
   .batch-phase-grid { grid-template-columns: 1fr !important; }
   .dept-grid { grid-template-columns: repeat(2, 1fr) !important; }
 
-  /* Armory table */
-  .vault-table-header, .vault-table-row { flex-wrap: wrap; }
+  /* Armory table — allow horizontal scroll */
+  [class*="vault-table"] { overflow-x: auto !important; }
+
+  /* Vault doc-row children — stack vertically on mobile */
+  .doc-row {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 2px !important;
+  }
+  .doc-row span {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    flex: none !important;
+    width: 100% !important;
+  }
+
+  /* === CRITICAL: Collapse all inline multi-column grids to single column === */
+  /* 2-column grids */
+  div[style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+  /* 3-column grids (Forge decision points, document settings) */
+  div[style*="grid-template-columns: 1fr 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+  /* Home dashboard sidebar layout */
+  div[style*="grid-template-columns: 280px 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+  /* Vault table header inline grid */
+  div[style*="grid-template-columns: 30%"] {
+    grid-template-columns: 1fr !important;
+  }
+  /* Choose focus card grid inside splash-card */
+  div[style*="grid-template-columns: 1fr 1fr"][style*="max-width: 600px"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Force glass containers to not clip scrollable children */
+  .glass[style*="overflow: hidden"] {
+    overflow: visible !important;
+  }
 }
 
 /* === SCROLLBAR === */
