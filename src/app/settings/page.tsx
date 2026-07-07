@@ -142,11 +142,21 @@ export default function SettingsPage() {
               <div className="data-row"><span className="data-label">Rate</span><span className="data-value">£{limits.price.toLocaleString()}/mo</span></div>
               <div className="data-row"><span className="data-label">Status</span><span className="data-value"><span className="status-dot active" style={{ marginRight: "4px" }}></span>Active</span></div>
               <div style={{ display: "flex", gap: "10px", marginTop: "16px" }}>
-                {process.env.NEXT_PUBLIC_STRIPE_CUSTOMER_PORTAL_LINK && (
-                  <a href={process.env.NEXT_PUBLIC_STRIPE_CUSTOMER_PORTAL_LINK} target="_blank" rel="noopener noreferrer" className="btn btn-secondary" style={{ padding: "12px 20px", fontSize: "14px" }}>
-                    Manage in Stripe
-                  </a>
-                )}
+                <button onClick={async () => {
+                  try {
+                    const token = localStorage.getItem("sopmaster_token");
+                    const res = await fetch("/api/stripe/portal", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+                    });
+                    const data = await res.json();
+                    if (data.url) window.location.href = data.url;
+                  } catch (e) {
+                    console.error("Portal error:", e);
+                  }
+                }} className="btn btn-secondary" style={{ padding: "12px 20px", fontSize: "14px" }}>
+                  Manage Subscription
+                </button>
               </div>
               {session.isDirector && <p style={{ fontSize: "13px", color: "var(--warning)", marginTop: "12px" }}>Director override: unlimited credits.</p>}
             </div>
