@@ -82,7 +82,7 @@ export default function HomePage() {
   if (!session || !company) {
     return (
       <div className="fade-in">
-        <section className="landing-hero gradient-bg" style={{
+        <section className="landing-hero" style={{
           minHeight: "100vh",
           display: "flex",
           flexDirection: "column",
@@ -91,107 +91,137 @@ export default function HomePage() {
           padding: "0 24px",
           position: "relative",
           overflow: "hidden",
+          background: "var(--bg-deep)",
         }}>
-          {/* Ambient light */}
+          {/* 3D ambient light orbs */}
           <div style={{
             position: "absolute",
-            width: "600px", height: "600px", borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(37,99,235,0.06) 0%, transparent 60%)",
-            top: "-10%", right: "-10%", pointerEvents: "none",
+            width: "800px", height: "800px", borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(201, 160, 90, 0.04) 0%, transparent 60%)",
+            top: "-20%", right: "-10%", pointerEvents: "none",
+            animation: "float 12s ease-in-out infinite",
           }} />
           <div style={{
             position: "absolute",
-            width: "500px", height: "500px", borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(201,149,58,0.03) 0%, transparent 60%)",
-            bottom: "-10%", left: "-5%", pointerEvents: "none",
+            width: "700px", height: "700px", borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(45, 95, 158, 0.04) 0%, transparent 60%)",
+            bottom: "-15%", left: "-8%", pointerEvents: "none",
+            animation: "float 10s ease-in-out 2s infinite",
           }} />
           <div style={{
             position: "absolute",
-            width: "300px", height: "300px", borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(37,99,235,0.04) 0%, transparent 70%)",
-            top: "40%", left: "20%", pointerEvents: "none",
+            width: "400px", height: "400px", borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(192, 57, 43, 0.02) 0%, transparent 60%)",
+            top: "30%", left: "15%", pointerEvents: "none",
+            animation: "float 14s ease-in-out 4s infinite",
           }} />
 
-          {/* Floating glass cards */}
-          <div className="glass float" style={{ position: "absolute", top: "18%", right: "8%", padding: "16px 20px", pointerEvents: "none" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-              <div style={{ width: "32px", height: "32px", borderRadius: "8px", background: "linear-gradient(135deg, #2563EB, #3B82F6)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "16px", color: "#fff", fontWeight: 700 }}>S</div>
-              <div>
-                <div style={{ fontSize: "12px", fontWeight: 600, color: "#F1F5F9" }}>SOP Builder</div>
-                <div style={{ fontSize: "11px", color: "#64748B" }}>4 SOPs generated today</div>
-              </div>
-            </div>
-          </div>
+          {/* 3D floating geometric elements */}
+          <div style={{
+            position: "absolute", top: "15%", right: "12%",
+            width: "64px", height: "64px",
+            border: "1px solid rgba(201, 160, 90, 0.15)",
+            borderRadius: "16px",
+            transform: "rotate(45deg)",
+            pointerEvents: "none",
+            animation: "float 8s ease-in-out infinite",
+            backdropFilter: "blur(4px)",
+            background: "rgba(201, 160, 90, 0.03)",
+          }} />
+          <div style={{
+            position: "absolute", bottom: "20%", right: "20%",
+            width: "80px", height: "80px",
+            border: "1px solid rgba(45, 95, 158, 0.12)",
+            borderRadius: "50%",
+            pointerEvents: "none",
+            animation: "float 10s ease-in-out 3s infinite",
+            backdropFilter: "blur(4px)",
+            background: "rgba(45, 95, 158, 0.03)",
+          }} />
+          <div style={{
+            position: "absolute", top: "25%", left: "8%",
+            width: "48px", height: "48px",
+            border: "1px solid rgba(201, 160, 90, 0.1)",
+            borderRadius: "12px",
+            transform: "rotate(30deg)",
+            pointerEvents: "none",
+            animation: "float 9s ease-in-out 5s infinite",
+            backdropFilter: "blur(4px)",
+            background: "rgba(201, 160, 90, 0.02)",
+          }} />
 
-          <div className="glass float-delayed" style={{ position: "absolute", bottom: "22%", left: "6%", padding: "16px 20px", pointerEvents: "none" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-              <div style={{ width: "32px", height: "32px", borderRadius: "8px", background: "rgba(201,149,58,0.1)", border: "1px solid rgba(201,149,58,0.3)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "16px", color: "#C9953A", fontWeight: 700 }}>C</div>
-              <div>
-                <div style={{ fontSize: "12px", fontWeight: 600, color: "#F1F5F9" }}>Checklist Builder</div>
-                <div style={{ fontSize: "11px", color: "#64748B" }}>Compliance ready</div>
-              </div>
-            </div>
-          </div>
+          {/* 3D particle dots */}
+          {[{ t: "20%", l: "30%" }, { t: "45%", r: "15%" }, { t: "60%", l: "10%" }, { t: "35%", r: "25%" }, { t: "70%", l: "35%" }, { t: "15%", l: "50%" }, { t: "55%", r: "8%" }, { t: "80%", r: "30%" }].map((p, i) => (
+            <div key={i} style={{
+              position: "absolute", top: p.t, left: p.l, right: p.r,
+              width: "3px", height: "3px",
+              borderRadius: "50%",
+              background: "rgba(201, 160, 90, 0.2)",
+              pointerEvents: "none",
+              animation: `float ${6 + i * 1.5}s ease-in-out ${i * 0.8}s infinite`,
+            }} />
+          ))}
 
-          <div className="glass" style={{ position: "absolute", top: "35%", right: "4%", padding: "10px 14px", pointerEvents: "none", opacity: 0.7 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "11px", color: "#94A3B8" }}>
-              <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#10B981", boxShadow: "0 0 8px rgba(16,185,129,0.3)" }}></span>
-              Document verification active
-            </div>
-          </div>
-
-          <div style={{ maxWidth: "720px", textAlign: "center", position: "relative", zIndex: 1 }}>
-            <div className="glass" style={{ display: "inline-flex", alignItems: "center", gap: "8px", marginBottom: "32px", padding: "8px 18px", borderRadius: "var(--radius)" }}>
-              <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#10B981", boxShadow: "0 0 8px rgba(16,185,129,0.3)" }}></span>
-              <span style={{ fontSize: "12px", fontWeight: 500, letterSpacing: "0.06em", color: "#94A3B8" }}>
+          <div style={{ maxWidth: "780px", textAlign: "center", position: "relative", zIndex: 1 }}>
+            <div style={{
+              display: "inline-flex", alignItems: "center", gap: "10px", marginBottom: "40px",
+              padding: "10px 22px", borderRadius: "var(--radius)",
+              border: "1px solid rgba(201, 160, 90, 0.2)",
+              background: "rgba(201, 160, 90, 0.04)",
+            }}>
+              <span style={{
+                width: "6px", height: "6px", borderRadius: "50%",
+                background: "var(--accent)",
+                boxShadow: "0 0 12px rgba(201, 160, 90, 0.4)",
+              }} />
+              <span style={{ fontSize: "11px", fontWeight: 500, letterSpacing: "0.08em", color: "var(--accent)", textTransform: "uppercase" }}>
                 Operational Governance Platform
               </span>
             </div>
             <h1 style={{
-              fontSize: "48px",
+              fontSize: "52px",
               fontWeight: 700,
-              lineHeight: 1.1,
-              color: "#F1F5F9",
-              marginBottom: "20px",
+              lineHeight: 1.08,
+              color: "var(--text-primary)",
+              marginBottom: "24px",
               letterSpacing: "-0.03em",
             }}>
-              <span style={{ display: "block" }}>SOP<span style={{ color: "#2563EB" }}>Master</span></span>
-              <span style={{ display: "block", fontSize: "22px", fontWeight: 400, color: "#94A3B8", marginTop: "8px", letterSpacing: "-0.01em" }}>Operational Documentation Platform for Consultants</span>
+              <span style={{ display: "block" }}>SOP<span style={{ color: "var(--accent)" }}>Master</span></span>
+              <span style={{ display: "block", fontSize: "24px", fontWeight: 400, color: "var(--text-secondary)", marginTop: "12px", letterSpacing: "-0.01em" }}>Operational Documentation for Consultants</span>
             </h1>
             <p style={{
               fontSize: "17px",
-              lineHeight: 1.7,
-              color: "#94A3B8",
-              marginBottom: "40px",
-              maxWidth: "560px",
-              margin: "0 auto 40px",
+              lineHeight: 1.8,
+              color: "var(--text-secondary)",
+              maxWidth: "600px",
+              margin: "0 auto 44px",
             }}>
               The operating system for consultants who run structured delivery. Turn consulting work into repeatable systems, client delivery frameworks, and operational governance that scales across your entire practice.
             </p>
             <div style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}>
-              <button onClick={() => router.push("/register")} className="btn btn-primary" style={{ padding: "12px 32px", fontSize: "15px" }}>
+              <button onClick={() => router.push("/register")} className="btn btn-primary" style={{ padding: "14px 36px", fontSize: "15px" }}>
                 Get Started
               </button>
-              <button onClick={() => router.push("/login")} className="btn btn-secondary" style={{ padding: "12px 32px", fontSize: "15px" }}>
+              <button onClick={() => router.push("/login")} className="btn btn-secondary" style={{ padding: "14px 36px", fontSize: "15px" }}>
                 Sign In
               </button>
-              <button onClick={() => featuresRef.current?.scrollIntoView({ behavior: "smooth" })} className="btn btn-ghost" style={{ padding: "12px 32px", fontSize: "15px" }}>
+              <button onClick={() => featuresRef.current?.scrollIntoView({ behavior: "smooth" })} className="btn btn-ghost" style={{ padding: "14px 36px", fontSize: "15px" }}>
                 Learn More
               </button>
             </div>
             <p style={{
               fontSize: "13px",
               lineHeight: 1.5,
-              color: "#475569",
-              marginTop: "36px",
+              color: "var(--text-tertiary)",
+              marginTop: "40px",
             }}>
               Trusted by solo consultants, firms, and enterprise organisations
             </p>
           </div>
 
-          <div style={{ position: "absolute", bottom: "32px", left: "50%", transform: "translateX(-50%)" }}>
+          <div style={{ position: "absolute", bottom: "36px", left: "50%", transform: "translateX(-50%)" }}>
             <button onClick={() => featuresRef.current?.scrollIntoView({ behavior: "smooth" })}
-              style={{ background: "none", border: "none", cursor: "pointer", color: "#475569", fontSize: "20px", opacity: 0.5 }}>
+              style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-tertiary)", fontSize: "20px", opacity: 0.4 }}>
               ↓
             </button>
           </div>

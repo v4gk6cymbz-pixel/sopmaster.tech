@@ -37,21 +37,48 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="splash-screen" style={{ padding: "24px" }}>
-      <div className="card" style={{ width: "100%", maxWidth: "480px", padding: "40px", border: "1px solid var(--border)" }}>
-        <div className="gradient-border" style={{ padding: 0, margin: "-40px -40px 28px -40px", borderRadius: "12px 12px 0 0" }}>
-          <div style={{ height: "80px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <div className="splash-logo" style={{ width: "44px", height: "44px", fontSize: "18px" }}>S</div>
+    <div className="splash-screen" style={{ padding: "24px", position: "relative", overflow: "hidden" }}>
+      {/* 3D ambient orbs */}
+      <div style={{
+        position: "absolute", width: "500px", height: "500px", borderRadius: "50%",
+        background: "radial-gradient(circle, rgba(201, 160, 90, 0.03) 0%, transparent 60%)",
+        top: "-15%", right: "-10%", pointerEvents: "none",
+        animation: "float 10s ease-in-out infinite",
+      }} />
+      <div style={{
+        position: "absolute", width: "400px", height: "400px", borderRadius: "50%",
+        background: "radial-gradient(circle, rgba(45, 95, 158, 0.03) 0%, transparent 60%)",
+        bottom: "-10%", left: "-8%", pointerEvents: "none",
+        animation: "float 12s ease-in-out 3s infinite",
+      }} />
+      <div style={{
+        position: "absolute", top: "30%", right: "12%",
+        width: "40px", height: "40px", border: "1px solid rgba(201, 160, 90, 0.1)", borderRadius: "10px", transform: "rotate(30deg)",
+        pointerEvents: "none", animation: "float 8s ease-in-out 2s infinite",
+      }} />
+      <div style={{
+        position: "absolute", bottom: "25%", left: "10%",
+        width: "50px", height: "50px", border: "1px solid rgba(45, 95, 158, 0.08)", borderRadius: "50%",
+        pointerEvents: "none", animation: "float 9s ease-in-out 5s infinite",
+      }} />
+
+      <div style={{ position: "relative", zIndex: 1 }}>
+        <div className="card" style={{ width: "100%", maxWidth: "480px", padding: "40px", border: "1px solid var(--border-gold)" }}>
+          <div style={{ textAlign: "center", marginBottom: "32px" }}>
+            <div style={{
+              width: "48px", height: "48px", borderRadius: "14px", margin: "0 auto 20px",
+              background: "linear-gradient(135deg, var(--accent), #8B7335)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: "20px", fontWeight: 700, color: "var(--bg-deep)",
+              boxShadow: "0 0 30px rgba(201, 160, 90, 0.2)",
+            }}>S</div>
+            <h1 style={{ fontSize: "22px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "8px", letterSpacing: "-0.01em" }}>
+              Register
+            </h1>
+            <p style={{ fontSize: "14px", color: "var(--text-tertiary)", lineHeight: 1.6 }}>
+              Create your consultancy account to get started. Register your firm and set up your workspace.
+            </p>
           </div>
-        </div>
-        <div style={{ textAlign: "center", marginBottom: "28px" }}>
-          <h1 style={{ fontSize: "22px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "6px" }}>
-            Register
-          </h1>
-          <p style={{ fontSize: "14px", color: "var(--text-tertiary)" }}>
-            Create your consultancy account to get started. Register your firm and set up your workspace.
-          </p>
-        </div>
 
         <div style={{ marginBottom: "16px" }}>
           <label>Firm Name</label>
@@ -88,7 +115,7 @@ export default function RegisterPage() {
               <button key={opt.value} onClick={() => setCompanySize(opt.value)}
                 style={{
                   textAlign: "left", padding: "14px 18px", borderRadius: "10px", cursor: "pointer",
-                  border: companySize === opt.value ? "1px solid rgba(37, 99, 235, 0.3)" : "1px solid var(--border)",
+                  border: companySize === opt.value ? "1px solid rgba(201, 160, 90, 0.3)" : "1px solid var(--border)",
                   background: companySize === opt.value ? "var(--accent-subtle)" : "var(--bg-card)",
                   display: "flex", justifyContent: "space-between", alignItems: "center", transition: "all 0.2s", fontFamily: "inherit",
                 }}>
@@ -112,6 +139,7 @@ export default function RegisterPage() {
           </p>
         </div>
       </div>
+    </div>
     </div>
   );
 }

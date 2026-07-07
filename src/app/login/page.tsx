@@ -58,29 +58,56 @@ function LoginForm() {
   };
 
   return (
-    <div className="splash-screen" style={{ padding: "24px" }}>
-      <div className="card" style={{ width: "100%", maxWidth: "420px", padding: "40px", border: "1px solid var(--border)" }}>
-        <div className="gradient-border" style={{ padding: 0, margin: "-40px -40px 28px -40px", borderRadius: "12px 12px 0 0" }}>
-          <div style={{ height: "80px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <div className="splash-logo" style={{ width: "44px", height: "44px", fontSize: "18px" }}>S</div>
+    <div className="splash-screen" style={{ padding: "24px", position: "relative", overflow: "hidden" }}>
+      {/* 3D ambient orbs */}
+      <div style={{
+        position: "absolute", width: "500px", height: "500px", borderRadius: "50%",
+        background: "radial-gradient(circle, rgba(201, 160, 90, 0.03) 0%, transparent 60%)",
+        top: "-15%", right: "-10%", pointerEvents: "none",
+        animation: "float 10s ease-in-out infinite",
+      }} />
+      <div style={{
+        position: "absolute", width: "400px", height: "400px", borderRadius: "50%",
+        background: "radial-gradient(circle, rgba(45, 95, 158, 0.03) 0%, transparent 60%)",
+        bottom: "-10%", left: "-8%", pointerEvents: "none",
+        animation: "float 12s ease-in-out 3s infinite",
+      }} />
+      <div style={{
+        position: "absolute", top: "40%", left: "10%",
+        width: "40px", height: "40px", border: "1px solid rgba(201, 160, 90, 0.1)", borderRadius: "10px", transform: "rotate(30deg)",
+        pointerEvents: "none", animation: "float 8s ease-in-out 2s infinite",
+      }} />
+      <div style={{
+        position: "absolute", bottom: "30%", right: "12%",
+        width: "50px", height: "50px", border: "1px solid rgba(45, 95, 158, 0.08)", borderRadius: "50%",
+        pointerEvents: "none", animation: "float 9s ease-in-out 5s infinite",
+      }} />
+
+      <div style={{ position: "relative", zIndex: 1 }}>
+        <div className="card" style={{ width: "100%", maxWidth: "420px", padding: "40px", border: "1px solid var(--border-gold)" }}>
+          <div style={{ textAlign: "center", marginBottom: "32px" }}>
+            <div style={{
+              width: "48px", height: "48px", borderRadius: "14px", margin: "0 auto 20px",
+              background: "linear-gradient(135deg, var(--accent), #8B7335)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: "20px", fontWeight: 700, color: "var(--bg-deep)",
+              boxShadow: "0 0 30px rgba(201, 160, 90, 0.2)",
+            }}>S</div>
+            <h1 style={{ fontSize: "22px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "8px", letterSpacing: "-0.01em" }}>
+              Sign In
+            </h1>
+            <p style={{ fontSize: "14px", color: "var(--text-tertiary)", lineHeight: 1.6 }}>
+              Access your organisation workspace. Sign in with your company credentials.
+            </p>
           </div>
-        </div>
-        <div style={{ textAlign: "center", marginBottom: "28px" }}>
-          <h1 style={{ fontSize: "22px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "6px" }}>
-            Sign In
-          </h1>
-          <p style={{ fontSize: "14px", color: "var(--text-tertiary)" }}>
-            Access your organisation workspace. Sign in with your company credentials.
-          </p>
-        </div>
 
         <div style={{ display: "flex", gap: "8px", marginBottom: "24px" }}>
           <button onClick={() => { setMode("standard"); setError(""); }}
             style={{
               flex: 1, padding: "10px 8px", fontSize: "13px", fontWeight: 500, borderRadius: "8px", cursor: "pointer", fontFamily: "inherit",
               background: mode === "standard" ? "var(--accent-subtle)" : "transparent",
-              border: mode === "standard" ? "1px solid rgba(37, 99, 235, 0.3)" : "1px solid var(--border)",
-              color: mode === "standard" ? "var(--text-primary)" : "var(--text-tertiary)", transition: "all 0.2s",
+              border: mode === "standard" ? "1px solid rgba(201, 160, 90, 0.3)" : "1px solid var(--border)",
+              color: mode === "standard" ? "var(--accent)" : "var(--text-tertiary)", transition: "all 0.2s",
             }}>
             Firm Login
           </button>
@@ -88,8 +115,8 @@ function LoginForm() {
             style={{
               flex: 1, padding: "10px 8px", fontSize: "13px", fontWeight: 500, borderRadius: "8px", cursor: "pointer", fontFamily: "inherit",
               background: mode === "director" ? "var(--accent-subtle)" : "transparent",
-              border: mode === "director" ? "1px solid rgba(37, 99, 235, 0.3)" : "1px solid var(--border)",
-              color: mode === "director" ? "var(--text-primary)" : "var(--text-tertiary)", transition: "all 0.2s",
+              border: mode === "director" ? "1px solid rgba(201, 160, 90, 0.3)" : "1px solid var(--border)",
+              color: mode === "director" ? "var(--accent)" : "var(--text-tertiary)", transition: "all 0.2s",
             }}>
             Director Login
           </button>
@@ -157,6 +184,7 @@ function LoginForm() {
           </p>
         </div>
       </div>
+    </div>
     </div>
   );
 }
