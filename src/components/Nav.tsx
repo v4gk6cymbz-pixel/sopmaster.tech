@@ -6,12 +6,12 @@ import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 
 const NAV_ITEMS = [
-  { href: "/", label: "Workspace", icon: "W" },
-  { href: "/forge", label: "SOP Builder", focus: "sops" as const, icon: "S" },
-  { href: "/checklist", label: "Checklist Builder", focus: "checklists" as const, icon: "C" },
-  { href: "/batch", label: "Batch Builder", focus: "batch" as const, icon: "B" },
-  { href: "/armory", label: "Document Vault", icon: "V" },
-  { href: "/settings", label: "Administration", icon: "A" },
+  { href: "/", label: "Workspace", icon: "01" },
+  { href: "/forge", label: "SOP Builder", focus: "sops" as const, icon: "02" },
+  { href: "/checklist", label: "Checklist Builder", focus: "checklists" as const, icon: "03" },
+  { href: "/batch", label: "Batch Builder", focus: "batch" as const, icon: "04" },
+  { href: "/armory", label: "Document Vault", icon: "05" },
+  { href: "/settings", label: "Administration", icon: "06" },
 ];
 
 function isLocked(item: typeof NAV_ITEMS[number], company: { focus?: string; subscriptionActive?: string } | null, isDirector: boolean): boolean {
@@ -57,24 +57,26 @@ export default function Nav() {
     <>
       <header style={{
         borderBottom: "1px solid var(--border)",
-        background: "var(--bg-primary)",
+        background: "var(--navy-900)",
         position: "sticky",
         top: 0,
         zIndex: 50,
       }}>
         <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px" }}>
-          <div style={{ display: "flex", alignItems: "center", height: "56px", gap: "24px" }}>
+          <div style={{ display: "flex", alignItems: "center", height: "60px", gap: "28px" }}>
             <Link href="/" style={{
-              fontSize: "16px", fontWeight: 700, color: "var(--text-primary)", textDecoration: "none",
-              letterSpacing: "-0.02em", whiteSpace: "nowrap",
+              fontSize: "15px", fontWeight: 600, color: "var(--white)", textDecoration: "none",
+              letterSpacing: "-0.01em", whiteSpace: "nowrap",
               display: "flex", alignItems: "center", gap: "10px",
             }}>
               <span style={{
                 width: "28px", height: "28px", borderRadius: "8px",
                 background: "linear-gradient(135deg, var(--accent), #8B7335)",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: "13px", fontWeight: 700, color: "#fff",
+                fontSize: "12px", fontWeight: 700, color: "#fff",
               }}>S</span>
+              <span style={{ fontSize: "11px", color: "var(--accent)", fontWeight: 500, letterSpacing: "0.08em", textTransform: "uppercase", marginLeft: "-4px" }}>OGI</span>
+              <span style={{ color: "var(--text-muted)", fontWeight: 300 }}>/</span>
               SOPMaster
             </Link>
 
@@ -85,63 +87,68 @@ export default function Nav() {
                 return locked ? (
                   <span key={item.href} title="Subscribe to unlock"
                     style={{
-                      display: "flex", alignItems: "center", gap: "6px", padding: "8px 14px",
-                      borderRadius: "8px", fontSize: "13px", fontWeight: 500,
-                      color: "var(--text-tertiary)", cursor: "not-allowed", opacity: 0.45,
+                      display: "flex", alignItems: "center", gap: "6px", padding: "7px 14px",
+                      borderRadius: "8px", fontSize: "12px", fontWeight: 500,
+                      color: "var(--text-tertiary)", cursor: "not-allowed", opacity: 0.35,
+                      letterSpacing: "0.01em",
                     }}>
-                    {item.icon} {item.label}
+                    <span style={{ fontSize: "9px", opacity: 0.4, fontFamily: "monospace" }}>{item.icon}</span>
+                    {item.label}
                   </span>
                 ) : (
                   <Link
                     key={item.href}
                     href={item.href}
                     style={{
-                      display: "flex", alignItems: "center", gap: "6px", padding: "8px 14px",
-                      borderRadius: "8px", fontSize: "13px", fontWeight: 500,
+                      display: "flex", alignItems: "center", gap: "6px", padding: "7px 14px",
+                      borderRadius: "8px", fontSize: "12px", fontWeight: 500,
                       color: active ? "var(--accent)" : "var(--text-secondary)",
                       background: active ? "var(--accent-subtle)" : "transparent",
                       textDecoration: "none", transition: "all 0.15s",
+                      letterSpacing: "0.01em",
                     }}
-                    onMouseEnter={(e) => { if (!active) e.currentTarget.style.background = "var(--bg-card)"; }}
+                    onMouseEnter={(e) => { if (!active) e.currentTarget.style.background = "rgba(255,255,255,0.03)"; }}
                     onMouseLeave={(e) => { if (!active) e.currentTarget.style.background = "transparent"; }}
                   >
-                    {item.icon} {item.label}
+                    <span style={{ fontSize: "9px", opacity: 0.5, fontFamily: "monospace" }}>{item.icon}</span>
+                    {item.label}
                   </Link>
                 );
               })}
             </nav>
 
-            <div className="desktop-nav" style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            <div className="desktop-nav" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
               <button onClick={() => setSearchOpen(!searchOpen)}
                 style={{
-                  display: "flex", alignItems: "center", gap: "6px", padding: "7px 14px",
+                  display: "flex", alignItems: "center", gap: "6px", padding: "6px 12px",
                   borderRadius: "8px", fontSize: "12px", color: "var(--text-tertiary)",
-                  background: "var(--bg-card)", border: "1px solid var(--border)",
-                  cursor: "pointer", fontFamily: "inherit", minWidth: "160px",
+                  background: "var(--navy-700)", border: "1px solid var(--border)",
+                  cursor: "pointer", fontFamily: "inherit", minWidth: "140px",
                 }}>
-                <span style={{ opacity: 0.5 }}>&#8981;</span>
-                <span>Search documents...</span>
-                <span style={{ marginLeft: "auto", fontSize: "10px", padding: "2px 5px", borderRadius: "4px", background: "var(--bg-secondary)", color: "var(--text-tertiary)" }}>Ctrl+K</span>
+                <span style={{ opacity: 0.4, fontSize: "13px" }}>&#8981;</span>
+                <span style={{ fontSize: "11px" }}>Search...</span>
+                <span style={{ marginLeft: "auto", fontSize: "9px", padding: "2px 5px", borderRadius: "4px", background: "var(--navy-800)", color: "var(--text-tertiary)" }}>&#8984;K</span>
               </button>
 
               <div style={{
-                display: "flex", alignItems: "center", gap: "8px", padding: "6px 14px",
-                borderRadius: "8px", background: session.isDirector ? "rgba(201, 149, 58, 0.08)" : "var(--bg-card)",
-                border: session.isDirector ? "1px solid rgba(201, 149, 58, 0.2)" : "1px solid var(--border)",
+                display: "flex", alignItems: "center", gap: "8px", padding: "5px 12px",
+                borderRadius: "8px",
+                background: session.isDirector ? "var(--accent-subtle)" : "var(--navy-700)",
+                border: session.isDirector ? "1px solid var(--accent-border)" : "1px solid var(--border)",
               }}>
-                <span style={{ fontSize: "12px", color: "var(--text-tertiary)" }}>{company?.name}</span>
-                <span style={{ width: "1px", height: "14px", background: "var(--border)" }}></span>
-                <span style={{ fontSize: "12px", fontWeight: 600, color: session.isDirector ? "var(--accent)" : "var(--accent)" }}>
-                  {creditsDisplay} credits
+                <span style={{ fontSize: "11px", color: "var(--text-tertiary)" }}>{company?.name}</span>
+                <span style={{ width: "1px", height: "12px", background: "var(--border)" }}></span>
+                <span style={{ fontSize: "11px", fontWeight: 600, color: "var(--accent)" }}>
+                  {creditsDisplay}
                 </span>
               </div>
 
               <button onClick={logout} style={{
-                padding: "7px 14px", borderRadius: "8px", fontSize: "12px", fontWeight: 500,
+                padding: "6px 12px", borderRadius: "8px", fontSize: "11px", fontWeight: 500,
                 color: "var(--text-tertiary)", background: "none", border: "1px solid var(--border)",
                 cursor: "pointer", fontFamily: "inherit", transition: "all 0.15s",
               }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = "var(--bg-card)"; e.currentTarget.style.color = "var(--text-primary)"; }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.03)"; e.currentTarget.style.color = "var(--text-primary)"; }}
                 onMouseLeave={(e) => { e.currentTarget.style.background = "none"; e.currentTarget.style.color = "var(--text-tertiary)"; }}>
                 Sign Out
               </button>
@@ -198,24 +205,24 @@ export default function Nav() {
           position: "fixed", inset: 0, zIndex: 100, display: "flex", alignItems: "flex-start",
           justifyContent: "center", paddingTop: "80px",
         }}>
-          <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.6)" }} onClick={() => setSearchOpen(false)}></div>
-          <div className="card" style={{
-            position: "relative", width: "100%", maxWidth: "520px", padding: "20px",
+          <div style={{ position: "absolute", inset: 0, background: "rgba(7, 11, 24, 0.7)" }} onClick={() => setSearchOpen(false)}></div>
+          <div className="glass" style={{
+            position: "relative", width: "100%", maxWidth: "480px", padding: "20px",
             border: "1px solid var(--border-light)",
           }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "14px" }}>
               <span style={{ color: "var(--text-tertiary)", fontSize: "16px" }}>&#8981;</span>
               <input ref={searchRef} type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search documents by title, company, or hash..."
-                style={{ flex: 1, border: "none", background: "none", fontSize: "15px", color: "var(--text-primary)", outline: "none" }}
+                placeholder="Search documents..."
+                style={{ flex: 1, border: "none", background: "none", fontSize: "14px", color: "var(--text-primary)", outline: "none" }}
                 onKeyDown={(e) => { if (e.key === "Enter") { setSearchOpen(false); } }}
               />
-              <button onClick={() => setSearchOpen(false)} style={{ background: "none", border: "none", color: "var(--text-tertiary)", cursor: "pointer", fontSize: "14px", fontFamily: "inherit" }}>
+              <button onClick={() => setSearchOpen(false)} style={{ background: "none", border: "none", color: "var(--text-tertiary)", cursor: "pointer", fontSize: "12px", fontFamily: "inherit" }}>
                 Esc
               </button>
             </div>
             {searchQuery && (
-              <div style={{ fontSize: "13px", color: "var(--text-tertiary)", padding: "8px 0" }}>
+              <div style={{ fontSize: "13px", color: "var(--text-tertiary)", padding: "6px 0" }}>
                 Press Enter to search for &ldquo;{searchQuery}&rdquo;
               </div>
             )}

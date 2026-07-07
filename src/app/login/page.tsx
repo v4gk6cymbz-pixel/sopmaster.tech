@@ -59,132 +59,105 @@ function LoginForm() {
 
   return (
     <div className="splash-screen" style={{ padding: "24px", position: "relative", overflow: "hidden" }}>
-      {/* 3D ambient orbs */}
-      <div style={{
-        position: "absolute", width: "500px", height: "500px", borderRadius: "50%",
-        background: "radial-gradient(circle, rgba(201, 160, 90, 0.03) 0%, transparent 60%)",
-        top: "-15%", right: "-10%", pointerEvents: "none",
-        animation: "float 10s ease-in-out infinite",
-      }} />
-      <div style={{
-        position: "absolute", width: "400px", height: "400px", borderRadius: "50%",
-        background: "radial-gradient(circle, rgba(45, 95, 158, 0.03) 0%, transparent 60%)",
-        bottom: "-10%", left: "-8%", pointerEvents: "none",
-        animation: "float 12s ease-in-out 3s infinite",
-      }} />
-      <div style={{
-        position: "absolute", top: "40%", left: "10%",
-        width: "40px", height: "40px", border: "1px solid rgba(201, 160, 90, 0.1)", borderRadius: "10px", transform: "rotate(30deg)",
-        pointerEvents: "none", animation: "float 8s ease-in-out 2s infinite",
-      }} />
-      <div style={{
-        position: "absolute", bottom: "30%", right: "12%",
-        width: "50px", height: "50px", border: "1px solid rgba(45, 95, 158, 0.08)", borderRadius: "50%",
-        pointerEvents: "none", animation: "float 9s ease-in-out 5s infinite",
-      }} />
+      <div style={{ position: "absolute", width: "500px", height: "500px", borderRadius: "50%",
+        background: "radial-gradient(circle, rgba(201,160,90,0.025) 0%, transparent 60%)",
+        top: "-15%", right: "-10%", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", width: "400px", height: "400px", borderRadius: "50%",
+        background: "radial-gradient(circle, rgba(59,130,246,0.02) 0%, transparent 60%)",
+        bottom: "-10%", left: "-8%", pointerEvents: "none" }} />
 
       <div style={{ position: "relative", zIndex: 1 }}>
-        <div className="card" style={{ width: "100%", maxWidth: "420px", padding: "40px", border: "1px solid var(--border-gold)" }}>
-          <div style={{ textAlign: "center", marginBottom: "32px" }}>
+        <div className="glass" style={{ width: "100%", maxWidth: "420px", padding: "36px 32px 28px" }}>
+          <div style={{ textAlign: "center", marginBottom: "28px" }}>
             <div style={{
-              width: "48px", height: "48px", borderRadius: "14px", margin: "0 auto 20px",
+              width: "44px", height: "44px", borderRadius: "12px", margin: "0 auto 18px",
               background: "linear-gradient(135deg, var(--accent), #8B7335)",
               display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: "20px", fontWeight: 700, color: "var(--bg-deep)",
-              boxShadow: "0 0 30px rgba(201, 160, 90, 0.2)",
+              fontSize: "18px", fontWeight: 700, color: "var(--navy-950)",
             }}>S</div>
-            <h1 style={{ fontSize: "22px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "8px", letterSpacing: "-0.01em" }}>
-              Sign In
+            <h1 style={{ fontSize: "20px", fontWeight: 600, color: "var(--white)", marginBottom: "6px", letterSpacing: "-0.01em" }}>
+              Access Platform
             </h1>
-            <p style={{ fontSize: "14px", color: "var(--text-tertiary)", lineHeight: 1.6 }}>
-              Access your organisation workspace. Sign in with your company credentials.
+            <p style={{ fontSize: "13px", color: "var(--text-tertiary)", lineHeight: 1.6 }}>
+              Sign in to your Operational Governance workspace.
             </p>
           </div>
 
-        <div style={{ display: "flex", gap: "8px", marginBottom: "24px" }}>
-          <button onClick={() => { setMode("standard"); setError(""); }}
-            style={{
-              flex: 1, padding: "10px 8px", fontSize: "13px", fontWeight: 500, borderRadius: "8px", cursor: "pointer", fontFamily: "inherit",
-              background: mode === "standard" ? "var(--accent-subtle)" : "transparent",
-              border: mode === "standard" ? "1px solid rgba(201, 160, 90, 0.3)" : "1px solid var(--border)",
-              color: mode === "standard" ? "var(--accent)" : "var(--text-tertiary)", transition: "all 0.2s",
-            }}>
-            Firm Login
-          </button>
-          <button onClick={() => { setMode("director"); setError(""); }}
-            style={{
-              flex: 1, padding: "10px 8px", fontSize: "13px", fontWeight: 500, borderRadius: "8px", cursor: "pointer", fontFamily: "inherit",
-              background: mode === "director" ? "var(--accent-subtle)" : "transparent",
-              border: mode === "director" ? "1px solid rgba(201, 160, 90, 0.3)" : "1px solid var(--border)",
-              color: mode === "director" ? "var(--accent)" : "var(--text-tertiary)", transition: "all 0.2s",
-            }}>
-            Director Login
-          </button>
-        </div>
-
-        {mode === "director" ? (
-          <div>
-            <div style={{ marginBottom: "16px" }}>
-              <label>Email</label>
-              <input type="email" value={dirEmail} onChange={(e) => setDirEmail(e.target.value)}
-                placeholder="Director email" onKeyDown={(e) => { if (e.key === "Enter") handleDirLogin(); }} />
-            </div>
-            <div style={{ marginBottom: "24px" }}>
-              <label>PIN (optional)</label>
-              <input type="password" value={dirPin} onChange={(e) => setDirPin(e.target.value)}
-                placeholder="Not required" onKeyDown={(e) => { if (e.key === "Enter") handleDirLogin(); }} />
-            </div>
-            {error && <p style={{ fontSize: "13px", color: "var(--danger)", marginBottom: "12px" }}>{error}</p>}
-            <button onClick={handleDirLogin} className="btn btn-primary" style={{ width: "100%", padding: "14px 28px", fontSize: "15px" }}>
-              Sign In
-            </button>
+          <div style={{ display: "flex", gap: "8px", marginBottom: "24px" }}>
+            {[
+              { key: "standard", label: "Firm Login" },
+              { key: "director", label: "Director Login" },
+            ].map((m) => (
+              <button key={m.key} onClick={() => { setMode(m.key as "standard" | "director"); setError(""); }}
+                style={{
+                  flex: 1, padding: "9px 8px", fontSize: "12px", fontWeight: 500, borderRadius: "8px", cursor: "pointer", fontFamily: "inherit",
+                  background: mode === m.key ? "var(--accent-subtle)" : "transparent",
+                  border: mode === m.key ? "1px solid var(--accent-border)" : "1px solid var(--border)",
+                  color: mode === m.key ? "var(--accent)" : "var(--text-tertiary)", transition: "all 0.2s",
+                }}>
+                {m.label}
+              </button>
+            ))}
           </div>
-        ) : (
-          <div>
-            <div style={{ marginBottom: "16px" }}>
-              <label>Company Name</label>
-              <input type="text" value={companyName} onChange={(e) => setCompanyName(e.target.value)} placeholder="Your firm name" />
-            </div>
-            <div style={{ marginBottom: "16px" }}>
-              <label>PIN</label>
-              <input type="password" value={pin} onChange={(e) => setPin(e.target.value)} placeholder="Firm PIN" onKeyDown={(e) => { if (e.key === "Enter") handleLogin(); }} />
-            </div>
 
-            <div style={{ marginBottom: "16px" }}>
-              <button onClick={() => setIsMember(!isMember)}
-                style={{ fontSize: "13px", color: "var(--accent)", background: "none", border: "none", cursor: "pointer", padding: 0, fontFamily: "inherit" }}>
-                {isMember ? "Sign in as director instead" : "Sign in as team member"}
+          {mode === "director" ? (
+            <div>
+              <div style={{ marginBottom: "14px" }}>
+                <label>Email</label>
+                <input type="email" value={dirEmail} onChange={(e) => setDirEmail(e.target.value)}
+                  placeholder="Director email" onKeyDown={(e) => { if (e.key === "Enter") handleDirLogin(); }} />
+              </div>
+              {error && <p style={{ fontSize: "13px", color: "var(--danger)", marginBottom: "12px" }}>{error}</p>}
+              <button onClick={handleDirLogin} className="btn btn-primary" style={{ width: "100%", padding: "12px 28px", fontSize: "14px" }}>
+                Sign In
               </button>
             </div>
-
-            {isMember && (
-              <div style={{ marginBottom: "16px" }} className="fade-in">
-                <div style={{ marginBottom: "12px" }}>
-                  <label>Your Name</label>
-                  <input type="text" value={memberName} onChange={(e) => setMemberName(e.target.value)} placeholder="Full name" />
-                </div>
-                <div>
-                  <label>Your Role</label>
-                  <input type="text" value={memberRole} onChange={(e) => setMemberRole(e.target.value)} placeholder="e.g., Operations Lead" />
-                </div>
+          ) : (
+            <div>
+              <div style={{ marginBottom: "14px" }}>
+                <label>Company Name</label>
+                <input type="text" value={companyName} onChange={(e) => setCompanyName(e.target.value)} placeholder="Your firm name" />
               </div>
-            )}
+              <div style={{ marginBottom: "14px" }}>
+                <label>PIN</label>
+                <input type="password" value={pin} onChange={(e) => setPin(e.target.value)} placeholder="Firm PIN" onKeyDown={(e) => { if (e.key === "Enter") handleLogin(); }} />
+              </div>
 
-            {error && <p style={{ fontSize: "13px", color: "var(--danger)", marginBottom: "12px" }}>{error}</p>}
+              <div style={{ marginBottom: "14px" }}>
+                <button onClick={() => setIsMember(!isMember)}
+                  style={{ fontSize: "12px", color: "var(--accent)", background: "none", border: "none", cursor: "pointer", padding: 0, fontFamily: "inherit" }}>
+                  {isMember ? "Sign in as director instead" : "Sign in as team member"}
+                </button>
+              </div>
 
-            <button onClick={handleLogin} className="btn btn-primary" style={{ width: "100%", padding: "14px 28px", fontSize: "15px" }}>
-              Sign In
-            </button>
+              {isMember && (
+                <div style={{ marginBottom: "14px" }} className="fade-in">
+                  <div style={{ marginBottom: "10px" }}>
+                    <label>Your Name</label>
+                    <input type="text" value={memberName} onChange={(e) => setMemberName(e.target.value)} placeholder="Full name" />
+                  </div>
+                  <div>
+                    <label>Your Role</label>
+                    <input type="text" value={memberRole} onChange={(e) => setMemberRole(e.target.value)} placeholder="e.g., Operations Lead" />
+                  </div>
+                </div>
+              )}
+
+              {error && <p style={{ fontSize: "13px", color: "var(--danger)", marginBottom: "12px" }}>{error}</p>}
+
+              <button onClick={handleLogin} className="btn btn-primary" style={{ width: "100%", padding: "12px 28px", fontSize: "14px" }}>
+                Sign In
+              </button>
+            </div>
+          )}
+
+          <div style={{ marginTop: "20px", paddingTop: "16px", borderTop: "1px solid var(--border)", textAlign: "center" }}>
+            <p style={{ fontSize: "12px", color: "var(--text-tertiary)" }}>
+              Don&apos;t have an account? <button onClick={() => router.push("/register")} style={{ fontSize: "12px", color: "var(--accent)", background: "none", border: "none", cursor: "pointer", padding: 0, fontFamily: "inherit" }}>Register</button>
+            </p>
           </div>
-        )}
-
-        <div style={{ marginTop: "20px", paddingTop: "20px", borderTop: "1px solid var(--border)", textAlign: "center" }}>
-          <p style={{ fontSize: "13px", color: "var(--text-tertiary)" }}>
-            Don&apos;t have an account? <button onClick={() => router.push("/register")} style={{ fontSize: "13px", color: "var(--accent)", background: "none", border: "none", cursor: "pointer", padding: 0, fontFamily: "inherit" }}>Register</button>
-          </p>
         </div>
       </div>
-    </div>
     </div>
   );
 }

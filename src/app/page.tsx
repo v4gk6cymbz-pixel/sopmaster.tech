@@ -13,6 +13,14 @@ function getCompanySopCount(companyId: string): number {
   return c?.sopCount ?? 0;
 }
 
+const LANDING_SECTIONS = [
+  { id: "what-it-does", label: "Capabilities" },
+  { id: "who-its-for", label: "Audience" },
+  { id: "industry-intelligence", label: "Industries" },
+  { id: "pricing", label: "Pricing" },
+  { id: "faqs", label: "FAQs" },
+];
+
 export default function HomePage() {
   const session = useStore((s) => s.session);
   const getCompany = useStore((s) => s.getCompany);
@@ -77,232 +85,134 @@ export default function HomePage() {
     router.prefetch("/batch");
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-
-
   if (!session || !company) {
     return (
       <div className="fade-in">
-        <section className="landing-hero" style={{
+        {/* Hero */}
+        <section style={{
           minHeight: "100vh",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          padding: "0 24px",
+          padding: "0 32px",
           position: "relative",
           overflow: "hidden",
-          background: "var(--bg-deep)",
         }}>
-          {/* 3D ambient light orbs */}
           <div style={{
-            position: "absolute",
-            width: "800px", height: "800px", borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(201, 160, 90, 0.04) 0%, transparent 60%)",
-            top: "-20%", right: "-10%", pointerEvents: "none",
-            animation: "float 12s ease-in-out infinite",
-          }} />
-          <div style={{
-            position: "absolute",
-            width: "700px", height: "700px", borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(45, 95, 158, 0.04) 0%, transparent 60%)",
-            bottom: "-15%", left: "-8%", pointerEvents: "none",
-            animation: "float 10s ease-in-out 2s infinite",
-          }} />
-          <div style={{
-            position: "absolute",
-            width: "400px", height: "400px", borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(192, 57, 43, 0.02) 0%, transparent 60%)",
-            top: "30%", left: "15%", pointerEvents: "none",
-            animation: "float 14s ease-in-out 4s infinite",
-          }} />
-
-          {/* 3D floating geometric elements */}
-          <div style={{
-            position: "absolute", top: "15%", right: "12%",
-            width: "64px", height: "64px",
-            border: "1px solid rgba(201, 160, 90, 0.15)",
-            borderRadius: "16px",
-            transform: "rotate(45deg)",
+            position: "absolute", inset: 0,
+            background: "radial-gradient(ellipse at 50% 0%, rgba(201,160,90,0.04) 0%, transparent 50%)",
             pointerEvents: "none",
-            animation: "float 8s ease-in-out infinite",
-            backdropFilter: "blur(4px)",
-            background: "rgba(201, 160, 90, 0.03)",
           }} />
           <div style={{
-            position: "absolute", bottom: "20%", right: "20%",
-            width: "80px", height: "80px",
-            border: "1px solid rgba(45, 95, 158, 0.12)",
-            borderRadius: "50%",
+            position: "absolute", inset: 0,
+            background: "radial-gradient(ellipse at 80% 80%, rgba(59,130,246,0.025) 0%, transparent 50%)",
             pointerEvents: "none",
-            animation: "float 10s ease-in-out 3s infinite",
-            backdropFilter: "blur(4px)",
-            background: "rgba(45, 95, 158, 0.03)",
           }} />
-          <div style={{
-            position: "absolute", top: "25%", left: "8%",
-            width: "48px", height: "48px",
-            border: "1px solid rgba(201, 160, 90, 0.1)",
-            borderRadius: "12px",
-            transform: "rotate(30deg)",
-            pointerEvents: "none",
-            animation: "float 9s ease-in-out 5s infinite",
-            backdropFilter: "blur(4px)",
-            background: "rgba(201, 160, 90, 0.02)",
-          }} />
+          <div style={{ position: "absolute", top: "18%", right: "15%", width: "120px", height: "120px", border: "1px solid rgba(201,160,90,0.08)", borderRadius: "20px", transform: "rotate(35deg)", pointerEvents: "none" }} />
+          <div style={{ position: "absolute", bottom: "22%", left: "12%", width: "80px", height: "80px", border: "1px solid rgba(59,130,246,0.06)", borderRadius: "50%", pointerEvents: "none" }} />
+          <div style={{ position: "absolute", top: "35%", left: "10%", width: "48px", height: "48px", border: "1px solid rgba(201,160,90,0.06)", borderRadius: "12px", transform: "rotate(25deg)", pointerEvents: "none" }} />
 
-          {/* 3D particle dots */}
-          {[{ t: "20%", l: "30%" }, { t: "45%", r: "15%" }, { t: "60%", l: "10%" }, { t: "35%", r: "25%" }, { t: "70%", l: "35%" }, { t: "15%", l: "50%" }, { t: "55%", r: "8%" }, { t: "80%", r: "30%" }].map((p, i) => (
-            <div key={i} style={{
-              position: "absolute", top: p.t, left: p.l, right: p.r,
-              width: "3px", height: "3px",
-              borderRadius: "50%",
-              background: "rgba(201, 160, 90, 0.2)",
-              pointerEvents: "none",
-              animation: `float ${6 + i * 1.5}s ease-in-out ${i * 0.8}s infinite`,
-            }} />
-          ))}
-
-          <div style={{ maxWidth: "780px", textAlign: "center", position: "relative", zIndex: 1 }}>
-            <div style={{
-              display: "inline-flex", alignItems: "center", gap: "10px", marginBottom: "40px",
-              padding: "10px 22px", borderRadius: "var(--radius)",
-              border: "1px solid rgba(201, 160, 90, 0.2)",
-              background: "rgba(201, 160, 90, 0.04)",
-            }}>
-              <span style={{
-                width: "6px", height: "6px", borderRadius: "50%",
-                background: "var(--accent)",
-                boxShadow: "0 0 12px rgba(201, 160, 90, 0.4)",
-              }} />
-              <span style={{ fontSize: "11px", fontWeight: 500, letterSpacing: "0.08em", color: "var(--accent)", textTransform: "uppercase" }}>
-                Operational Governance Platform
-              </span>
-            </div>
+          <div style={{ maxWidth: "820px", textAlign: "center", position: "relative", zIndex: 1 }}>
+            <div className="ogi-badge">Introducing Operational Governance Infrastructure</div>
             <h1 style={{
-              fontSize: "52px",
+              fontSize: "54px",
               fontWeight: 700,
-              lineHeight: 1.08,
-              color: "var(--text-primary)",
-              marginBottom: "24px",
+              lineHeight: 1.06,
+              color: "var(--white)",
+              marginBottom: "20px",
               letterSpacing: "-0.03em",
             }}>
-              <span style={{ display: "block" }}>SOP<span style={{ color: "var(--accent)" }}>Master</span></span>
-              <span style={{ display: "block", fontSize: "24px", fontWeight: 400, color: "var(--text-secondary)", marginTop: "12px", letterSpacing: "-0.01em" }}>Operational Documentation for Consultants</span>
+              The World&apos;s First<br />
+              <span style={{ color: "var(--accent)" }}>Operational Governance</span><br />
+              Infrastructure Platform
             </h1>
             <p style={{
               fontSize: "17px",
               lineHeight: 1.8,
               color: "var(--text-secondary)",
-              maxWidth: "600px",
+              maxWidth: "580px",
               margin: "0 auto 44px",
             }}>
-              The operating system for consultants who run structured delivery. Turn consulting work into repeatable systems, client delivery frameworks, and operational governance that scales across your entire practice.
+              SOPMaster transforms how enterprises document, govern, and scale operational procedures. 
+              Built for organisations that treat operational discipline as a strategic asset.
             </p>
-            <div style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}>
-              <button onClick={() => router.push("/register")} className="btn btn-primary" style={{ padding: "14px 36px", fontSize: "15px" }}>
-                Get Started
+            <div style={{ display: "flex", gap: "14px", justifyContent: "center", flexWrap: "wrap" }}>
+              <button onClick={() => router.push("/register")} className="btn btn-primary" style={{ padding: "14px 38px", fontSize: "14px" }}>
+                Deploy OGI
               </button>
-              <button onClick={() => router.push("/login")} className="btn btn-secondary" style={{ padding: "14px 36px", fontSize: "15px" }}>
-                Sign In
+              <button onClick={() => router.push("/login")} className="btn btn-secondary" style={{ padding: "14px 38px", fontSize: "14px" }}>
+                Access Platform
               </button>
-              <button onClick={() => featuresRef.current?.scrollIntoView({ behavior: "smooth" })} className="btn btn-ghost" style={{ padding: "14px 36px", fontSize: "15px" }}>
-                Learn More
+              <button onClick={() => featuresRef.current?.scrollIntoView({ behavior: "smooth" })} className="btn btn-ghost" style={{ padding: "14px 38px", fontSize: "14px" }}>
+                Explore
               </button>
             </div>
-            <p style={{
-              fontSize: "13px",
-              lineHeight: 1.5,
-              color: "var(--text-tertiary)",
-              marginTop: "40px",
-            }}>
-              Trusted by solo consultants, firms, and enterprise organisations
+            <p style={{ fontSize: "12px", color: "var(--text-tertiary)", marginTop: "36px", letterSpacing: "0.04em" }}>
+              Trusted by solo practitioners, consultancies, and enterprise organisations
             </p>
           </div>
 
-          <div style={{ position: "absolute", bottom: "36px", left: "50%", transform: "translateX(-50%)" }}>
+          <div style={{ position: "absolute", bottom: "32px", left: "50%", transform: "translateX(-50%)" }}>
             <button onClick={() => featuresRef.current?.scrollIntoView({ behavior: "smooth" })}
-              style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-tertiary)", fontSize: "20px", opacity: 0.4 }}>
+              style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-tertiary)", fontSize: "18px", opacity: 0.3 }}>
               ↓
             </button>
           </div>
         </section>
 
-        <section className="section-container" style={{ textAlign: "center" }}>
-          <div className="glass" style={{ maxWidth: "640px", margin: "0 auto", padding: "40px 48px" }}>
-            <p style={{ fontSize: "22px", fontWeight: 500, color: "#F1F5F9", lineHeight: 1.4, marginBottom: "12px", letterSpacing: "-0.01em" }}>
-              Operational Documentation Platform for Consultants.
-            </p>
-            <p style={{ fontSize: "15px", color: "#94A3B8", lineHeight: 1.7 }}>
-              Everything you do becomes a system. Every client becomes structured. Every process becomes repeatable.
-            </p>
-          </div>
-        </section>
-
+        {/* What It Does */}
         <section id="what-it-does" ref={featuresRef} className="section-container">
-          <div style={{ maxWidth: "900px", margin: "0 auto" }}>
-            <div style={{ textAlign: "center", marginBottom: "48px" }}>
-              <h2 style={{ fontSize: "28px", fontWeight: 700, color: "#F1F5F9", marginBottom: "12px", letterSpacing: "-0.02em" }}>What It Does</h2>
-              <p style={{ fontSize: "15px", color: "#94A3B8", maxWidth: "600px", margin: "0 auto", lineHeight: 1.7 }}>
-                SOPMaster turns real consulting work into operational systems you can reuse across clients. Instead of writing documents from scratch for each engagement, you build once and deploy across your entire practice.
+          <div style={{ maxWidth: "960px", margin: "0 auto" }}>
+            <div style={{ textAlign: "center", marginBottom: "52px" }}>
+              <div className="ogi-badge">Core Capabilities</div>
+              <h2 style={{ fontSize: "34px", fontWeight: 600, color: "var(--white)", marginBottom: "14px", letterSpacing: "-0.02em" }}>Infrastructure for Operational Governance</h2>
+              <p style={{ fontSize: "16px", color: "var(--text-secondary)", maxWidth: "600px", margin: "0 auto", lineHeight: 1.7 }}>
+                SOPMaster provides the foundational layer for creating, managing, and governing operational procedures across your entire organisation.
               </p>
             </div>
-            <div className="gradient-border">
-              <div className="card" style={{ padding: "36px" }}>
-                <div className="features-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
-                  {[
-                    "SOPs built from real workflows",
-                    "Client delivery frameworks",
-                    "Repeatable consulting processes",
-                    "Standardised internal operations",
-                    "Instant system capture",
-                    "Reusable consulting assets instead of one-off work",
-                  ].map((item, i) => (
-                    <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                      <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#2563EB", flexShrink: 0, boxShadow: "0 0 10px rgba(37,99,235,0.3)" }}></div>
-                      <span style={{ fontSize: "15px", color: "#F1F5F9" }}>{item}</span>
-                    </div>
-                  ))}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "20px" }}>
+              {[
+                { title: "Structured SOP Generation", desc: "Turn workflows into auditable, jurisdiction-aware standard operating procedures with full governance controls and cryptographic verification." },
+                { title: "Multi-Jurisdiction Compliance", desc: "28+ jurisdictional frameworks with automatic regulatory triggers, retention schedules, and sector-specific legislation references." },
+                { title: "Operational Command Centre", desc: "Real-time visibility across all documents, team collaboration, batch operations, and enterprise-grade document lifecycle management." },
+              ].map((f, i) => (
+                <div key={i} className="workspace-card" style={{ padding: "32px 28px", textAlign: "center", cursor: "default" }}>
+                  <div style={{ width: "40px", height: "40px", borderRadius: "12px", background: "var(--accent-subtle)", border: "1px solid var(--accent-border)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 18px", fontSize: "16px", color: "var(--accent)" }}>
+                    {["01", "02", "03"][i]}
+                  </div>
+                  <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--white)", marginBottom: "10px" }}>{f.title}</h3>
+                  <p style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: 1.7 }}>{f.desc}</p>
                 </div>
-              </div>
+              ))}
             </div>
-            <p style={{ fontSize: "14px", color: "#94A3B8", lineHeight: 1.6, textAlign: "center", marginTop: "28px" }}>
-              Generate your first <Link href="/forge" style={{ color: "#2563EB", textDecoration: "underline" }}>SOP document</Link> or build a <Link href="/checklist" style={{ color: "#2563EB", textDecoration: "underline" }}>compliance checklist</Link> directly from your workflows.
-            </p>
           </div>
         </section>
 
-        <section id="who-its-for" className="section-container">
+        {/* Who It's For */}
+        <section id="who-its-for" className="section-container" style={{ paddingTop: "40px" }}>
           <div style={{ maxWidth: "800px", margin: "0 auto" }}>
             <div style={{ textAlign: "center", marginBottom: "48px" }}>
-              <h2 style={{ fontSize: "28px", fontWeight: 700, color: "#F1F5F9", marginBottom: "12px", letterSpacing: "-0.02em" }}>Who It&apos;s For</h2>
-              <p style={{ fontSize: "15px", color: "#94A3B8", lineHeight: 1.7 }}>
-                Built for consultants who don&apos;t run messy operations.
-              </p>
+              <div className="ogi-badge">Designed For</div>
+              <h2 style={{ fontSize: "34px", fontWeight: 600, color: "var(--white)", marginBottom: "12px", letterSpacing: "-0.02em" }}>Who We Serve</h2>
             </div>
-            <div className="card" style={{ padding: "28px" }}>
+            <div className="glass" style={{ padding: "32px" }}>
               {[
-                { type: "Solo Consultants", desc: "You stop operating like a freelancer and start working like a system." },
-                { type: "Freelancers", desc: "Your delivery becomes consistent, structured, and client-ready." },
-                { type: "Small Consulting Firms", desc: "Your team stops working differently on every client. You standardise delivery." },
-                { type: "Medium Consulting Firms", desc: "You scale output without losing process control." },
-                { type: "Large Consulting Firms", desc: "You operate with structured delivery systems across teams, clients, and workflows." },
+                { type: "Solo Practitioners", desc: "Standardise client delivery. Operate like a system, not a freelancer." },
+                { type: "Small Consultancies", desc: "Align your team around repeatable delivery frameworks." },
+                { type: "Mid-Market Firms", desc: "Scale output without losing process control." },
+                { type: "Enterprise Organisations", desc: "Deploy operational governance across departments, regions, and business units." },
               ].map((item, i) => (
                 <div key={i} style={{
-                  display: "flex", gap: "16px", padding: "18px 0",
-                  borderBottom: i < 4 ? "1px solid var(--border)" : "none",
+                  display: "flex", gap: "18px", padding: "20px 0",
+                  borderBottom: i < 3 ? "1px solid var(--border)" : "none",
                 }}>
-                  <div style={{
-                    width: "30px", height: "30px", borderRadius: "50%",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: "13px", fontWeight: 600, color: "#2563EB",
-                    border: "1px solid rgba(37,99,235,0.3)", flexShrink: 0,
-                    background: "rgba(37,99,235,0.06)",
-                  }}>
-                    {i + 1}
+                  <div style={{ width: "32px", height: "32px", borderRadius: "10px", background: "var(--accent-subtle)", border: "1px solid var(--accent-border)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: "12px", color: "var(--accent)", fontWeight: 600 }}>
+                    {String(i + 1).padStart(2, "0")}
                   </div>
                   <div>
-                    <h3 style={{ fontSize: "15px", fontWeight: 600, color: "#F1F5F9", marginBottom: "4px" }}>{item.type}</h3>
-                    <p style={{ fontSize: "14px", color: "#94A3B8", lineHeight: 1.6 }}>{item.desc}</p>
+                    <h3 style={{ fontSize: "15px", fontWeight: 600, color: "var(--white)", marginBottom: "4px" }}>{item.type}</h3>
+                    <p style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: 1.7 }}>{item.desc}</p>
                   </div>
                 </div>
               ))}
@@ -310,93 +220,50 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section id="what-makes-it-different" className="section-container">
-          <div style={{ maxWidth: "800px", margin: "0 auto" }}>
-            <div style={{ textAlign: "center", marginBottom: "48px" }}>
-              <h2 style={{ fontSize: "28px", fontWeight: 700, color: "#F1F5F9", marginBottom: "12px", letterSpacing: "-0.02em" }}>What Makes It Different</h2>
-              <p style={{ fontSize: "15px", color: "#94A3B8", maxWidth: "600px", margin: "0 auto", lineHeight: 1.7 }}>
-                Most tools store information. SOPMaster structures how work is delivered, governed, and scaled across clients and teams.
-              </p>
-            </div>
-            <div className="gradient-border">
-              <div className="card" style={{ padding: "36px", textAlign: "center" }}>
-                <p style={{ fontSize: "16px", color: "#F1F5F9", lineHeight: 1.7, marginBottom: "20px" }}>
-                  We don&apos;t store information. We turn it into systems that can be reused, sold, and scaled.
-                </p>
-                <p style={{ fontSize: "15px", color: "#94A3B8", lineHeight: 1.7, marginBottom: "0" }}>
-                  Unlike generic document tools or template libraries, SOPMaster builds jurisdiction-aware compliance documents with governance controls, team collaboration, and document verification baked in. Every document includes industry-specific regulatory triggers, cryptographic verification hashes, and configurable retention policies.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section id="positioning" className="section-container">
-          <div style={{ maxWidth: "800px", margin: "0 auto" }}>
-            <div style={{ textAlign: "center", marginBottom: "48px" }}>
-              <h2 style={{ fontSize: "28px", fontWeight: 700, color: "#F1F5F9", marginBottom: "12px", letterSpacing: "-0.02em" }}>Positioning</h2>
-              <p style={{ fontSize: "15px", color: "#94A3B8", maxWidth: "560px", margin: "0 auto", lineHeight: 1.7 }}>
-                For consultants who think in systems, not tasks. SOPMaster replaces ad-hoc document creation with structured, repeatable frameworks that scale across your entire practice.
-              </p>
-            </div>
-            <div className="card" style={{ padding: "36px", textAlign: "center" }}>
-              <p style={{ fontSize: "16px", color: "#F1F5F9", lineHeight: 1.7, marginBottom: "20px" }}>
-                SOPMaster is purpose-built for consultants, not generic document platforms repurposed for compliance work.
-              </p>
-              <p style={{ fontSize: "15px", color: "#94A3B8", lineHeight: 1.7, marginBottom: "0" }}>
-                Whether you are a <Link href="/about" style={{ color: "#2563EB", textDecoration: "underline" }}>solo practitioner</Link> standardising client delivery or a multi-team firm scaling operational governance across departments, SOPMaster adapts to your practice size and industry requirements. Learn more <Link href="/about" style={{ color: "#2563EB", textDecoration: "underline" }}>about how SOPMaster works</Link> for different firm types.
-              </p>
-            </div>
-          </div>
-        </section>
-
+        {/* Industry Intelligence */}
         <section id="industry-intelligence" className="section-container">
           <div style={{ maxWidth: "800px", margin: "0 auto" }}>
             <div style={{ textAlign: "center", marginBottom: "48px" }}>
-              <h2 style={{ fontSize: "28px", fontWeight: 700, color: "#F1F5F9", marginBottom: "12px", letterSpacing: "-0.02em" }}>Industry Intelligence</h2>
-              <p style={{ fontSize: "15px", color: "#94A3B8", lineHeight: 1.7 }}>
-                Sector-specific regulatory context for every document generated.
+              <div className="ogi-badge">Sector Coverage</div>
+              <h2 style={{ fontSize: "34px", fontWeight: 600, color: "var(--white)", marginBottom: "12px", letterSpacing: "-0.02em" }}>Industry Intelligence</h2>
+              <p style={{ fontSize: "16px", color: "var(--text-secondary)", lineHeight: 1.7 }}>
+                Sector-specific regulatory context embedded into every document generated.
               </p>
             </div>
-            <div className="card who-grid" style={{ padding: "24px" }}>
+            <div className="glass" style={{ padding: "28px" }}>
               {[
-                { industry: "Financial Services", focus: "FCA compliance, AML/KYC frameworks, transaction reporting, reconciliation controls" },
-                { industry: "Healthcare", focus: "CQC compliance, PHI protection, clinical governance, information governance" },
-                { industry: "Construction", focus: "CDM regulations, health & safety, site governance, supply chain compliance" },
-                { industry: "Professional Services", focus: "Client onboarding, engagement management, conflict checking, data protection" },
-                { industry: "Manufacturing", focus: "ISO standards, quality management, supply chain controls, operational safety" },
-                { industry: "Technology", focus: "Data governance, SaaS compliance, incident response, SLA management" },
+                { industry: "Financial Services", focus: "FCA compliance, AML/KYC frameworks, transaction reporting" },
+                { industry: "Healthcare", focus: "CQC compliance, clinical governance, information governance" },
+                { industry: "Professional Services", focus: "Client onboarding, engagement management, conflict checking" },
+                { industry: "Technology / SaaS", focus: "Data governance, incident response, SLA management" },
+                { industry: "Manufacturing", focus: "ISO standards, quality management, supply chain controls" },
+                { industry: "Construction", focus: "CDM regulations, health & safety, site governance" },
               ].map((item, i) => (
-                <div key={i} className="data-row" style={{ borderBottom: i < 5 ? "1px solid var(--border)" : "none", padding: "12px 0" }}>
+                <div key={i} className="data-row" style={{ borderBottom: i < 5 ? "1px solid var(--border)" : "none", padding: "14px 0", gap: "12px" }}>
                   <span className="data-label" style={{ fontWeight: 500, minWidth: "180px", fontSize: "14px" }}>{item.industry}</span>
-                  <span className="data-value" style={{ fontWeight: 400, color: "#94A3B8", fontSize: "13px" }}>{item.focus}</span>
+                  <span className="data-value" style={{ fontWeight: 400, color: "var(--text-secondary)", fontSize: "13px" }}>{item.focus}</span>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        <section id="professional-documentation" className="section-container">
+        {/* Professional Documentation */}
+        <section className="section-container" style={{ paddingTop: "20px" }}>
           <div style={{ maxWidth: "800px", margin: "0 auto" }}>
-            <div style={{ textAlign: "center", marginBottom: "48px" }}>
-              <h2 style={{ fontSize: "28px", fontWeight: 700, color: "#F1F5F9", marginBottom: "12px", letterSpacing: "-0.02em" }}>Professional Documentation</h2>
-              <p style={{ fontSize: "15px", color: "#94A3B8", lineHeight: 1.7 }}>
-                Word-compatible HTML documents with full governance structure.
-              </p>
-            </div>
-            <div className="card" style={{ padding: "28px" }}>
-              <div className="doc-grid-2" style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "24px" }}>
+            <div className="workspace-card" style={{ cursor: "default" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "24px" }}>
                 {[
-                  { label: "Format", value: "Word-compatible HTML" },
+                  { label: "Format", value: "Word-Compatible HTML" },
                   { label: "Classification", value: "Controlled Document" },
-                  { label: "Structure", value: "Governance → Procedure → Controls → Audit" },
-                  { label: "Verification", value: "Cryptographic hash per document" },
-                  { label: "Compliance", value: "Jurisdiction-specific regulatory triggers" },
-                  { label: "Retention", value: "Configurable retention schedules" },
+                  { label: "Structure", value: "Governance / Procedure / Controls / Audit" },
+                  { label: "Verification", value: "Cryptographic Hash" },
+                  { label: "Compliance", value: "Jurisdiction-Aware" },
+                  { label: "Retention", value: "Configurable Schedules" },
                 ].map((d, i) => (
                   <div key={i}>
-                    <p style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.05em", color: "#64748B", marginBottom: "4px" }}>{d.label}</p>
-                    <p style={{ fontSize: "15px", color: "#F1F5F9", fontWeight: 500 }}>{d.value}</p>
+                    <p style={{ fontSize: "10px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--text-tertiary)", marginBottom: "4px" }}>{d.label}</p>
+                    <p style={{ fontSize: "14px", color: "var(--white)", fontWeight: 500 }}>{d.value}</p>
                   </div>
                 ))}
               </div>
@@ -404,36 +271,38 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* FAQs */}
         <section id="faqs" ref={faqRef} className="section-container">
           <div style={{ maxWidth: "720px", margin: "0 auto" }}>
             <div style={{ textAlign: "center", marginBottom: "48px" }}>
-              <h2 style={{ fontSize: "28px", fontWeight: 700, color: "#F1F5F9", marginBottom: "12px", letterSpacing: "-0.02em" }}>Frequently Asked Questions</h2>
-              <p style={{ fontSize: "15px", color: "#94A3B8", marginTop: "8px" }}>
-                Have a different question? <Link href="/contact" style={{ color: "#2563EB", textDecoration: "underline" }}>Contact our team</Link>.
+              <div className="ogi-badge">Answers</div>
+              <h2 style={{ fontSize: "34px", fontWeight: 600, color: "var(--white)", marginBottom: "12px", letterSpacing: "-0.02em" }}>Frequently Asked Questions</h2>
+              <p style={{ fontSize: "15px", color: "var(--text-secondary)" }}>
+                Have a different question? <Link href="/contact" style={{ color: "var(--accent)", textDecoration: "none", borderBottom: "1px solid var(--accent-border)" }}>Contact our team</Link>.
               </p>
             </div>
-            <div className="card" style={{ padding: "24px 28px" }}>
+            <div className="glass" style={{ padding: "24px 28px" }}>
               {[
-                { q: "What is SOPMaster?", a: "SOPMaster is a consultant operating system for turning consulting work into repeatable systems, client delivery frameworks, and operational structure. Built for consultants who take delivery seriously." },
-                { q: "How does SOP generation work?", a: "Set your consulting context — jurisdiction, industry, and delivery workflows. SOPMaster generates structured, consultant-grade documents that you can reuse across clients and engagements." },
-                { q: "What formats are supported?", a: "All documents are generated as Word-compatible HTML files. They open directly in Microsoft Word, Google Docs, or any browser with full formatting preserved." },
-                { q: "How do credits work?", a: "Each SOP or Checklist generation consumes one credit. New accounts receive 300 complimentary credits. Additional credits can be purchased through your Administration panel." },
-                { q: "Which jurisdictions are supported?", a: "UK, Scotland, Wales, England, US Federal & state-level (New York, California, Texas, Florida, Delaware), EU (GDPR, Pay Transparency), Canada (Federal, Ontario), Australia, and Dubai Global." },
-                { q: "Can I generate documents for any industry?", a: "Yes. SOPMaster supports Financial Services, Healthcare, Construction, Professional Services, Technology, Manufacturing, Logistics and more. Each document is tailored to the selected context." },
+                { q: "What is Operational Governance Infrastructure?", a: "OGI is the foundational layer that enterprises use to create, manage, and govern operational procedures. Unlike traditional SOP tools, OGI provides jurisdiction-aware compliance, cryptographic verification, and enterprise lifecycle management." },
+                { q: "How does SOP generation work?", a: "Configure your operational context — jurisdiction, industry, and delivery workflows. SOPMaster generates structured, governance-grade documents with full compliance references, audit trails, and document controls." },
+                { q: "What formats are supported?", a: "All documents generate as Word-compatible HTML files. They open directly in Microsoft Word, Google Docs, or any browser with full formatting, governance structure, and document controls preserved." },
+                { q: "How does jurisdiction compliance work?", a: "OGI includes 28+ built-in jurisdictional frameworks (UK, US Federal & State, EU, Canada, Australia, UAE, Singapore, and more). Each document automatically references the correct legislation, retention schedules, and regulatory triggers for the selected jurisdiction." },
+                { q: "What industries do you support?", a: "SOPMaster supports Financial Services, Healthcare, Construction, Professional Services, Technology, Manufacturing, Logistics, and more. Each document is tailored to the selected industry and jurisdictional context." },
+                { q: "Can I collaborate with my team?", a: "Yes. SOPMaster includes team management, shared document vaults, batch operations, and role-based access controls. Director accounts can manage team members, credits, and subscription settings." },
               ].map((faq, i) => (
                 <div key={i} style={{
                   borderBottom: i < 5 ? "1px solid var(--border)" : "none",
                   padding: "18px 0",
                   cursor: "pointer",
                 }} onClick={() => setActiveFaq(activeFaq === i ? null : i)}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <h3 style={{ fontSize: "14px", fontWeight: 500, color: "#F1F5F9", margin: 0 }}>{faq.q}</h3>
-                    <span style={{ fontSize: "16px", color: "#64748B", transition: "transform 0.3s ease", transform: activeFaq === i ? "rotate(180deg)" : "none" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "16px" }}>
+                    <h3 style={{ fontSize: "14px", fontWeight: 500, color: "var(--white)", margin: 0 }}>{faq.q}</h3>
+                    <span style={{ fontSize: "16px", color: "var(--text-tertiary)", transition: "transform 0.3s ease", transform: activeFaq === i ? "rotate(180deg)" : "none", flexShrink: 0 }}>
                       {activeFaq === i ? "−" : "+"}
                     </span>
                   </div>
                   {activeFaq === i && (
-                    <p style={{ fontSize: "14px", color: "#94A3B8", lineHeight: 1.7, marginTop: "12px" }}>{faq.a}</p>
+                    <p style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: 1.7, marginTop: "12px" }}>{faq.a}</p>
                   )}
                 </div>
               ))}
@@ -441,40 +310,39 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* Pricing */}
         <section id="pricing" ref={pricingRef} className="section-container">
           <div style={{ maxWidth: "960px", margin: "0 auto" }}>
             <div style={{ textAlign: "center", marginBottom: "48px" }}>
-              <h2 style={{ fontSize: "28px", fontWeight: 700, color: "#F1F5F9", marginBottom: "12px", letterSpacing: "-0.02em" }}>Pricing</h2>
-              <p style={{ fontSize: "15px", color: "#94A3B8" }}>
+              <div className="ogi-badge">Plans</div>
+              <h2 style={{ fontSize: "34px", fontWeight: 600, color: "var(--white)", marginBottom: "12px", letterSpacing: "-0.02em" }}>Pricing</h2>
+              <p style={{ fontSize: "15px", color: "var(--text-secondary)" }}>
                 Choose the plan that fits your organisation.
               </p>
             </div>
             <div className="pricing-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "20px" }}>
               {[
-                { tier: "solo", name: "Solo Professional", price: "£400", credits: "300/mo", tag: "" },
+                { tier: "solo", name: "Solo Professional", price: "£400", credits: "300/mo" },
                 { tier: "small", name: "Small Consultancy", price: "£2,500", credits: "2,500/mo", tag: "Popular" },
-                { tier: "medium", name: "Medium Consultancy", price: "£5,100", credits: "6,000/mo", tag: "" },
-                { tier: "large", name: "Large Consultancy", price: "£9,000", credits: "12,000/mo", tag: "" },
+                { tier: "medium", name: "Medium Consultancy", price: "£5,100", credits: "6,000/mo" },
+                { tier: "large", name: "Large Consultancy", price: "£9,000", credits: "12,000/mo" },
               ].map((p, i) => (
-                <div key={i} className="card gradient-border" style={{
-                  display: "flex", flexDirection: "column",
-                  position: "relative",
-                }}>
+                <div key={i} className="workspace-card" style={{ cursor: "default", display: "flex", flexDirection: "column", position: "relative" }}>
                   {p.tag && (
                     <div style={{
                       position: "absolute", top: "-1px", left: "50%", transform: "translateX(-50%)",
-                      fontSize: "10px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em",
-                      color: "#2563EB", background: "var(--bg-primary)", padding: "2px 14px",
-                      border: "1px solid var(--accent)", borderTop: "none", borderRadius: "0 0 8px 8px",
+                      fontSize: "9px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.1em",
+                      color: "var(--accent)", background: "var(--navy-800)", padding: "3px 16px",
+                      border: "1px solid var(--accent-border)", borderTop: "none", borderRadius: "0 0 8px 8px",
                     }}>
                       {p.tag}
                     </div>
                   )}
-                  <h3 style={{ fontSize: "14px", fontWeight: 600, color: "#F1F5F9", marginBottom: "8px" }}>{p.name}</h3>
-                  <p style={{ fontSize: "32px", fontWeight: 700, color: "#F1F5F9", marginBottom: "4px", letterSpacing: "-0.02em" }}>{p.price}<span style={{ fontSize: "14px", fontWeight: 400, color: "#64748B" }}>/month</span></p>
-                  <p style={{ fontSize: "13px", color: "#64748B", marginBottom: "20px" }}>{p.credits}</p>
+                  <h3 style={{ fontSize: "13px", fontWeight: 600, color: "var(--white)", marginBottom: "8px", letterSpacing: "0.02em" }}>{p.name}</h3>
+                  <p style={{ fontSize: "34px", fontWeight: 700, color: "var(--white)", marginBottom: "2px", letterSpacing: "-0.02em" }}>{p.price}<span style={{ fontSize: "14px", fontWeight: 400, color: "var(--text-tertiary)" }}>/mo</span></p>
+                  <p style={{ fontSize: "13px", color: "var(--text-tertiary)", marginBottom: "22px" }}>{p.credits}</p>
                   <button onClick={() => router.push("/register")} className="btn btn-primary" style={{ width: "100%", marginTop: "auto" }}>
-                    Get Started
+                    Deploy OGI
                   </button>
                 </div>
               ))}
@@ -482,60 +350,46 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="section-container" style={{ textAlign: "center" }}>
-          <div style={{ maxWidth: "600px", margin: "0 auto" }}>
-            <p style={{ fontSize: "13px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", color: "#64748B", marginBottom: "16px" }}>Connect</p>
-            <a href="https://www.linkedin.com/in/sopmaster" target="_blank" rel="noopener noreferrer"
-              className="btn btn-secondary"
-              style={{ padding: "12px 28px", fontSize: "14px" }}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-              Follow on LinkedIn
-            </a>
-          </div>
-        </section>
-
-        <footer style={{
-          padding: "48px 24px 24px",
-          borderTop: "1px solid var(--border)",
-          background: "var(--bg-deep)",
-        }}>
+        {/* Footer */}
+        <footer style={{ padding: "56px 32px 28px", borderTop: "1px solid var(--border)" }}>
           <div style={{ maxWidth: "1024px", margin: "0 auto" }}>
-            <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr", gap: "40px", marginBottom: "32px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr", gap: "40px", marginBottom: "36px" }}>
               <div>
-                <p style={{ fontSize: "16px", fontWeight: 600, color: "#F1F5F9", marginBottom: "12px", letterSpacing: "-0.01em" }}>SOPMaster</p>
-                <p style={{ fontSize: "13px", color: "#64748B", lineHeight: 1.7 }}>
-                  The operational governance platform for consultants. Turn consulting work into repeatable systems, client delivery frameworks, and operational structure that scales.
+                <p style={{ fontSize: "15px", fontWeight: 600, color: "var(--white)", marginBottom: "10px", letterSpacing: "-0.01em" }}>
+                  <span style={{ color: "var(--accent)", fontWeight: 700, fontSize: "11px", letterSpacing: "0.1em", textTransform: "uppercase" }}>OGI</span>
+                  <span style={{ color: "var(--text-muted)", margin: "0 6px" }}>/</span>
+                  SOPMaster
+                </p>
+                <p style={{ fontSize: "13px", color: "var(--text-tertiary)", lineHeight: 1.7 }}>
+                  The world&apos;s first Operational Governance Infrastructure platform. 
+                  Transform how your organisation documents, governs, and scales operational procedures.
                 </p>
               </div>
               <div>
-                <p style={{ fontSize: "11px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", color: "#64748B", marginBottom: "14px" }}>Platform</p>
-                <p style={{ fontSize: "13px", color: "#94A3B8", marginBottom: "8px" }}><Link href="/forge" style={{ color: "#94A3B8", textDecoration: "none" }}>SOP Builder</Link></p>
-                <p style={{ fontSize: "13px", color: "#94A3B8", marginBottom: "8px" }}><Link href="/checklist" style={{ color: "#94A3B8", textDecoration: "none" }}>Checklist Builder</Link></p>
-                <p style={{ fontSize: "13px", color: "#94A3B8", marginBottom: "8px" }}><Link href="/batch" style={{ color: "#94A3B8", textDecoration: "none" }}>Batch Generation</Link></p>
-                <p style={{ fontSize: "13px", color: "#94A3B8", marginBottom: "8px" }}><Link href="/armory" style={{ color: "#94A3B8", textDecoration: "none" }}>Document Vault</Link></p>
+                <p style={{ fontSize: "10px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-tertiary)", marginBottom: "14px" }}>Platform</p>
+                <p style={{ fontSize: "13px", color: "var(--text-secondary)", marginBottom: "8px" }}><Link href="/forge" style={{ color: "var(--text-secondary)", textDecoration: "none" }}>SOP Builder</Link></p>
+                <p style={{ fontSize: "13px", color: "var(--text-secondary)", marginBottom: "8px" }}><Link href="/checklist" style={{ color: "var(--text-secondary)", textDecoration: "none" }}>Checklist Builder</Link></p>
+                <p style={{ fontSize: "13px", color: "var(--text-secondary)", marginBottom: "8px" }}><Link href="/batch" style={{ color: "var(--text-secondary)", textDecoration: "none" }}>Batch Builder</Link></p>
+                <p style={{ fontSize: "13px", color: "var(--text-secondary)", marginBottom: "8px" }}><Link href="/armory" style={{ color: "var(--text-secondary)", textDecoration: "none" }}>Document Vault</Link></p>
               </div>
               <div>
-                <p style={{ fontSize: "11px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", color: "#64748B", marginBottom: "14px" }}>Company</p>
-                <p style={{ fontSize: "13px", color: "#94A3B8", marginBottom: "8px" }}><Link href="/about" style={{ color: "#94A3B8", textDecoration: "none" }}>About</Link></p>
-                <p style={{ fontSize: "13px", color: "#94A3B8", marginBottom: "8px" }}><Link href="/contact" style={{ color: "#94A3B8", textDecoration: "none" }}>Contact</Link></p>
-                <p style={{ fontSize: "13px", color: "#94A3B8", marginBottom: "8px" }}><Link href="/privacy" style={{ color: "#94A3B8", textDecoration: "none" }}>Privacy</Link></p>
-                <p style={{ fontSize: "13px", color: "#94A3B8", marginBottom: "8px" }}><Link href="/terms" style={{ color: "#94A3B8", textDecoration: "none" }}>Terms</Link></p>
+                <p style={{ fontSize: "10px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-tertiary)", marginBottom: "14px" }}>Company</p>
+                <p style={{ fontSize: "13px", color: "var(--text-secondary)", marginBottom: "8px" }}><Link href="/about" style={{ color: "var(--text-secondary)", textDecoration: "none" }}>About</Link></p>
+                <p style={{ fontSize: "13px", color: "var(--text-secondary)", marginBottom: "8px" }}><Link href="/contact" style={{ color: "var(--text-secondary)", textDecoration: "none" }}>Contact</Link></p>
+                <p style={{ fontSize: "13px", color: "var(--text-secondary)", marginBottom: "8px" }}><Link href="/privacy" style={{ color: "var(--text-secondary)", textDecoration: "none" }}>Privacy</Link></p>
+                <p style={{ fontSize: "13px", color: "var(--text-secondary)", marginBottom: "8px" }}><Link href="/terms" style={{ color: "var(--text-secondary)", textDecoration: "none" }}>Terms</Link></p>
               </div>
               <div>
-                <p style={{ fontSize: "11px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", color: "#64748B", marginBottom: "14px" }}>Legal</p>
-                <p style={{ fontSize: "12px", color: "#64748B", marginBottom: "4px" }}>Dubai Global Tax Code</p>
-                <p style={{ fontSize: "12px", color: "#94A3B8" }}>txcd_20030000 &middot; 0% VAT</p>
+                <p style={{ fontSize: "10px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-tertiary)", marginBottom: "14px" }}>Connect</p>
+                <a href="https://www.linkedin.com/in/sopmaster" target="_blank" rel="noopener noreferrer" style={{ color: "var(--text-secondary)", fontSize: "13px", textDecoration: "none" }}>
+                  LinkedIn
+                </a>
+                <p style={{ fontSize: "12px", color: "var(--text-tertiary)", marginTop: "16px" }}>Dubai Global Tax Code</p>
+                <p style={{ fontSize: "12px", color: "var(--text-secondary)" }}>txcd_20030000 · 0% VAT</p>
               </div>
             </div>
-            <div style={{ display: "flex", justifyContent: "center", gap: "24px", paddingBottom: "14px" }}>
-              <a href="https://www.linkedin.com/in/sopmaster" target="_blank" rel="noopener noreferrer" style={{ color: "#475569", fontSize: "13px", textDecoration: "none" }}
-                onMouseEnter={(e) => e.currentTarget.style.color = "#2563EB"}
-                onMouseLeave={(e) => e.currentTarget.style.color = "#475569"}>
-                LinkedIn
-              </a>
-            </div>
-            <div style={{ borderTop: "1px solid var(--border)", paddingTop: "16px", textAlign: "center" }}>
-              <p style={{ fontSize: "12px", color: "#475569" }}>© {new Date().getFullYear()} SOPMaster. All rights reserved.</p>
+            <div style={{ borderTop: "1px solid var(--border)", paddingTop: "20px", textAlign: "center" }}>
+              <p style={{ fontSize: "12px", color: "var(--text-muted)" }}>© {new Date().getFullYear()} SOPMaster. All rights reserved.</p>
             </div>
           </div>
         </footer>
@@ -552,32 +406,21 @@ export default function HomePage() {
 
     return (
       <div style={{ maxWidth: "1120px", margin: "0 auto", padding: "40px 32px" }} className="fade-in">
-        <div style={{ marginBottom: "36px" }}>
-          <h1 style={{ fontSize: "26px", fontWeight: 600, color: "#F1F5F9", marginBottom: "6px", letterSpacing: "-0.02em" }}>
-            Admin Dashboard
+        <div style={{ marginBottom: "32px" }}>
+          <div className="ogi-badge">Administration</div>
+          <h1 style={{ fontSize: "28px", fontWeight: 600, color: "var(--white)", marginBottom: "6px", letterSpacing: "-0.02em" }}>
+            Platform Overview
           </h1>
-          <p style={{ fontSize: "14px", color: "#64748B" }}>
-            Platform overview &middot; {allCompanies.length} registered firms
+          <p style={{ fontSize: "14px", color: "var(--text-secondary)" }}>
+            {allCompanies.length} registered firms · {totalSops} total documents
           </p>
         </div>
 
-        <div className="admin-stats" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "20px", marginBottom: "28px" }}>
-          <div className="card" style={{ textAlign: "center", padding: "28px 20px" }}>
-            <div className="stat-label">Registered Firms</div>
-            <div className="stat-value">{allCompanies.length}</div>
-          </div>
-          <div className="card" style={{ textAlign: "center", padding: "28px 20px" }}>
-            <div className="stat-label">Total SOPs</div>
-            <div className="stat-value">{totalSops}</div>
-          </div>
-          <div className="card" style={{ textAlign: "center", padding: "28px 20px" }}>
-            <div className="stat-label">Subscribed</div>
-            <div className="stat-value">{subscribedCount}</div>
-          </div>
-          <div className="card" style={{ textAlign: "center", padding: "28px 20px" }}>
-            <div className="stat-label">Unsubscribed</div>
-            <div className="stat-value">{allCompanies.length - subscribedCount}</div>
-          </div>
+        <div className="command-bar" style={{ marginBottom: "28px" }}>
+          <div style={{ textAlign: "center" }}><div className="stat-label">Registered Firms</div><div className="stat-value" style={{ fontSize: "26px" }}>{allCompanies.length}</div></div>
+          <div style={{ textAlign: "center" }}><div className="stat-label">Total SOPs</div><div className="stat-value" style={{ fontSize: "26px" }}>{totalSops}</div></div>
+          <div style={{ textAlign: "center" }}><div className="stat-label">Subscribed</div><div className="stat-value" style={{ fontSize: "26px", color: "var(--success)" }}>{subscribedCount}</div></div>
+          <div style={{ textAlign: "center" }}><div className="stat-label">Unsubscribed</div><div className="stat-value" style={{ fontSize: "26px", color: "var(--text-tertiary)" }}>{allCompanies.length - subscribedCount}</div></div>
         </div>
 
         <div className="card" style={{ padding: "28px" }}>
@@ -585,14 +428,14 @@ export default function HomePage() {
           <div className="table-wrap">
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px" }}>
               <thead>
-                <tr style={{ borderBottom: "1px solid #334155" }}>
-                  <th style={{ textAlign: "left", padding: "10px 8px", color: "#64748B", fontWeight: 500, fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.04em" }}>Firm</th>
-                  <th style={{ textAlign: "left", padding: "10px 8px", color: "#64748B", fontWeight: 500, fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.04em" }}>SOPs</th>
-                  <th style={{ textAlign: "left", padding: "10px 8px", color: "#64748B", fontWeight: 500, fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.04em" }}>Plan</th>
-                  <th style={{ textAlign: "left", padding: "10px 8px", color: "#64748B", fontWeight: 500, fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.04em" }}>Credits</th>
-                  <th style={{ textAlign: "left", padding: "10px 8px", color: "#64748B", fontWeight: 500, fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.04em" }}>Subscription</th>
-                  <th style={{ textAlign: "left", padding: "10px 8px", color: "#64748B", fontWeight: 500, fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.04em" }}>Registered</th>
-                  <th style={{ textAlign: "right", padding: "10px 8px", color: "#64748B", fontWeight: 500, fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.04em" }}>Actions</th>
+                <tr style={{ borderBottom: "1px solid var(--border)" }}>
+                  <th style={{ textAlign: "left", padding: "10px 8px", color: "var(--text-tertiary)", fontWeight: 500, fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.06em" }}>Firm</th>
+                  <th style={{ textAlign: "left", padding: "10px 8px", color: "var(--text-tertiary)", fontWeight: 500, fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.06em" }}>SOPs</th>
+                  <th style={{ textAlign: "left", padding: "10px 8px", color: "var(--text-tertiary)", fontWeight: 500, fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.06em" }}>Plan</th>
+                  <th style={{ textAlign: "left", padding: "10px 8px", color: "var(--text-tertiary)", fontWeight: 500, fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.06em" }}>Credits</th>
+                  <th style={{ textAlign: "left", padding: "10px 8px", color: "var(--text-tertiary)", fontWeight: 500, fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.06em" }}>Subscription</th>
+                  <th style={{ textAlign: "left", padding: "10px 8px", color: "var(--text-tertiary)", fontWeight: 500, fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.06em" }}>Registered</th>
+                  <th style={{ textAlign: "right", padding: "10px 8px", color: "var(--text-tertiary)", fontWeight: 500, fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.06em" }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -600,18 +443,18 @@ export default function HomePage() {
                   const isDirectorCompany = c.email === session.email;
                   const sopCount = getCompanySopCount(c.id);
                   return (
-                    <tr key={c.id} style={{ borderBottom: "1px solid #1E293B" }}>
-                      <td style={{ padding: "10px 8px", color: "#F1F5F9", fontWeight: 500 }}>
+                    <tr key={c.id} style={{ borderBottom: "1px solid var(--border)" }}>
+                      <td style={{ padding: "10px 8px", color: "var(--white)", fontWeight: 500 }}>
                         {c.name}
-                        {isDirectorCompany && <span className="tag" style={{ marginLeft: "8px", fontSize: "10px" }}>Admin</span>}
+                        {isDirectorCompany && <span className="tag" style={{ marginLeft: "8px", fontSize: "9px" }}>Admin</span>}
                       </td>
-                      <td style={{ padding: "10px 8px", color: "#94A3B8" }}>{sopCount}</td>
+                      <td style={{ padding: "10px 8px", color: "var(--text-secondary)" }}>{sopCount}</td>
                       <td style={{ padding: "10px 8px" }}>
                         {isDirectorCompany ? (
-                          <span style={{ color: "#94A3B8" }}>{getTierLimits(c.tier).label}</span>
+                          <span style={{ color: "var(--text-secondary)" }}>{getTierLimits(c.tier).label}</span>
                         ) : (
                           <select value={c.tier} onChange={(e) => adminSetTier(c.id, e.target.value as FirmTier)}
-                            style={{ background: "transparent", border: "1px solid #334155", borderRadius: "4px", color: "#94A3B8", fontSize: "12px", padding: "2px 4px" }}>
+                            style={{ background: "transparent", border: "1px solid var(--border)", borderRadius: "4px", color: "var(--text-secondary)", fontSize: "12px", padding: "2px 4px" }}>
                             <option value="solo">Solo Professional</option>
                             <option value="small">Small Firm Protocol</option>
                             <option value="medium">Medium Firm Protocol</option>
@@ -619,42 +462,42 @@ export default function HomePage() {
                           </select>
                         )}
                       </td>
-                      <td style={{ padding: "10px 8px", color: "#94A3B8" }}>
+                      <td style={{ padding: "10px 8px", color: "var(--text-secondary)" }}>
                         {isDirectorCompany ? (
                           <span>{c.credits}</span>
                         ) : editCreditsId === c.id ? (
                           <div style={{ display: "flex", gap: "4px", alignItems: "center" }}>
                             <input type="number" value={creditsAmount} onChange={(e) => setCreditsAmount(e.target.value)}
-                              style={{ width: "60px", background: "#1E293B", border: "1px solid #334155", borderRadius: "4px", color: "#F1F5F9", padding: "2px 4px", fontSize: "12px" }} />
-                            <button onClick={() => { adminSetCredits(c.id, parseInt(creditsAmount) || 0); setEditCreditsId(null); }} className="btn btn-primary" style={{ fontSize: "10px", padding: "2px 6px" }}>Set</button>
-                            <button onClick={() => setEditCreditsId(null)} className="btn-ghost" style={{ fontSize: "10px", padding: "2px 6px" }}>x</button>
+                              style={{ width: "60px", background: "var(--navy-700)", border: "1px solid var(--border)", borderRadius: "4px", color: "var(--white)", padding: "2px 4px", fontSize: "12px" }} />
+                            <button onClick={() => { adminSetCredits(c.id, parseInt(creditsAmount) || 0); setEditCreditsId(null); }} className="btn btn-primary" style={{ fontSize: "9px", padding: "2px 6px" }}>Set</button>
+                            <button onClick={() => setEditCreditsId(null)} className="btn-ghost" style={{ fontSize: "9px", padding: "2px 6px" }}>x</button>
                           </div>
                         ) : (
-                          <span onClick={() => { setEditCreditsId(c.id); setCreditsAmount(String(c.credits)); }} style={{ cursor: "pointer", borderBottom: "1px dashed #475569" }}>{c.credits}</span>
+                          <span onClick={() => { setEditCreditsId(c.id); setCreditsAmount(String(c.credits)); }} style={{ cursor: "pointer", borderBottom: "1px dashed var(--border)" }}>{c.credits}</span>
                         )}
                       </td>
                       <td style={{ padding: "10px 8px" }}>
                         {isDirectorCompany ? (
-                          <span style={{ color: "#22C55E", fontSize: "11px" }}>Active</span>
+                          <span style={{ color: "var(--success)", fontSize: "11px" }}>Active</span>
                         ) : (
                           <button onClick={() => adminSetSubscription(c.id, c.subscriptionActive !== "yes")}
                             className={`btn ${c.subscriptionActive === "yes" ? "btn-secondary" : "btn-primary"}`}
-                            style={{ fontSize: "10px", padding: "2px 8px" }}>
+                            style={{ fontSize: "9px", padding: "2px 8px" }}>
                             {c.subscriptionActive === "yes" ? "Deactivate" : "Activate"}
                           </button>
                         )}
                       </td>
-                      <td style={{ padding: "10px 8px", color: "#64748B", fontSize: "12px" }}>{c.createdAt}</td>
+                      <td style={{ padding: "10px 8px", color: "var(--text-tertiary)", fontSize: "12px" }}>{c.createdAt}</td>
                       <td style={{ padding: "10px 8px", textAlign: "right" }}>
                         {isDirectorCompany ? (
-                          <span style={{ color: "#475569", fontSize: "11px" }}>Protected</span>
+                          <span style={{ color: "var(--text-muted)", fontSize: "11px" }}>Protected</span>
                         ) : deleteConfirmId === c.id ? (
                           <div style={{ display: "flex", gap: "4px", justifyContent: "flex-end" }}>
-                            <button onClick={() => { deleteCompany(c.id); setDeleteConfirmId(null); }} className="btn btn-primary" style={{ fontSize: "10px", padding: "2px 6px", background: "#DC2626", borderColor: "#DC2626" }}>Confirm</button>
-                            <button onClick={() => setDeleteConfirmId(null)} className="btn-ghost" style={{ fontSize: "10px", padding: "2px 6px" }}>Cancel</button>
+                            <button onClick={() => { deleteCompany(c.id); setDeleteConfirmId(null); }} className="btn btn-primary" style={{ fontSize: "9px", padding: "2px 6px", background: "var(--danger)", borderColor: "var(--danger)" }}>Confirm</button>
+                            <button onClick={() => setDeleteConfirmId(null)} className="btn-ghost" style={{ fontSize: "9px", padding: "2px 6px" }}>Cancel</button>
                           </div>
                         ) : (
-                          <button onClick={() => setDeleteConfirmId(c.id)} className="btn-ghost" style={{ fontSize: "11px", color: "#DC2626", padding: "2px 6px" }}>Delete</button>
+                          <button onClick={() => setDeleteConfirmId(c.id)} className="btn-ghost" style={{ fontSize: "11px", color: "var(--danger)", padding: "2px 6px" }}>Delete</button>
                         )}
                       </td>
                     </tr>
@@ -670,31 +513,33 @@ export default function HomePage() {
 
   return (
     <div style={{ maxWidth: "1120px", margin: "0 auto", padding: "40px 32px" }} className="fade-in">
-      <div style={{ marginBottom: "40px" }}>
-        <h1 style={{ fontSize: "28px", fontWeight: 600, color: "#F1F5F9", marginBottom: "8px", letterSpacing: "-0.02em" }}>
+      {/* Header */}
+      <div style={{ marginBottom: "36px" }}>
+        <div className="ogi-badge">Command Centre</div>
+        <h1 style={{ fontSize: "28px", fontWeight: 600, color: "var(--white)", marginBottom: "4px", letterSpacing: "-0.02em" }}>
           {greeting}, {session.name}
         </h1>
-        <p style={{ fontSize: "15px", color: "#64748B" }}>
-          {company.name} &middot; {getTierLimits(company.tier).label}
+        <p style={{ fontSize: "14px", color: "var(--text-secondary)" }}>
+          {company.name} · {getTierLimits(company.tier).label} · {company.jurisdiction} jurisdiction
         </p>
       </div>
 
       {stripeSuccess && (
-        <div className="card" style={{ marginBottom: "24px", padding: "16px 20px", borderColor: "#10B981" }}>
+        <div className="glass" style={{ marginBottom: "24px", padding: "16px 20px", border: "1px solid rgba(16,185,129,0.3)" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <div>
-              <p style={{ fontSize: "14px", fontWeight: 600, color: "#10B981", marginBottom: "4px" }}>Payment successful</p>
-              <p style={{ fontSize: "13px", color: "#94A3B8" }}>{stripeSuccess}</p>
+              <p style={{ fontSize: "14px", fontWeight: 600, color: "var(--success)", marginBottom: "2px" }}>Payment successful</p>
+              <p style={{ fontSize: "13px", color: "var(--text-secondary)" }}>{stripeSuccess}</p>
             </div>
-            <button onClick={() => setStripeSuccess(null)} className="btn btn-secondary" style={{ fontSize: "12px" }}>Dismiss</button>
+            <button onClick={() => setStripeSuccess(null)} className="btn btn-secondary" style={{ fontSize: "11px" }}>Dismiss</button>
           </div>
         </div>
       )}
 
       {unreadNotifs.length > 0 && (
-        <div className="card" style={{ marginBottom: "24px", padding: "20px" }}>
+        <div className="glass" style={{ marginBottom: "24px", padding: "20px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
-            <span style={{ fontSize: "11px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", color: "#64748B" }}>
+            <span style={{ fontSize: "10px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-tertiary)" }}>
               Notifications ({unreadNotifs.length})
             </span>
             <button onClick={clearNotifications} className="btn-ghost" style={{ fontSize: "11px", padding: "2px 8px" }}>Clear all</button>
@@ -702,8 +547,8 @@ export default function HomePage() {
           {unreadNotifs.slice(0, 3).map((n) => (
             <div key={n.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0", borderBottom: "1px solid var(--border)" }}>
               <div>
-                <p style={{ fontSize: "14px", fontWeight: 500, color: "#F1F5F9" }}>{n.title}</p>
-                <p style={{ fontSize: "13px", color: "#94A3B8" }}>{n.message}</p>
+                <p style={{ fontSize: "14px", fontWeight: 500, color: "var(--white)" }}>{n.title}</p>
+                <p style={{ fontSize: "13px", color: "var(--text-secondary)" }}>{n.message}</p>
               </div>
               <button onClick={() => dismissNotification(n.id)} className="btn-ghost" style={{ fontSize: "11px", padding: "2px 8px" }}>Dismiss</button>
             </div>
@@ -711,79 +556,128 @@ export default function HomePage() {
         </div>
       )}
 
-      <div className="dash-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "28px", marginBottom: "32px" }}>
-        <div className="card" style={{ padding: "28px" }}>
-          <div className="card-header" style={{ marginBottom: "20px" }}>Company Overview</div>
-          <div className="data-row" style={{ marginBottom: "14px" }}><span className="data-label">Company</span><span className="data-value">{company.name}</span></div>
-          <div className="data-row" style={{ marginBottom: "14px" }}><span className="data-label">Plan</span><span className="data-value">{getTierLimits(company.tier).label}</span></div>
-          <div className="data-row"><span className="data-label">Jurisdiction</span><span className="data-value accent">{company.jurisdiction}</span></div>
+      {/* Command Centre Stats */}
+      <div className="command-bar" style={{ marginBottom: "28px" }}>
+        <div style={{ textAlign: "center" }}>
+          <div className="stat-label">Credits Available</div>
+          <div className="stat-value" style={{ fontSize: "28px" }}>{company.credits}</div>
         </div>
-
-        <div className="card" style={{ padding: "28px" }}>
-          <div className="card-header" style={{ marginBottom: "20px" }}>Credits &amp; Activity</div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
-            <div>
-              <div className="stat-label">Credits Available</div>
-              <div className="stat-value" style={{ fontSize: "32px", color: "#2563EB" }}>{company.credits}</div>
-            </div>
-            <div>
-              <div className="stat-label">Documents Created</div>
-              <div className="stat-value">{vault.length}</div>
-            </div>
+        <div style={{ textAlign: "center" }}>
+          <div className="stat-label">Active Documents</div>
+          <div className="stat-value" style={{ fontSize: "28px" }}>{activeCount}</div>
+        </div>
+        <div style={{ textAlign: "center" }}>
+          <div className="stat-label">Team Members</div>
+          <div className="stat-value" style={{ fontSize: "28px" }}>{company.team.length}</div>
+        </div>
+        <div style={{ textAlign: "center" }}>
+          <div className="stat-label">Subscription</div>
+          <div className="stat-value" style={{ fontSize: "20px", color: company.subscriptionActive === "yes" ? "var(--success)" : "var(--text-tertiary)", marginTop: "6px" }}>
+            {company.subscriptionActive === "yes" ? "Active" : "Trial"}
           </div>
         </div>
       </div>
 
-      <div className="card" style={{ padding: "28px", marginBottom: "32px" }}>
-        <div className="card-header" style={{ marginBottom: "20px" }}>Quick Actions</div>
+      {/* Workspace Cards */}
+      <div className="dash-grid" style={{ marginBottom: "28px" }}>
         {!company.focus ? (
-          <div style={{ textAlign: "center", padding: "24px 0" }}>
-            <p style={{ fontSize: "14px", color: "#94A3B8", marginBottom: "16px" }}>
-              Choose what you want to create to unlock tools.
+          <div className="workspace-card" style={{ gridColumn: "1 / -1", textAlign: "center", padding: "48px 32px" }}>
+            <p style={{ fontSize: "15px", color: "var(--text-secondary)", marginBottom: "18px" }}>
+              Choose your focus to unlock the tools you need.
             </p>
             <button onClick={() => router.push("/choose-focus")} className="btn btn-primary" style={{ padding: "12px 32px", fontSize: "14px" }}>
               Choose Focus
             </button>
           </div>
         ) : (
-          <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-            {company.focus === "sops" ? (
-              <button onClick={() => router.push("/forge")} className="btn btn-primary" style={{ padding: "14px 28px", fontSize: "14px", flex: 1, minWidth: "180px" }}>
-                Generate SOP
-              </button>
-            ) : (
-              <button disabled className="btn btn-secondary" style={{ padding: "14px 28px", fontSize: "14px", flex: 1, minWidth: "180px" }}>
-                Generate SOP
-              </button>
-            )}
-            {company.focus === "checklists" ? (
-              <button onClick={() => router.push("/checklist")} className="btn btn-primary" style={{ padding: "14px 28px", fontSize: "15px", flex: 1, minWidth: "180px" }}>
-                Create Checklist
-              </button>
-            ) : (
-              <button disabled className="btn btn-secondary" style={{ padding: "14px 28px", fontSize: "15px", flex: 1, minWidth: "180px" }}>
-                Create Checklist
-              </button>
-            )}
-            <button onClick={() => router.push("/armory")} className="btn btn-secondary" style={{ padding: "14px 28px", fontSize: "15px", flex: 1, minWidth: "180px" }}>
-              Document Vault
-            </button>
-            <button onClick={() => router.push("/settings")} className="btn btn-secondary" style={{ padding: "14px 28px", fontSize: "15px", flex: 1, minWidth: "180px" }}>
-              Administration
-            </button>
-          </div>
+          <>
+            <div className="workspace-card" onClick={() => company.focus === "sops" && router.push("/forge")} style={company.focus !== "sops" ? { opacity: 0.5, cursor: "not-allowed" } : {}}>
+              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "16px" }}>
+                <div style={{ width: "44px", height: "44px", borderRadius: "12px", background: "var(--accent-subtle)", border: "1px solid var(--accent-border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "18px", color: "var(--accent)" }}>S</div>
+                <span className="tag tag-gold" style={{ fontSize: "9px" }}>{company.focus === "sops" ? "Active" : "Locked"}</span>
+              </div>
+              <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--white)", marginBottom: "6px" }}>SOP Builder</h3>
+              <p style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: 1.6, marginBottom: "16px" }}>
+                Generate structured operational procedures with full governance controls.
+              </p>
+              <div style={{ display: "flex", gap: "8px" }}>
+                <span className="tag">10 credits</span>
+                <span className="tag">{getTierLimits(company.tier).label}</span>
+              </div>
+            </div>
+
+            <div className="workspace-card" onClick={() => company.focus === "checklists" && router.push("/checklist")} style={company.focus !== "checklists" ? { opacity: 0.5, cursor: "not-allowed" } : {}}>
+              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "16px" }}>
+                <div style={{ width: "44px", height: "44px", borderRadius: "12px", background: "var(--success-subtle)", border: "1px solid rgba(16,185,129,0.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "18px", color: "var(--success)" }}>C</div>
+                <span className="tag tag-green" style={{ fontSize: "9px" }}>{company.focus === "checklists" ? "Active" : "Locked"}</span>
+              </div>
+              <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--white)", marginBottom: "6px" }}>Checklist Builder</h3>
+              <p style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: 1.6, marginBottom: "16px" }}>
+                Create operational checklists for recurring processes and compliance checks.
+              </p>
+              <div style={{ display: "flex", gap: "8px" }}>
+                <span className="tag">1 credit</span>
+                <span className="tag">{getTierLimits(company.tier).label}</span>
+              </div>
+            </div>
+
+            <div className="workspace-card" onClick={() => router.push("/batch")} style={company.subscriptionActive !== "yes" ? { opacity: 0.5, cursor: "not-allowed" } : {}}>
+              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "16px" }}>
+                <div style={{ width: "44px", height: "44px", borderRadius: "12px", background: "var(--blue-subtle)", border: "1px solid rgba(59,130,246,0.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "18px", color: "var(--blue-accent)" }}>B</div>
+                <span className="tag tag-blue" style={{ fontSize: "9px" }}>{company.subscriptionActive === "yes" ? "Available" : "Premium"}</span>
+              </div>
+              <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--white)", marginBottom: "6px" }}>Batch Builder</h3>
+              <p style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: 1.6, marginBottom: "16px" }}>
+                Generate entire SOP packages across departments in a single operation.
+              </p>
+              <div style={{ display: "flex", gap: "8px" }}>
+                <span className="tag">Bulk operation</span>
+                <span className="tag tag-gold">Subscription</span>
+              </div>
+            </div>
+
+            <div className="workspace-card" onClick={() => router.push("/armory")}>
+              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "16px" }}>
+                <div style={{ width: "44px", height: "44px", borderRadius: "12px", background: "var(--bg-elevated)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "18px", color: "var(--text-secondary)" }}>V</div>
+                <span className="tag" style={{ fontSize: "9px" }}>{vault.length} docs</span>
+              </div>
+              <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--white)", marginBottom: "6px" }}>Document Vault</h3>
+              <p style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: 1.6, marginBottom: "16px" }}>
+                Access, download, and manage your complete document inventory.
+              </p>
+              <div style={{ display: "flex", gap: "8px" }}>
+                <span className="tag">{activeCount} active</span>
+                <span className="tag">{vault.filter(s => s.favorite).length} starred</span>
+              </div>
+            </div>
+          </>
         )}
       </div>
 
+      {/* Quick actions */}
+      <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginBottom: "32px" }}>
+        <button onClick={() => router.push("/settings")} className="btn btn-secondary" style={{ padding: "10px 20px", fontSize: "12px" }}>
+          Administration
+        </button>
+        {vault.length > 0 && (
+          <button onClick={() => router.push("/armory")} className="btn btn-secondary" style={{ padding: "10px 20px", fontSize: "12px" }}>
+            View All Documents
+          </button>
+        )}
+      </div>
+
+      {/* Latest Documents */}
       {vault.length > 0 && (
-        <div className="card" style={{ padding: "28px" }}>
-          <div className="card-header" style={{ marginBottom: "20px" }}>Latest Documents</div>
+        <div className="glass">
+          <div style={{ padding: "20px 24px 12px", borderBottom: "1px solid var(--border)" }}>
+            <span style={{ fontSize: "10px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--accent)" }}>Recent Documents</span>
+          </div>
           {vault.slice(-5).reverse().map((sop) => (
-            <div key={sop.id} className="doc-row" style={{ padding: "12px 0" }}>
-              <span className="status-dot" style={{ background: sop.status === "active" ? "#10B981" : "#64748B" }}></span>
-              <span style={{ flex: 1, color: "#F1F5F9", fontWeight: 500, fontSize: "14px" }}>{sop.title}</span>
-              <span style={{ fontSize: "13px", color: "#64748B", width: "100px" }}>{sop.dateCreated}</span>
-              <span className="tag" style={{ width: "auto" }}>{sop.jurisdiction}</span>
+            <div key={sop.id} className="doc-row" style={{ padding: "12px 24px" }}>
+              <span className="status-dot" style={{ background: sop.status === "active" ? "var(--success)" : "var(--text-tertiary)" }}></span>
+              <span style={{ flex: 1, color: "var(--white)", fontWeight: 500, fontSize: "14px" }}>{sop.title}</span>
+              <span style={{ fontSize: "12px", color: "var(--text-tertiary)", width: "100px" }} className="hide-mobile">{sop.dateCreated}</span>
+              <span className="tag" style={{ width: "auto", fontSize: "10px" }}>{sop.jurisdiction}</span>
             </div>
           ))}
         </div>

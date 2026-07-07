@@ -104,17 +104,18 @@ export default function ArmoryPage() {
   return (
     <div style={{ maxWidth: "1120px", margin: "0 auto", padding: "40px 32px" }} className="fade-in">
       <div style={{ marginBottom: "32px" }}>
-        <h1 style={{ fontSize: "28px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "8px", letterSpacing: "-0.02em" }}>
+        <div className="ogi-badge">Document Repository</div>
+        <h1 style={{ fontSize: "28px", fontWeight: 600, color: "var(--white)", marginBottom: "6px", letterSpacing: "-0.02em" }}>
           Document Vault
         </h1>
-        <p style={{ fontSize: "15px", color: "var(--text-secondary)" }}>
-          {vault.filter(s => s.status === "active").length} active documents &middot; {vault.filter(s => s.favorite).length} starred
+        <p style={{ fontSize: "14px", color: "var(--text-secondary)" }}>
+          {vault.filter(s => s.status === "active").length} active documents · {vault.filter(s => s.favorite).length} starred
         </p>
       </div>
 
       {!viewingSop ? (
         <>
-          <div style={{ display: "flex", gap: "12px", marginBottom: "20px", flexWrap: "wrap", alignItems: "center" }}>
+          <div style={{ display: "flex", gap: "12px", marginBottom: "24px", flexWrap: "wrap", alignItems: "center" }}>
             <div style={{ flex: 1, minWidth: "200px", position: "relative" }}>
               <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search by title, company, or hash..." style={{ paddingLeft: "36px", width: "100%" }} />
               <span style={{ position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)", fontSize: "14px", color: "var(--text-tertiary)", pointerEvents: "none" }}>&#8981;</span>
@@ -124,25 +125,24 @@ export default function ArmoryPage() {
               <option value="active">Active</option>
               <option value="archived">Archived</option>
             </select>
-            <button onClick={() => setFilterFav(!filterFav)} className={filterFav ? "btn btn-primary" : "btn btn-secondary"} style={{ padding: "12px 20px", fontSize: "13px" }}>
+            <button onClick={() => setFilterFav(!filterFav)} className={filterFav ? "btn btn-primary" : "btn btn-secondary"} style={{ padding: "11px 20px", fontSize: "12px" }}>
               {filterFav ? "\u2605 Starred" : "\u2606 Starred"}
             </button>
           </div>
 
           {filtered.length === 0 ? (
-            <div className="card" style={{ textAlign: "center", padding: "64px 32px" }}>
-              <div style={{ fontSize: "40px", marginBottom: "16px", opacity: 0.3 }}>&#128196;</div>
+            <div className="workspace-card" style={{ textAlign: "center", padding: "64px 32px", cursor: "default" }}>
               <p style={{ fontSize: "15px", color: "var(--text-secondary)", marginBottom: "20px" }}>
                 {search ? "No documents match your search." : "No documents in the vault yet."}
               </p>
-              <button onClick={() => router.push("/forge")} className="btn btn-primary" style={{ padding: "14px 28px", fontSize: "15px" }}>
+              <button onClick={() => router.push("/forge")} className="btn btn-primary" style={{ padding: "12px 28px", fontSize: "14px" }}>
                 Generate Document
               </button>
             </div>
           ) : (
             <>
               <div className="card mobile-safe-overflow" style={{ padding: 0, overflow: "hidden" }}>
-                <div style={{ display: "flex", padding: "12px 20px", borderBottom: "1px solid var(--border)", fontSize: "11px", fontWeight: 600, color: "var(--text-tertiary)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                <div style={{ display: "flex", padding: "12px 20px", borderBottom: "1px solid var(--border)", fontSize: "10px", fontWeight: 600, color: "var(--text-tertiary)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
                   <span style={{ flex: "1 1 30%", minWidth: "100px" }}>Title</span>
                   <span className="hide-mobile" style={{ flex: "0 0 90px" }}>Jurisdiction</span>
                   <span className="hide-mobile" style={{ flex: "0 0 60px", textAlign: "center" }}>Ver.</span>
@@ -151,18 +151,18 @@ export default function ArmoryPage() {
                   <span style={{ flex: "0 0 90px", textAlign: "right" }}>Actions</span>
                 </div>
                 {filtered.map((sop) => (
-                  <div key={sop.id} className="doc-row" style={{ flexWrap: "nowrap", gap: "4px", padding: "10px 20px", transition: "background 0.15s" }}>
-                    <span style={{ flex: "1 1 30%", minWidth: "80px", fontWeight: 500, color: "var(--text-primary)", cursor: "pointer", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontSize: "14px" }}
+                  <div key={sop.id} className="doc-row" style={{ flexWrap: "nowrap", gap: "4px", padding: "10px 20px" }}>
+                    <span style={{ flex: "1 1 30%", minWidth: "80px", fontWeight: 500, color: "var(--white)", cursor: "pointer", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontSize: "14px" }}
                       onClick={() => setViewingSop(sop.id)}>
                       {sop.favorite && <span style={{ color: "var(--warning)", marginRight: "4px" }}>&#9733;</span>}
                       {sop.title}
                     </span>
                     <span className="hide-mobile" style={{ flex: "0 0 90px", fontSize: "12px" }}>
-                      <span className="tag tag-blue" style={{ fontSize: "11px", padding: "2px 8px" }}>{sop.jurisdiction}</span>
+                      <span className="tag tag-blue" style={{ fontSize: "10px", padding: "2px 8px" }}>{sop.jurisdiction}</span>
                     </span>
                     <span className="hide-mobile" style={{ flex: "0 0 60px", textAlign: "center", fontSize: "12px", color: "var(--text-tertiary)" }}>v{sop.version}</span>
                     <span style={{ flex: "0 0 70px", textAlign: "center" }}>
-                      <span className={`tag ${sop.status === "active" ? "tag-green" : ""}`} style={{ fontSize: "11px", padding: "2px 8px" }}>{sop.status}</span>
+                      <span className={`tag ${sop.status === "active" ? "tag-green" : ""}`} style={{ fontSize: "10px", padding: "2px 8px" }}>{sop.status}</span>
                     </span>
                     <span className="hide-mobile" style={{ flex: "0 0 90px", textAlign: "right", fontSize: "12px", color: "var(--text-tertiary)" }}>{sop.dateCreated}</span>
                     <span style={{ flex: "0 0 90px", textAlign: "right", display: "flex", gap: "4px", justifyContent: "flex-end" }}>
@@ -185,7 +185,7 @@ export default function ArmoryPage() {
 
               {filtered.length > 1 && (
                 <div style={{ textAlign: "right", marginTop: "16px" }}>
-                  <button onClick={() => downloadZip(filtered)} className="btn btn-secondary" style={{ padding: "12px 24px", fontSize: "14px" }}>
+                  <button onClick={() => downloadZip(filtered)} className="btn btn-secondary" style={{ padding: "11px 24px", fontSize: "13px" }}>
                     Download All (HTML)
                   </button>
                 </div>
@@ -196,62 +196,56 @@ export default function ArmoryPage() {
       ) : selectedSop ? (
         <div className="fade-in">
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
-            <button onClick={() => setViewingSop(null)} className="btn btn-secondary" style={{ padding: "12px 20px", fontSize: "14px" }}>&larr; Back to Vault</button>
+            <button onClick={() => setViewingSop(null)} className="btn btn-secondary" style={{ padding: "11px 20px", fontSize: "13px" }}>&larr; Back to Vault</button>
             <div style={{ display: "flex", gap: "10px" }}>
-              <button onClick={() => handleToggleFavorite(selectedSop.id, selectedSop.favorite!)} className="btn btn-secondary" style={{ padding: "12px 20px", fontSize: "13px" }}>
+              <button onClick={() => handleToggleFavorite(selectedSop.id, selectedSop.favorite!)} className="btn btn-secondary" style={{ padding: "11px 20px", fontSize: "12px" }}>
                 {selectedSop.favorite ? "\u2605 Starred" : "\u2606 Star"}
               </button>
-              <button onClick={() => handleToggleArchive(selectedSop.id, selectedSop.status)} className="btn btn-secondary" style={{ padding: "12px 20px", fontSize: "13px" }}>
+              <button onClick={() => handleToggleArchive(selectedSop.id, selectedSop.status)} className="btn btn-secondary" style={{ padding: "11px 20px", fontSize: "12px" }}>
                 {selectedSop.status === "archived" ? "Restore" : "Archive"}
               </button>
-              <button onClick={() => downloadHtml(selectedSop)} className="btn btn-primary" style={{ padding: "12px 20px", fontSize: "13px" }}>
+              <button onClick={() => downloadHtml(selectedSop)} className="btn btn-primary" style={{ padding: "11px 20px", fontSize: "12px" }}>
                 Download HTML
               </button>
             </div>
           </div>
 
-            <div className="card" style={{ padding: "32px" }}>
-            <div className="meta-grid-5" style={{ marginBottom: "28px", padding: "20px", background: "var(--bg-card)", borderRadius: "10px" }}>
-              <div><div className="stat-label" style={{ fontSize: "11px" }}>SOP ID</div><div style={{ fontSize: "13px", fontFamily: "monospace", color: "var(--text-primary)", marginTop: "4px", wordBreak: "break-all" }}>{selectedSop.id}</div></div>
-              <div><div className="stat-label" style={{ fontSize: "11px" }}>Version</div><div style={{ fontSize: "14px", color: "var(--text-primary)", marginTop: "4px" }}>{selectedSop.version}.0</div></div>
-              <div><div className="stat-label" style={{ fontSize: "11px" }}>Created</div><div style={{ fontSize: "14px", color: "var(--text-primary)", marginTop: "4px" }}>{selectedSop.dateCreated}</div></div>
-              <div><div className="stat-label" style={{ fontSize: "11px" }}>Owner</div><div style={{ fontSize: "14px", color: "var(--text-primary)", marginTop: "4px" }}>{selectedSop.createdBy}</div></div>
-              <div><div className="stat-label" style={{ fontSize: "11px" }}>Jurisdiction</div><div style={{ fontSize: "14px", color: "var(--accent)", marginTop: "4px" }}>{selectedSop.jurisdiction}</div></div>
+          <div className="card" style={{ padding: "32px" }}>
+            <div className="meta-grid-5" style={{ marginBottom: "28px", padding: "20px", background: "var(--navy-700)", borderRadius: "var(--radius)" }}>
+              <div><div className="stat-label">Document ID</div><div style={{ fontSize: "13px", fontFamily: "monospace", color: "var(--white)", marginTop: "4px", wordBreak: "break-all" }}>{selectedSop.id}</div></div>
+              <div><div className="stat-label">Version</div><div style={{ fontSize: "14px", color: "var(--white)", marginTop: "4px" }}>{selectedSop.version}.0</div></div>
+              <div><div className="stat-label">Created</div><div style={{ fontSize: "14px", color: "var(--white)", marginTop: "4px" }}>{selectedSop.dateCreated}</div></div>
+              <div><div className="stat-label">Owner</div><div style={{ fontSize: "14px", color: "var(--white)", marginTop: "4px" }}>{selectedSop.createdBy}</div></div>
+              <div><div className="stat-label">Jurisdiction</div><div style={{ fontSize: "14px", color: "var(--accent)", marginTop: "4px" }}>{selectedSop.jurisdiction}</div></div>
             </div>
 
             {selectedSop.industry && (
-              <div className="meta-grid-4" style={{ marginBottom: "28px", padding: "20px", background: "var(--bg-card)", borderRadius: "10px" }}>
-                <div><div className="stat-label" style={{ fontSize: "11px" }}>Industry</div><div style={{ fontSize: "14px", color: "var(--text-primary)", marginTop: "4px" }}>{selectedSop.industry}</div></div>
-                <div><div className="stat-label" style={{ fontSize: "11px" }}>Department</div><div style={{ fontSize: "14px", color: "var(--text-primary)", marginTop: "4px" }}>{selectedSop.department || "\u2014"}</div></div>
-                <div><div className="stat-label" style={{ fontSize: "11px" }}>Type</div><div style={{ fontSize: "14px", color: "var(--text-primary)", marginTop: "4px" }}>{selectedSop.sopType || "Operational"}</div></div>
-                <div><div className="stat-label" style={{ fontSize: "11px" }}>Status</div><div style={{ fontSize: "14px", color: selectedSop.status === "active" ? "var(--success)" : "var(--text-tertiary)", marginTop: "4px" }}>{selectedSop.status}</div></div>
+              <div className="meta-grid-4" style={{ marginBottom: "28px", padding: "20px", background: "var(--navy-700)", borderRadius: "var(--radius)" }}>
+                <div><div className="stat-label">Industry</div><div style={{ fontSize: "14px", color: "var(--white)", marginTop: "4px" }}>{selectedSop.industry}</div></div>
+                <div><div className="stat-label">Department</div><div style={{ fontSize: "14px", color: "var(--white)", marginTop: "4px" }}>{selectedSop.department || "\u2014"}</div></div>
+                <div><div className="stat-label">Type</div><div style={{ fontSize: "14px", color: "var(--white)", marginTop: "4px" }}>{selectedSop.sopType || "Operational"}</div></div>
+                <div><div className="stat-label">Status</div><div style={{ fontSize: "14px", color: selectedSop.status === "active" ? "var(--success)" : "var(--text-tertiary)", marginTop: "4px" }}>{selectedSop.status}</div></div>
               </div>
             )}
 
             <div style={{ marginBottom: "20px" }}>
-              <h2 style={{ fontSize: "20px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "4px", letterSpacing: "-0.01em" }}>{selectedSop.title}</h2>
-              <p style={{ fontSize: "14px", color: "var(--text-secondary)" }}>{selectedSop.company} &middot; {selectedSop.complexity} &middot; {selectedSop.systems}</p>
+              <h2 style={{ fontSize: "20px", fontWeight: 600, color: "var(--white)", marginBottom: "4px", letterSpacing: "-0.01em" }}>{selectedSop.title}</h2>
+              <p style={{ fontSize: "14px", color: "var(--text-secondary)" }}>{selectedSop.company} · {selectedSop.complexity} · {selectedSop.systems}</p>
             </div>
 
-            <div style={{ marginBottom: "24px", padding: "16px 20px", background: "var(--accent-subtle)", borderRadius: "10px", border: "1px solid rgba(37, 99, 235, 0.12)" }}>
-              <p style={{ fontSize: "11px", color: "var(--accent)", fontWeight: 600, marginBottom: "6px", textTransform: "uppercase", letterSpacing: "0.06em" }}>Framework Context</p>
+            <div className="glass-light" style={{ marginBottom: "24px", padding: "16px 20px" }}>
+              <p style={{ fontSize: "10px", color: "var(--accent)", fontWeight: 600, marginBottom: "6px", textTransform: "uppercase", letterSpacing: "0.08em" }}>Framework Context</p>
               <p style={{ fontSize: "14px", color: "var(--text-secondary)" }}>
                 This procedure integrates within the broader {selectedSop.company} management system.
               </p>
             </div>
 
-            <div style={{ fontSize: "12px", color: "var(--text-tertiary)", marginBottom: "20px", fontFamily: "monospace", padding: "12px 16px", background: "var(--bg-card)", borderRadius: "8px" }}>
+            <div style={{ fontSize: "12px", color: "var(--text-tertiary)", fontFamily: "monospace", padding: "12px 16px", background: "var(--navy-700)", borderRadius: "var(--radius)" }}>
               Verification: {selectedSop.verificationHash}
             </div>
           </div>
         </div>
       ) : null}
-
-      <style>{`
-        @media (min-width: 769px) {
-          .desktop-col { display: block !important; }
-        }
-      `}</style>
     </div>
   );
 }

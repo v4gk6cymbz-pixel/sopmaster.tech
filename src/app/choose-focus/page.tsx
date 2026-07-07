@@ -37,48 +37,67 @@ export default function ChooseFocusPage() {
   return (
     <div className="splash-screen" style={{ padding: "24px" }}>
       <div style={{ width: "100%", maxWidth: "620px", textAlign: "center" }}>
-        <h1 style={{ fontSize: "28px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "8px" }}>
+        <div className="ogi-badge" style={{ marginBottom: "16px" }}>Getting Started</div>
+        <h1 style={{ fontSize: "28px", fontWeight: 600, color: "var(--white)", marginBottom: "8px", letterSpacing: "-0.02em" }}>
           What will you be creating?
         </h1>
         <p style={{ fontSize: "15px", color: "var(--text-secondary)", marginBottom: "32px" }}>
-          Choose what you will be creating to get started. SOPs or checklists — we support both.
+          Choose your document type to begin. SOPs for structured procedures, checklists for recurring tasks.
         </p>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
           <button
             onClick={() => handleChoice("sops")}
             disabled={busy}
-            className="card"
+            className="workspace-card"
             style={{
-              padding: "44px 28px", border: "1px solid rgba(37, 99, 235, 0.3)", cursor: busy ? "not-allowed" : "pointer",
-              opacity: busy ? 0.5 : 1, display: "flex", flexDirection: "column", alignItems: "center", gap: "16px",
+              padding: "44px 28px",
+              cursor: busy ? "not-allowed" : "pointer",
+              opacity: busy ? 0.5 : 1,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "16px",
+              background: "var(--glass-bg)",
+              borderRadius: "12px",
+              border: "1px solid var(--glass-border)",
+              transition: "all 0.2s ease",
             }}>
             <div style={{ width: "64px", height: "64px", borderRadius: "16px", background: "var(--accent-subtle)", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <div style={{ fontSize: "28px", fontWeight: 700, color: "var(--accent)" }}>S</div>
             </div>
-            <div style={{ fontSize: "20px", fontWeight: 700, color: "var(--text-primary)" }}>SOPs</div>
-            <p style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: 1.6 }}>
+            <div style={{ fontSize: "20px", fontWeight: 600, color: "var(--white)", letterSpacing: "-0.01em" }}>SOPs</div>
+            <p style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: 1.6, margin: 0 }}>
               Generate standard operating procedures with full governance structure.
             </p>
-            <div style={{ fontSize: "13px", color: "var(--text-tertiary)", marginTop: "4px", padding: "6px 14px", borderRadius: "20px", background: "var(--bg-card)" }}>
+            <div style={{ fontSize: "12px", color: "var(--text-tertiary)", marginTop: "4px", padding: "6px 14px", borderRadius: "20px", background: "var(--bg-card)" }}>
               100 free credits included
             </div>
           </button>
           <button
             onClick={() => handleChoice("checklists")}
             disabled={busy}
-            className="card"
+            className="workspace-card"
             style={{
-              padding: "44px 28px", border: "1px solid var(--border)", cursor: busy ? "not-allowed" : "pointer",
-              opacity: busy ? 0.5 : 1, display: "flex", flexDirection: "column", alignItems: "center", gap: "16px",
+              padding: "44px 28px",
+              cursor: busy ? "not-allowed" : "pointer",
+              opacity: busy ? 0.5 : 1,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "16px",
+              background: "var(--glass-bg)",
+              borderRadius: "12px",
+              border: "1px solid var(--glass-border)",
+              transition: "all 0.2s ease",
             }}>
             <div style={{ width: "64px", height: "64px", borderRadius: "16px", background: "rgba(16, 185, 129, 0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <div style={{ fontSize: "28px", fontWeight: 700, color: "var(--success)" }}>C</div>
             </div>
-            <div style={{ fontSize: "20px", fontWeight: 700, color: "var(--text-primary)" }}>Checklists</div>
-            <p style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: 1.6 }}>
+            <div style={{ fontSize: "20px", fontWeight: 600, color: "var(--white)", letterSpacing: "-0.01em" }}>Checklists</div>
+            <p style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: 1.6, margin: 0 }}>
               Create operational checklists for recurring processes.
             </p>
-            <div style={{ fontSize: "13px", color: "var(--text-tertiary)", marginTop: "4px", padding: "6px 14px", borderRadius: "20px", background: "var(--bg-card)" }}>
+            <div style={{ fontSize: "12px", color: "var(--text-tertiary)", marginTop: "4px", padding: "6px 14px", borderRadius: "20px", background: "var(--bg-card)" }}>
               10 free credits included
             </div>
           </button>
