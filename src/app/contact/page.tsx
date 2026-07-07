@@ -2,12 +2,12 @@
 
 export default function ContactPage() {
   return (
-    <div style={{ maxWidth: "800px", margin: "0 auto", padding: "64px 24px" }} className="fade-in">
-      <div style={{ marginBottom: "48px" }}>
-        <h1 style={{ fontSize: "22px", fontWeight: 600, color: "#F1F5F9", marginBottom: "4px" }}>
+    <div style={{ maxWidth: "800px", margin: "0 auto", padding: "80px 24px" }} className="fade-in">
+      <div style={{ marginBottom: "52px" }}>
+        <h1 style={{ fontSize: "28px", fontWeight: 600, color: "#F8FAFC", marginBottom: "8px", letterSpacing: "-0.02em" }}>
           Contact Us
         </h1>
-        <p style={{ fontSize: "13px", color: "#64748B" }}>
+        <p style={{ fontSize: "15px", color: "#94A3B8" }}>
           Get in touch with the SOPMaster team.
         </p>
       </div>

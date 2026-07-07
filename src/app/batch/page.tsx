@@ -197,13 +197,13 @@ export default function BatchPage() {
   const isHalfPackage = selectedDepartments.length <= 7;
 
   return (
-    <div style={{ maxWidth: "1120px", margin: "0 auto", padding: "32px 24px" }} className="fade-in">
+    <div style={{ maxWidth: "1120px", margin: "0 auto", padding: "48px 24px" }} className="fade-in">
 
-      <div style={{ marginBottom: result ? "24px" : "20px" }}>
-        <h1 style={{ fontSize: "20px", fontWeight: 600, color: "#F1F5F9", marginBottom: "4px" }}>
+      <div style={{ marginBottom: result ? "28px" : "24px" }}>
+        <h1 style={{ fontSize: "28px", fontWeight: 600, color: "#F8FAFC", marginBottom: "6px", letterSpacing: "-0.02em" }}>
           BATCH BUILDER v3.0
         </h1>
-        <p style={{ fontSize: "13px", color: "#64748B" }}>
+        <p style={{ fontSize: "15px", color: "#94A3B8" }}>
           Generate a complete Operational Infrastructure Package across multiple departments. 30 credits per department.
         </p>
       </div>
@@ -212,20 +212,22 @@ export default function BatchPage() {
 
       {/* Phase Stepper */}
       {!result && !generating && (
-        <div style={{ display: "flex", gap: "8px", marginBottom: "24px" }}>
+        <div style={{ display: "flex", gap: "10px", marginBottom: "28px" }}>
           {PHASES.map((p, i) => (
             <div key={p.id} style={{
-              display: "flex", alignItems: "center", gap: "8px", padding: "8px 16px",
-              borderRadius: "8px", fontSize: "12px", fontWeight: 500, whiteSpace: "nowrap",
-              background: phase === p.id ? "rgba(59,130,246,0.12)" : "rgba(0,0,0,0.2)",
-              border: phase === p.id ? "1px solid rgba(59,130,246,0.3)" : "1px solid #1E293B",
-              color: phase === p.id ? "#3B82F6" : "#64748B",
+              display: "flex", alignItems: "center", gap: "10px", padding: "10px 20px",
+              borderRadius: "10px", fontSize: "13px", fontWeight: 500, whiteSpace: "nowrap",
+              background: phase === p.id ? "rgba(59,130,246,0.1)" : "rgba(255,255,255,0.03)",
+              border: phase === p.id ? "1px solid rgba(59,130,246,0.3)" : "1px solid rgba(255,255,255,0.06)",
+              color: phase === p.id ? "#F8FAFC" : "#64748B",
+              backdropFilter: phase === p.id ? "blur(12px)" : "none",
+              transition: "all 0.2s ease",
             }}>
               <span style={{
-                width: "22px", height: "22px", borderRadius: "50%", display: "flex",
-                alignItems: "center", justifyContent: "center", fontSize: "11px", fontWeight: 600,
-                background: phase === p.id ? "#3B82F6" : "#1E293B",
-                color: phase === p.id ? "#fff" : "#475569",
+                width: "24px", height: "24px", borderRadius: "50%", display: "flex",
+                alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: 600,
+                background: phase === p.id ? "#3B82F6" : "rgba(255,255,255,0.08)",
+                color: phase === p.id ? "#fff" : "#64748B",
               }}>{i + 1}</span>
               {p.label}
             </div>
@@ -236,8 +238,8 @@ export default function BatchPage() {
       {/* Phase 1 — Company DNA */}
       {phase === "dna" && !result && !generating && (
         <div>
-          <div className="card" style={{ marginBottom: "20px", borderLeft: "3px solid #3B82F6" }}>
-            <div className="card-header" style={{ fontSize: "13px" }}>
+          <div className="card" style={{ marginBottom: "20px" }}>
+            <div className="card-header">
               Phase 1 — Company DNA
             </div>
             <p style={{ fontSize: "12px", color: "#64748B", marginTop: "-8px", marginBottom: "20px" }}>
@@ -313,8 +315,8 @@ export default function BatchPage() {
       {/* Phase 2 — Business Map */}
       {phase === "map" && !result && !generating && (
         <div>
-          <div className="card" style={{ marginBottom: "20px", borderLeft: "3px solid #22C55E" }}>
-            <div className="card-header" style={{ fontSize: "13px" }}>
+          <div className="card" style={{ marginBottom: "20px" }}>
+            <div className="card-header">
               Phase 2 — Business Map
             </div>
             <p style={{ fontSize: "12px", color: "#64748B", marginTop: "-8px", marginBottom: "20px" }}>
@@ -382,22 +384,22 @@ export default function BatchPage() {
 
       {/* Loading — SOP Factory */}
       {generating && (
-        <div className="card" style={{ maxWidth: "560px", margin: "0 auto", textAlign: "center", padding: "48px 32px" }}>
+        <div className="card" style={{ maxWidth: "560px", margin: "0 auto", textAlign: "center", padding: "48px 36px" }}>
           <div style={{ marginBottom: "16px" }}>
             <span style={{ fontSize: "11px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", color: "#22C55E" }}>
-              BATCH BUILDER v3.0 — Running 8-Phase Factory
+              BATCH BUILDER v3.0
             </span>
           </div>
-          <h2 style={{ fontSize: "16px", fontWeight: 600, color: "#F1F5F9", marginBottom: "4px" }}>Generating Operational Infrastructure</h2>
-          <p style={{ fontSize: "13px", color: "#64748B", marginBottom: "24px" }}>
-            {selectedDepartments.length} departments &middot; ~{isHalfPackage ? "3" : "5"} minutes
+          <h2 style={{ fontSize: "17px", fontWeight: 600, color: "#F8FAFC", marginBottom: "4px" }}>Generating Operational Infrastructure</h2>
+          <p style={{ fontSize: "14px", color: "#94A3B8", marginBottom: "24px" }}>
+            {selectedDepartments.length} departments &middot; Processing
           </p>
           <div className="progress-bar" style={{ marginBottom: "12px", height: "8px" }}>
             <div className="progress-fill" style={{ width: `${progress}%`, height: "8px" }} />
           </div>
           <p style={{ fontSize: "12px", color: "#22C55E", fontWeight: 500, marginBottom: "20px" }}>{Math.round(progress)}%</p>
           <div style={{
-            textAlign: "left", padding: "12px 16px", background: "rgba(0,0,0,0.3)", borderRadius: "8px",
+            textAlign: "left", padding: "14px 18px", background: "rgba(0,0,0,0.25)", borderRadius: "8px",
             maxHeight: "240px", overflowY: "auto", fontFamily: "monospace", fontSize: "12px",
           }}>
             {logs.map((log, i) => (
@@ -434,22 +436,22 @@ export default function BatchPage() {
           </div>
 
           {/* Summary Cards */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "12px", marginBottom: "20px" }}>
-            <div className="card" style={{ padding: "16px", textAlign: "center" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "16px", marginBottom: "24px" }}>
+            <div className="card" style={{ padding: "24px", textAlign: "center" }}>
               <div className="stat-label">Total SOPs</div>
-              <div className="stat-value" style={{ color: "#3B82F6", fontSize: "28px" }}>{result.totalCount}</div>
+              <div className="stat-value" style={{ color: "#3B82F6", fontSize: "30px" }}>{result.totalCount}</div>
             </div>
-            <div className="card" style={{ padding: "16px", textAlign: "center" }}>
+            <div className="card" style={{ padding: "24px", textAlign: "center" }}>
               <div className="stat-label">Departments</div>
-              <div className="stat-value">{selectedDepartments.length}</div>
+              <div className="stat-value" style={{ fontSize: "30px" }}>{selectedDepartments.length}</div>
             </div>
-            <div className="card" style={{ padding: "16px", textAlign: "center" }}>
+            <div className="card" style={{ padding: "24px", textAlign: "center" }}>
               <div className="stat-label">Industry</div>
-              <div className="stat-value" style={{ fontSize: "14px" }}>{industry}</div>
+              <div className="stat-value" style={{ fontSize: "15px", color: "#F8FAFC", marginTop: "4px" }}>{industry}</div>
             </div>
-            <div className="card" style={{ padding: "16px", textAlign: "center" }}>
+            <div className="card" style={{ padding: "24px", textAlign: "center" }}>
               <div className="stat-label">Company</div>
-              <div className="stat-value" style={{ fontSize: "14px" }}>{companyName}</div>
+              <div className="stat-value" style={{ fontSize: "15px", color: "#F8FAFC", marginTop: "4px" }}>{companyName}</div>
             </div>
           </div>
 

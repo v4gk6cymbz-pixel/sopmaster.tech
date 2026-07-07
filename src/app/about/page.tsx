@@ -2,18 +2,18 @@
 
 export default function AboutPage() {
   return (
-    <div style={{ maxWidth: "800px", margin: "0 auto", padding: "64px 24px" }} className="fade-in">
-      <div style={{ marginBottom: "48px" }}>
-        <h1 style={{ fontSize: "22px", fontWeight: 600, color: "#F1F5F9", marginBottom: "4px" }}>
+    <div style={{ maxWidth: "800px", margin: "0 auto", padding: "80px 24px" }} className="fade-in">
+      <div style={{ marginBottom: "52px" }}>
+        <h1 style={{ fontSize: "28px", fontWeight: 600, color: "#F8FAFC", marginBottom: "8px", letterSpacing: "-0.02em" }}>
           About SOPMaster
         </h1>
-        <p style={{ fontSize: "13px", color: "#64748B" }}>
+        <p style={{ fontSize: "15px", color: "#94A3B8" }}>
           The operational documentation platform for consultancy professionals.
         </p>
       </div>
 
-      <div className="card" style={{ padding: "32px", marginBottom: "24px" }}>
-        <div className="card-header" style={{ fontSize: "13px", marginBottom: "20px" }}>Our Purpose</div>
+      <div className="card" style={{ padding: "36px", marginBottom: "24px" }}>
+        <div className="card-header" style={{ marginBottom: "20px" }}>Our Purpose</div>
         <p style={{ fontSize: "14px", color: "#CBD5E1", lineHeight: 1.7, marginBottom: "16px" }}>
           SOPMaster is a professional operational documentation platform purpose-built for consultants, consultancy firms and documentation professionals. We provide the infrastructure to create, manage and maintain structured Standard Operating Procedures, operational checklists and department-level documentation that improves consistency, efficiency and client delivery.
         </p>

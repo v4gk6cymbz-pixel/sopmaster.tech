@@ -37,13 +37,13 @@ export default function RegisterPage() {
   };
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "24px", background: "#0F172A" }}>
-      <div className="card" style={{ width: "100%", maxWidth: "480px", padding: "32px" }}>
-        <div style={{ textAlign: "center", marginBottom: "24px" }}>
-          <h1 style={{ fontSize: "20px", fontWeight: 600, color: "#F1F5F9", marginBottom: "4px" }}>
+    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "24px", background: "#060D1A" }}>
+      <div className="card" style={{ width: "100%", maxWidth: "480px", padding: "36px" }}>
+        <div style={{ textAlign: "center", marginBottom: "28px" }}>
+          <h1 style={{ fontSize: "22px", fontWeight: 600, color: "#F8FAFC", marginBottom: "6px", letterSpacing: "-0.02em" }}>
             Register
           </h1>
-          <p style={{ fontSize: "13px", color: "#64748B" }}>
+          <p style={{ fontSize: "14px", color: "#94A3B8" }}>
             Create your consultancy account.
           </p>
         </div>
@@ -82,14 +82,14 @@ export default function RegisterPage() {
             {SIZE_OPTIONS.map((opt) => (
               <button key={opt.value} onClick={() => setCompanySize(opt.value)}
                 style={{
-                  textAlign: "left", padding: "12px 16px", borderRadius: "6px", cursor: "pointer",
-                  border: companySize === opt.value ? "1px solid #3B82F6" : "1px solid #334155",
-                  background: companySize === opt.value ? "rgba(59,130,246,0.06)" : "transparent",
-                  display: "flex", justifyContent: "space-between", alignItems: "center",
+                  textAlign: "left", padding: "14px 18px", borderRadius: "8px", cursor: "pointer",
+                  border: companySize === opt.value ? "1px solid rgba(59,130,246,0.4)" : "1px solid rgba(255,255,255,0.06)",
+                  background: companySize === opt.value ? "rgba(59,130,246,0.08)" : "rgba(255,255,255,0.02)",
+                  transition: "all 0.2s ease",
                 }}>
                 <div>
-                  <p style={{ fontSize: "13px", fontWeight: 600, color: "#F1F5F9" }}>{opt.label}</p>
-                  <p style={{ fontSize: "12px", color: "#94A3B8" }}>{opt.desc}</p>
+                  <p style={{ fontSize: "14px", fontWeight: 600, color: "#F8FAFC" }}>{opt.label}</p>
+                  <p style={{ fontSize: "13px", color: "#94A3B8" }}>{opt.desc}</p>
                 </div>
               </button>
             ))}

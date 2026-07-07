@@ -30,8 +30,8 @@ export default function SettingsPage() {
   const [inviteCopied, setInviteCopied] = useState(false);
 
   if (!session || !company) return (
-    <div style={{ maxWidth: "960px", margin: "0 auto", padding: "32px 24px", textAlign: "center" }}>
-      <p style={{ color: "#64748B", fontSize: "14px" }}>Loading...</p>
+    <div style={{ maxWidth: "800px", margin: "0 auto", padding: "48px 24px", textAlign: "center" }}>
+      <p style={{ color: "#94A3B8", fontSize: "14px" }}>Loading...</p>
     </div>
   );
   const isDirector = session.isDirector;
@@ -53,12 +53,12 @@ export default function SettingsPage() {
   };
 
   return (
-    <div style={{ maxWidth: "800px", margin: "0 auto", padding: "32px 24px" }} className="fade-in">
-      <div style={{ marginBottom: "28px" }}>
-        <h1 style={{ fontSize: "20px", fontWeight: 600, color: "#F1F5F9", marginBottom: "4px" }}>
+    <div style={{ maxWidth: "800px", margin: "0 auto", padding: "48px 24px" }} className="fade-in">
+      <div style={{ marginBottom: "36px" }}>
+        <h1 style={{ fontSize: "28px", fontWeight: 600, color: "#F8FAFC", marginBottom: "8px", letterSpacing: "-0.02em" }}>
           Settings
         </h1>
-        <p style={{ fontSize: "13px", color: "#64748B" }}>
+        <p style={{ fontSize: "15px", color: "#94A3B8" }}>
           Manage your company, billing, and account.
         </p>
       </div>
@@ -153,13 +153,13 @@ export default function SettingsPage() {
               <p style={{ fontSize: "12px", color: "#94A3B8", marginBottom: "16px" }}>
                 Selected plan at signup: {getTierLimits(company.tier).label}
               </p>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
                 {ALL_TIERS.map(t => (
-                  <div key={t.value} style={{ padding: "12px 16px", border: "1px solid #334155", borderRadius: "6px", background: "rgba(255,255,255,0.02)" }}>
-                    <p style={{ fontSize: "13px", fontWeight: 600, color: "#F1F5F9" }}>{t.label}</p>
-                    <p style={{ fontSize: "12px", color: "#64748B" }}>{t.credits} &middot; {t.price}</p>
+                  <div key={t.value} style={{ padding: "16px 20px", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "8px", background: "rgba(255,255,255,0.02)" }}>
+                    <p style={{ fontSize: "14px", fontWeight: 600, color: "#F8FAFC" }}>{t.label}</p>
+                    <p style={{ fontSize: "13px", color: "#94A3B8" }}>{t.credits} &middot; {t.price}</p>
                     <button onClick={() => redirectToStripe("subscription", { tier: t.value })}
-                      className="btn btn-primary" style={{ marginTop: "8px", width: "100%", fontSize: "12px" }}>
+                      className="btn btn-primary" style={{ marginTop: "10px", width: "100%", fontSize: "13px" }}>
                       Subscribe
                     </button>
                   </div>
@@ -177,9 +177,9 @@ export default function SettingsPage() {
             <div className="meta-grid-4" style={{ gap: "8px" }}>
               {[{ c: 100, p: 85 }, { c: 300, p: 142.99 }, { c: 500, p: 220 }, { c: 1000, p: 300 }].map((pack) => (
                 <button key={pack.c} onClick={() => redirectToStripe("credits", { amount: pack.c })}
-                  style={{ padding: "12px", border: "1px solid #334155", borderRadius: "6px", textAlign: "center", cursor: "pointer", background: "transparent", transition: "border-color 0.1s" }}>
-                  <p style={{ fontSize: "14px", fontWeight: 600, color: "#F1F5F9" }}>{pack.c}</p>
-                  <p style={{ fontSize: "12px", color: "#3B82F6" }}>£{pack.p}</p>
+                  style={{ padding: "14px", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "8px", textAlign: "center", cursor: "pointer", background: "rgba(255,255,255,0.02)", transition: "all 0.2s ease" }}>
+                  <p style={{ fontSize: "15px", fontWeight: 600, color: "#F8FAFC" }}>{pack.c}</p>
+                  <p style={{ fontSize: "13px", color: "#3B82F6" }}>£{pack.p}</p>
                 </button>
               ))}
             </div>
