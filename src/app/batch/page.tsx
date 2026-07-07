@@ -97,6 +97,7 @@ export default function BatchPage() {
   const deductCredit = useStore((s) => s.deductCredit);
   const addNotification = useStore((s) => s.addNotification);
   const companyProfile = useStore((s) => s.companyProfile);
+  const setCompanyJurisdiction = useStore((s) => s.setJurisdiction);
   const router = useRouter();
   const company = getCompany();
 
@@ -261,7 +262,7 @@ export default function BatchPage() {
               </div>
               <div>
                 <label>Jurisdiction</label>
-                <select value={jurisdiction} onChange={e => setJurisdiction(e.target.value)}>
+                <select value={jurisdiction} onChange={e => { setJurisdiction(e.target.value); setCompanyJurisdiction(e.target.value); }}>
                   {Object.entries(JURISDICTION_REGULATORY).map(([key, val]) => <option key={key} value={key}>{val.name}</option>)}
                 </select>
               </div>

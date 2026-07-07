@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useStore } from "@/lib/store";
-import { generateHash, generateVerificationHash, formatDate, buildSopHtml } from "@/lib/utils";
+import { generateHash, generateVerificationHash, formatDate, buildSopHtml, JURISDICTION_REGULATORY } from "@/lib/utils";
 import type { SOP, Industry, Jurisdiction } from "@/types";
 import { useRouter } from "next/navigation";
 
@@ -173,6 +173,7 @@ export default function ChecklistPage() {
   const getCompany = useStore((s) => s.getCompany);
   const addSOP = useStore((s) => s.addSOP);
   const deductCredit = useStore((s) => s.deductCredit);
+  const setCompanyJurisdiction = useStore((s) => s.setJurisdiction);
   const companyProfile = useStore((s) => s.companyProfile);
   const company = getCompany();
 
@@ -310,20 +311,10 @@ export default function ChecklistPage() {
               </div>
               <div>
                 <label>Jurisdiction</label>
-                <select value={jurisdiction} onChange={(e) => setJurisdiction(e.target.value)}>
-                  <option value="UK">United Kingdom</option>
-                  <option value="Scotland">Scotland</option>
-                  <option value="Wales">Wales</option>
-                  <option value="England">England</option>
-                  <option value="US-Federal">United States (Federal)</option>
-                  <option value="US-NewYork">New York</option>
-                  <option value="US-California">California</option>
-                  <option value="EU-GDPR">European Union (GDPR)</option>
-                  <option value="EU-PayTransparency">EU Pay Transparency</option>
-                  <option value="Canada">Canada</option>
-                  <option value="Canada-Ontario">Canada (Ontario)</option>
-                  <option value="Australia">Australia</option>
-                  <option value="Dubai-Global">Dubai Global</option>
+                <select value={jurisdiction} onChange={(e) => { setJurisdiction(e.target.value); setCompanyJurisdiction(e.target.value); }}>
+                  {Object.entries(JURISDICTION_REGULATORY).map(([key, val]) => (
+                    <option key={key} value={key}>{val.name}</option>
+                  ))}
                 </select>
               </div>
             </div>

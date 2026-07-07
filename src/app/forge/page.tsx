@@ -27,6 +27,7 @@ export default function ForgePage() {
   const getCompany = useStore((s) => s.getCompany);
   const addSOP = useStore((s) => s.addSOP);
   const deductCredit = useStore((s) => s.deductCredit);
+  const setCompanyJurisdiction = useStore((s) => s.setJurisdiction);
   const companyProfile = useStore((s) => s.companyProfile);
   const company = getCompany();
 
@@ -256,7 +257,7 @@ export default function ForgePage() {
               </div>
               <div>
                 <label>Jurisdiction</label>
-                <select value={jurisdiction} onChange={(e) => setJurisdiction(e.target.value)}>
+                <select value={jurisdiction} onChange={(e) => { setJurisdiction(e.target.value); setCompanyJurisdiction(e.target.value); }}>
                   {Object.entries(JURISDICTION_REGULATORY).map(([key, val]) => (
                     <option key={key} value={key}>{val.name}</option>
                   ))}
