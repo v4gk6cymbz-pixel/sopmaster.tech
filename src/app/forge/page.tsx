@@ -182,36 +182,34 @@ export default function ForgePage() {
   );
 
   return (
-    <div style={{ maxWidth: "1024px", margin: "0 auto", padding: "48px 24px" }} className="fade-in">
+    <div style={{ maxWidth: "1024px", margin: "0 auto", padding: "32px 24px" }} className="fade-in">
 
       {/* Header */}
-      <div style={{ marginBottom: step === "input" ? "32px" : "24px" }}>
-        <h1 style={{ fontSize: "28px", fontWeight: 600, color: "#F8FAFC", marginBottom: "6px", letterSpacing: "-0.02em" }}>
+      <div style={{ marginBottom: step === "input" ? "28px" : "24px" }}>
+        <h1 style={{ fontSize: "20px", fontWeight: 600, color: "#F1F5F9", marginBottom: "4px" }}>
           SOLO SOP BUILDER v2.0
         </h1>
-        <p style={{ fontSize: "15px", color: "#94A3B8" }}>
+        <p style={{ fontSize: "13px", color: "#64748B" }}>
           Generate a complete operational document with governance, quality controls, and operational assets. 10 credits per SOP.
         </p>
       </div>
 
       {/* Phase Stepper */}
       {step === "input" && (
-        <div style={{ display: "flex", gap: "10px", marginBottom: "32px", overflowX: "auto" }}>
+        <div style={{ display: "flex", gap: "8px", marginBottom: "28px", overflowX: "auto" }}>
           {PHASES.map((p, i) => (
             <div key={p.id} style={{
-              display: "flex", alignItems: "center", gap: "10px", padding: "10px 20px",
-              borderRadius: "10px", fontSize: "13px", fontWeight: 500, whiteSpace: "nowrap",
-              background: phase === p.id ? "rgba(59,130,246,0.1)" : "rgba(255,255,255,0.03)",
-              border: phase === p.id ? "1px solid rgba(59,130,246,0.3)" : "1px solid rgba(255,255,255,0.06)",
-              color: phase === p.id ? "#F8FAFC" : "#64748B",
-              backdropFilter: phase === p.id ? "blur(12px)" : "none",
-              transition: "all 0.2s ease",
+              display: "flex", alignItems: "center", gap: "8px", padding: "8px 16px",
+              borderRadius: "8px", fontSize: "12px", fontWeight: 500, whiteSpace: "nowrap",
+              background: phase === p.id ? "rgba(59,130,246,0.12)" : "rgba(0,0,0,0.2)",
+              border: phase === p.id ? "1px solid rgba(59,130,246,0.3)" : "1px solid #1E293B",
+              color: phase === p.id ? "#3B82F6" : "#64748B",
             }}>
               <span style={{
-                width: "24px", height: "24px", borderRadius: "50%", display: "flex",
-                alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: 600,
-                background: phase === p.id ? "#3B82F6" : "rgba(255,255,255,0.08)",
-                color: phase === p.id ? "#fff" : "#64748B",
+                width: "22px", height: "22px", borderRadius: "50%", display: "flex",
+                alignItems: "center", justifyContent: "center", fontSize: "11px", fontWeight: 600,
+                background: phase === p.id ? "#3B82F6" : "#1E293B",
+                color: phase === p.id ? "#fff" : "#475569",
               }}>{i + 1}</span>
               {p.label}
             </div>
@@ -222,8 +220,8 @@ export default function ForgePage() {
       {/* Phase 1 — Company Intelligence */}
       {phase === "company" && step === "input" && (
         <div>
-          <div className="card" style={{ marginBottom: "20px" }}>
-            <div className="card-header">
+          <div className="card" style={{ marginBottom: "20px", borderLeft: "3px solid #3B82F6" }}>
+            <div className="card-header" style={{ fontSize: "13px" }}>
               Phase 1 — Company Intelligence
             </div>
             <p style={{ fontSize: "12px", color: "#64748B", marginTop: "-8px", marginBottom: "20px" }}>
@@ -327,8 +325,8 @@ export default function ForgePage() {
       {/* Phase 2 — Process Intelligence */}
       {phase === "process" && step === "input" && (
         <div>
-          <div className="card" style={{ marginBottom: "20px" }}>
-            <div className="card-header">
+          <div className="card" style={{ marginBottom: "20px", borderLeft: "3px solid #22C55E" }}>
+            <div className="card-header" style={{ fontSize: "13px" }}>
               Phase 2 — Process Intelligence
             </div>
             <p style={{ fontSize: "12px", color: "#64748B", marginTop: "-8px", marginBottom: "20px" }}>
@@ -402,8 +400,8 @@ export default function ForgePage() {
       {/* Phase 3 — Workflow Mapping */}
       {phase === "workflow" && step === "input" && (
         <div>
-          <div className="card" style={{ marginBottom: "20px" }}>
-            <div className="card-header">
+          <div className="card" style={{ marginBottom: "20px", borderLeft: "3px solid #F59E0B" }}>
+            <div className="card-header" style={{ fontSize: "13px" }}>
               Phase 3 — Workflow Mapping
             </div>
             <p style={{ fontSize: "12px", color: "#64748B", marginTop: "-8px", marginBottom: "20px" }}>
@@ -498,7 +496,7 @@ export default function ForgePage() {
 
           {/* Document Settings Card */}
           <div className="card" style={{ marginBottom: "20px" }}>
-            <div className="card-header">
+            <div className="card-header" style={{ fontSize: "13px" }}>
               Document Settings
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "16px" }}>
@@ -544,20 +542,20 @@ export default function ForgePage() {
 
       {/* Loading / Generation Phase */}
       {step === "loading" && (
-        <div className="card" style={{ maxWidth: "560px", margin: "0 auto", textAlign: "center", padding: "48px 36px" }}>
+        <div className="card" style={{ maxWidth: "560px", margin: "0 auto", textAlign: "center", padding: "48px 32px" }}>
           <div style={{ marginBottom: "16px" }}>
             <span style={{ fontSize: "11px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", color: "#3B82F6" }}>
-              SOLO SOP BUILDER v2.0
+              SOLO SOP BUILDER v2.0 — Running 8-Phase Engine
             </span>
           </div>
-          <h2 style={{ fontSize: "17px", fontWeight: 600, color: "#F8FAFC", marginBottom: "4px" }}>Generating Operational Infrastructure</h2>
-          <p style={{ fontSize: "14px", color: "#94A3B8", marginBottom: "24px" }}>Phases 1-8</p>
+          <h2 style={{ fontSize: "16px", fontWeight: 600, color: "#F1F5F9", marginBottom: "4px" }}>Generating Operational Infrastructure</h2>
+          <p style={{ fontSize: "13px", color: "#64748B", marginBottom: "24px" }}>Phases 1-8 &middot; Estimated ~30 seconds</p>
           <div className="progress-bar" style={{ marginBottom: "12px", height: "8px" }}>
             <div className="progress-fill" style={{ width: `${progress}%`, height: "8px" }} />
           </div>
           <p style={{ fontSize: "12px", color: "#3B82F6", fontWeight: 500, marginBottom: "20px" }}>{Math.round(progress)}%</p>
           <div style={{
-            textAlign: "left", padding: "14px 18px", background: "rgba(0,0,0,0.25)", borderRadius: "8px",
+            textAlign: "left", padding: "12px 16px", background: "rgba(0,0,0,0.3)", borderRadius: "8px",
             maxHeight: "200px", overflowY: "auto", fontFamily: "monospace", fontSize: "12px",
           }}>
             {logs.map((log, i) => (
@@ -598,15 +596,14 @@ export default function ForgePage() {
 
           <div className="card" style={{ padding: "32px" }}>
             {/* Preview Meta */}
-            <div className="meta-grid" style={{
+            <div style={{
               display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "12px",
-              marginBottom: "24px", padding: "20px", background: "rgba(255,255,255,0.03)", borderRadius: "10px",
-              border: "1px solid rgba(255,255,255,0.04)",
+              marginBottom: "24px", padding: "16px", background: "rgba(0,0,0,0.15)", borderRadius: "8px",
             }}>
-              <div><div className="stat-label">SOP ID</div><div style={{ fontSize: "13px", color: "#F8FAFC", fontFamily: "monospace", marginTop: "2px" }}>{savedSop.id}</div></div>
-              <div><div className="stat-label">Version</div><div style={{ fontSize: "13px", color: "#F8FAFC", marginTop: "2px" }}>1.0</div></div>
-              <div><div className="stat-label">Effective Date</div><div style={{ fontSize: "13px", color: "#F8FAFC", marginTop: "2px" }}>{savedSop.dateCreated}</div></div>
-              <div><div className="stat-label">Owner</div><div style={{ fontSize: "13px", color: "#F8FAFC", marginTop: "2px" }}>{savedSop.createdBy}</div></div>
+              <div><div className="stat-label">SOP ID</div><div style={{ fontSize: "13px", color: "#F1F5F9", fontFamily: "monospace", marginTop: "2px" }}>{savedSop.id}</div></div>
+              <div><div className="stat-label">Version</div><div style={{ fontSize: "13px", color: "#F1F5F9", marginTop: "2px" }}>1.0</div></div>
+              <div><div className="stat-label">Effective Date</div><div style={{ fontSize: "13px", color: "#F1F5F9", marginTop: "2px" }}>{savedSop.dateCreated}</div></div>
+              <div><div className="stat-label">Owner</div><div style={{ fontSize: "13px", color: "#F1F5F9", marginTop: "2px" }}>{savedSop.createdBy}</div></div>
               <div><div className="stat-label">Jurisdiction</div><div style={{ fontSize: "13px", color: "#3B82F6", marginTop: "2px" }}>{savedSop.jurisdiction}</div></div>
               <div><div className="stat-label">Hash</div><div style={{ fontSize: "12px", color: "#64748B", fontFamily: "monospace", marginTop: "2px" }}>{savedSop.verificationHash}</div></div>
             </div>

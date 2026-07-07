@@ -34,5 +34,5 @@ jobs:
         env:
           DATABASE_URL: "file:./dev.db"
           NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: "pk_test_placeholder"
-          APP_URL: "http://localhost:3000"
+          NEXT_PUBLIC_APP_URL: "http://localhost:3000"
           JWT_SECRET: "ci-test-secret"

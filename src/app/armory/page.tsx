@@ -102,21 +102,21 @@ export default function ArmoryPage() {
   const selectedSop = viewingSop ? vault.find(s => s.id === viewingSop) : null;
 
   return (
-    <div style={{ maxWidth: "1120px", margin: "0 auto", padding: "48px 24px" }} className="fade-in">
-      <div style={{ marginBottom: "28px" }}>
-        <h1 style={{ fontSize: "28px", fontWeight: 600, color: "#F8FAFC", marginBottom: "8px", letterSpacing: "-0.02em" }}>
+    <div style={{ maxWidth: "1120px", margin: "0 auto", padding: "32px 24px" }} className="fade-in">
+      <div style={{ marginBottom: "24px" }}>
+        <h1 style={{ fontSize: "20px", fontWeight: 600, color: "#F1F5F9", marginBottom: "4px" }}>
           Document Vault
         </h1>
-        <p style={{ fontSize: "15px", color: "#94A3B8" }}>
+        <p style={{ fontSize: "13px", color: "#64748B" }}>
           {vault.filter(s => s.status === "active").length} active documents &middot; {vault.filter(s => s.favorite).length} starred
         </p>
       </div>
 
       {!viewingSop ? (
         <>
-          <div style={{ display: "flex", gap: "12px", marginBottom: "20px", flexWrap: "wrap", alignItems: "center" }}>
-            <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search by title, company, or hash..." style={{ flex: 1, minWidth: "200px", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }} />
-            <select value={filterStatus} onChange={e => setFilterStatus(e.target.value as "all" | "active" | "archived")} style={{ width: "auto", minWidth: "130px", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
+          <div style={{ display: "flex", gap: "12px", marginBottom: "16px", flexWrap: "wrap", alignItems: "center" }}>
+            <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search by title, company, or hash..." style={{ flex: 1, minWidth: "200px" }} />
+            <select value={filterStatus} onChange={e => setFilterStatus(e.target.value as "all" | "active" | "archived")} style={{ width: "auto", minWidth: "120px" }}>
               <option value="all">All documents</option>
               <option value="active">Active</option>
               <option value="archived">Archived</option>
@@ -127,18 +127,18 @@ export default function ArmoryPage() {
           </div>
 
           {filtered.length === 0 ? (
-            <div className="card" style={{ textAlign: "center", padding: "56px 36px" }}>
-              <p style={{ fontSize: "15px", color: "#94A3B8", marginBottom: "20px" }}>
+            <div className="card" style={{ textAlign: "center", padding: "48px 32px" }}>
+              <p style={{ fontSize: "14px", color: "#94A3B8", marginBottom: "16px" }}>
                 {search ? "No documents match your search." : "No documents in the vault yet."}
               </p>
-              <button onClick={() => router.push("/forge")} className="btn btn-primary" style={{ padding: "12px 32px" }}>
+              <button onClick={() => router.push("/forge")} className="btn btn-primary">
                 Generate Document
               </button>
             </div>
           ) : (
             <>
               <div className="card mobile-safe-overflow" style={{ padding: 0 }}>
-                <div className="doc-row-header" style={{ display: "flex", padding: "10px 20px", borderBottom: "1px solid rgba(255,255,255,0.04)", fontSize: "11px", fontWeight: 600, color: "#64748B", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                <div className="doc-row-header" style={{ display: "flex", padding: "8px 16px", borderBottom: "1px solid #334155", fontSize: "11px", fontWeight: 600, color: "#64748B", textTransform: "uppercase", letterSpacing: "0.04em" }}>
                   <span style={{ flex: "1 1 30%", minWidth: "100px" }}>Title</span>
                   <span className="hide-mobile" style={{ flex: "0 0 90px" }}>Jurisdiction</span>
                   <span className="hide-mobile" style={{ flex: "0 0 60px", textAlign: "center" }}>Ver.</span>
@@ -206,20 +206,20 @@ export default function ArmoryPage() {
             </div>
           </div>
 
-            <div className="card" style={{ padding: "36px" }}>
-            <div className="meta-grid" style={{ marginBottom: "24px", padding: "20px", background: "rgba(255,255,255,0.03)", borderRadius: "10px", border: "1px solid rgba(255,255,255,0.04)", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: "12px" }}>
-              <div><div className="stat-label">SOP ID</div><div style={{ fontSize: "13px", fontFamily: "monospace", color: "#F8FAFC", marginTop: "2px", wordBreak: "break-all" }}>{selectedSop.id}</div></div>
-              <div><div className="stat-label">Version</div><div style={{ fontSize: "13px", color: "#F8FAFC", marginTop: "2px" }}>{selectedSop.version}.0</div></div>
-              <div><div className="stat-label">Created</div><div style={{ fontSize: "13px", color: "#F8FAFC", marginTop: "2px" }}>{selectedSop.dateCreated}</div></div>
-              <div><div className="stat-label">Owner</div><div style={{ fontSize: "13px", color: "#F8FAFC", marginTop: "2px" }}>{selectedSop.createdBy}</div></div>
+            <div className="card" style={{ padding: "32px" }}>
+            <div className="meta-grid-5" style={{ marginBottom: "24px", padding: "16px", background: "rgba(0,0,0,0.15)", borderRadius: "6px" }}>
+              <div><div className="stat-label">SOP ID</div><div style={{ fontSize: "13px", fontFamily: "monospace", color: "#F1F5F9", marginTop: "2px", wordBreak: "break-all" }}>{selectedSop.id}</div></div>
+              <div><div className="stat-label">Version</div><div style={{ fontSize: "13px", color: "#F1F5F9", marginTop: "2px" }}>{selectedSop.version}.0</div></div>
+              <div><div className="stat-label">Created</div><div style={{ fontSize: "13px", color: "#F1F5F9", marginTop: "2px" }}>{selectedSop.dateCreated}</div></div>
+              <div><div className="stat-label">Owner</div><div style={{ fontSize: "13px", color: "#F1F5F9", marginTop: "2px" }}>{selectedSop.createdBy}</div></div>
               <div><div className="stat-label">Jurisdiction</div><div style={{ fontSize: "13px", color: "#3B82F6", marginTop: "2px" }}>{selectedSop.jurisdiction}</div></div>
             </div>
 
             {selectedSop.industry && (
-              <div className="meta-grid" style={{ marginBottom: "24px", padding: "20px", background: "rgba(255,255,255,0.03)", borderRadius: "10px", border: "1px solid rgba(255,255,255,0.04)", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: "12px" }}>
-                <div><div className="stat-label">Industry</div><div style={{ fontSize: "13px", color: "#F8FAFC", marginTop: "2px" }}>{selectedSop.industry}</div></div>
-                <div><div className="stat-label">Department</div><div style={{ fontSize: "13px", color: "#F8FAFC", marginTop: "2px" }}>{selectedSop.department || "\u2014"}</div></div>
-                <div><div className="stat-label">Type</div><div style={{ fontSize: "13px", color: "#F8FAFC", marginTop: "2px" }}>{selectedSop.sopType || "Operational"}</div></div>
+              <div className="meta-grid-4" style={{ marginBottom: "24px", padding: "16px", background: "rgba(0,0,0,0.15)", borderRadius: "6px" }}>
+                <div><div className="stat-label">Industry</div><div style={{ fontSize: "13px", color: "#F1F5F9", marginTop: "2px" }}>{selectedSop.industry}</div></div>
+                <div><div className="stat-label">Department</div><div style={{ fontSize: "13px", color: "#F1F5F9", marginTop: "2px" }}>{selectedSop.department || "\u2014"}</div></div>
+                <div><div className="stat-label">Type</div><div style={{ fontSize: "13px", color: "#F1F5F9", marginTop: "2px" }}>{selectedSop.sopType || "Operational"}</div></div>
                 <div><div className="stat-label">Status</div><div style={{ fontSize: "13px", color: selectedSop.status === "active" ? "#22C55E" : "#64748B", marginTop: "2px" }}>{selectedSop.status}</div></div>
               </div>
             )}

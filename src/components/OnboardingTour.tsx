@@ -68,37 +68,36 @@ export default function OnboardingTour() {
     <div style={{
       position: "fixed", inset: 0, zIndex: 9999,
       display: "flex", alignItems: "center", justifyContent: "center",
-      background: "rgba(6, 13, 26, 0.88)",
-      backdropFilter: "blur(8px)",
+      background: "rgba(15, 23, 42, 0.85)",
+      backdropFilter: "blur(4px)",
       padding: "24px",
     }}>
       <div style={{
-        background: "rgba(30, 41, 59, 0.9)",
-        border: "1px solid rgba(255,255,255,0.08)",
+        background: "#1E293B",
+        border: "1px solid #334155",
         borderRadius: "16px",
         maxWidth: "480px",
         width: "100%",
-        padding: "44px 36px 32px",
+        padding: "40px 32px 28px",
         textAlign: "center",
-        boxShadow: "0 25px 60px rgba(0,0,0,0.6)",
-        backdropFilter: "blur(20px)",
+        boxShadow: "0 25px 50px rgba(0,0,0,0.5)",
       }}>
         <div style={{ fontSize: "48px", marginBottom: "16px" }}>{current.emoji}</div>
         <h2 style={{
-          fontSize: "22px", fontWeight: 600, color: "#F8FAFC",
-          margin: "0 0 6px", lineHeight: 1.2, letterSpacing: "-0.02em",
+          fontSize: "22px", fontWeight: 700, color: "#F1F5F9",
+          margin: "0 0 6px", lineHeight: 1.2,
         }}>
           {current.title}
         </h2>
         <p style={{
-          fontSize: "14px", color: "#94A3B8", margin: "0 0 4px",
+          fontSize: "13px", color: "#94A3B8", margin: "0 0 4px",
           fontWeight: 500,
         }}>
           {current.subtitle}
         </p>
         <p style={{
-          fontSize: "14px", color: "#CBD5E1", margin: "14px 0 0",
-          lineHeight: 1.6,
+          fontSize: "14px", color: "#CBD5E1", margin: "12px 0 0",
+          lineHeight: 1.5,
         }}>
           {current.description}
         </p>
@@ -106,12 +105,12 @@ export default function OnboardingTour() {
         {/* Step dots */}
         <div style={{
           display: "flex", justifyContent: "center", gap: "8px",
-          marginTop: "32px",
+          marginTop: "28px",
         }}>
           {STEPS.map((_, i) => (
             <div key={i} style={{
               width: "8px", height: "8px", borderRadius: "50%",
-              background: i === step ? "#3B82F6" : "rgba(255,255,255,0.12)",
+              background: i === step ? "#3B82F6" : "#334155",
               transition: "background 0.2s",
             }} />
           ))}
@@ -119,7 +118,7 @@ export default function OnboardingTour() {
 
         {/* Buttons */}
         <div style={{
-          display: "flex", gap: "12px", marginTop: "28px",
+          display: "flex", gap: "12px", marginTop: "24px",
           justifyContent: "center",
         }}>
           {!isLast && (
@@ -127,10 +126,8 @@ export default function OnboardingTour() {
               onClick={handleSkip}
               style={{
                 padding: "10px 20px", fontSize: "13px", fontWeight: 500,
-                color: "#64748B", background: "rgba(255,255,255,0.03)",
-                border: "1px solid rgba(255,255,255,0.08)",
-                borderRadius: "8px", cursor: "pointer", fontFamily: "inherit",
-                transition: "all 0.2s ease",
+                color: "#64748B", background: "none", border: "1px solid #334155",
+                borderRadius: "8px", cursor: "pointer",
               }}
             >
               Skip tour
@@ -141,7 +138,7 @@ export default function OnboardingTour() {
             style={{
               padding: "10px 24px", fontSize: "13px", fontWeight: 600,
               color: "#fff", background: "#3B82F6", border: "none",
-              borderRadius: "8px", cursor: "pointer", fontFamily: "inherit",
+              borderRadius: "8px", cursor: "pointer",
             }}
           >
             {isLast ? "Get started" : "Next"}

@@ -58,35 +58,33 @@ function LoginForm() {
   };
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "24px", background: "#060D1A" }}>
-      <div className="card" style={{ width: "100%", maxWidth: "400px", padding: "36px" }}>
-        <div style={{ textAlign: "center", marginBottom: "28px" }}>
-          <h1 style={{ fontSize: "22px", fontWeight: 600, color: "#F8FAFC", marginBottom: "6px", letterSpacing: "-0.02em" }}>
+    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "24px", background: "#0F172A" }}>
+      <div className="card" style={{ width: "100%", maxWidth: "400px", padding: "32px" }}>
+        <div style={{ textAlign: "center", marginBottom: "24px" }}>
+          <h1 style={{ fontSize: "20px", fontWeight: 600, color: "#F1F5F9", marginBottom: "4px" }}>
             Sign In
           </h1>
-          <p style={{ fontSize: "14px", color: "#94A3B8" }}>
+          <p style={{ fontSize: "13px", color: "#64748B" }}>
             Access your organisation workspace.
           </p>
         </div>
 
-        <div style={{ display: "flex", gap: "8px", marginBottom: "24px" }}>
+        <div style={{ display: "flex", gap: "8px", marginBottom: "20px" }}>
           <button onClick={() => { setMode("standard"); setError(""); }}
             style={{
-              flex: 1, padding: "10px", fontSize: "13px", fontWeight: 500, borderRadius: "8px", cursor: "pointer",
-              background: mode === "standard" ? "rgba(59,130,246,0.1)" : "rgba(255,255,255,0.03)",
-              border: mode === "standard" ? "1px solid rgba(59,130,246,0.3)" : "1px solid rgba(255,255,255,0.06)",
-              color: mode === "standard" ? "#F8FAFC" : "#64748B", fontFamily: "inherit",
-              transition: "all 0.2s ease",
+              flex: 1, padding: "8px", fontSize: "12px", fontWeight: 500, borderRadius: "6px", cursor: "pointer",
+              background: mode === "standard" ? "rgba(59,130,246,0.08)" : "transparent",
+              border: mode === "standard" ? "1px solid rgba(59,130,246,0.3)" : "1px solid #334155",
+              color: mode === "standard" ? "#F1F5F9" : "#64748B", fontFamily: "inherit",
             }}>
             Firm Login
           </button>
           <button onClick={() => { setMode("director"); setError(""); }}
             style={{
-              flex: 1, padding: "10px", fontSize: "13px", fontWeight: 500, borderRadius: "8px", cursor: "pointer",
-              background: mode === "director" ? "rgba(59,130,246,0.1)" : "rgba(255,255,255,0.03)",
-              border: mode === "director" ? "1px solid rgba(59,130,246,0.3)" : "1px solid rgba(255,255,255,0.06)",
-              color: mode === "director" ? "#F8FAFC" : "#64748B", fontFamily: "inherit",
-              transition: "all 0.2s ease",
+              flex: 1, padding: "8px", fontSize: "12px", fontWeight: 500, borderRadius: "6px", cursor: "pointer",
+              background: mode === "director" ? "rgba(59,130,246,0.08)" : "transparent",
+              border: mode === "director" ? "1px solid rgba(59,130,246,0.3)" : "1px solid #334155",
+              color: mode === "director" ? "#F1F5F9" : "#64748B", fontFamily: "inherit",
             }}>
             Director Login
           </button>
@@ -161,9 +159,9 @@ function LoginForm() {
 export default function LoginPage() {
   return (
     <Suspense fallback={
-      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "24px", background: "#060D1A" }}>
-        <div className="card" style={{ width: "100%", maxWidth: "400px", padding: "36px", textAlign: "center" }}>
-          <p style={{ fontSize: "14px", color: "#94A3B8" }}>Loading...</p>
+      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "24px", background: "#0F172A" }}>
+        <div className="card" style={{ width: "100%", maxWidth: "400px", padding: "32px", textAlign: "center" }}>
+          <p style={{ fontSize: "14px", color: "#64748B" }}>Loading...</p>
         </div>
       </div>
     }>

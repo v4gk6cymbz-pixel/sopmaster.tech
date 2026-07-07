@@ -259,12 +259,12 @@ export default function ChecklistPage() {
   );
 
   return (
-    <div style={{ maxWidth: "960px", margin: "0 auto", padding: "48px 24px" }} className="fade-in">
-      <div style={{ marginBottom: "32px" }}>
-        <h1 style={{ fontSize: "28px", fontWeight: 600, color: "#F8FAFC", marginBottom: "6px", letterSpacing: "-0.02em" }}>
+    <div style={{ maxWidth: "960px", margin: "0 auto", padding: "32px 24px" }} className="fade-in">
+      <div style={{ marginBottom: "28px" }}>
+        <h1 style={{ fontSize: "20px", fontWeight: 600, color: "#F1F5F9", marginBottom: "4px" }}>
           Checklist Builder
         </h1>
-        <p style={{ fontSize: "15px", color: "#94A3B8" }}>
+        <p style={{ fontSize: "13px", color: "#64748B" }}>
           Generate operational checklists for recurring processes. Each checklist costs 1 credit.
         </p>
       </div>
@@ -330,19 +330,19 @@ export default function ChecklistPage() {
                     key={ct.value}
                     onClick={() => setChecklistType(ct.value)}
                     style={{
-                      padding: "12px 14px",
-                      fontSize: "13px",
+                      padding: "10px 12px",
+                      fontSize: "12px",
                       textAlign: "left",
-                      borderRadius: "8px",
+                      borderRadius: "6px",
                       cursor: "pointer",
-                      background: checklistType === ct.value ? "rgba(59,130,246,0.1)" : "rgba(255,255,255,0.02)",
-                      border: checklistType === ct.value ? "1px solid rgba(59,130,246,0.3)" : "1px solid rgba(255,255,255,0.06)",
-                      color: checklistType === ct.value ? "#F8FAFC" : "#94A3B8",
+                      background: checklistType === ct.value ? "rgba(59,130,246,0.08)" : "transparent",
+                      border: checklistType === ct.value ? "1px solid rgba(59,130,246,0.3)" : "1px solid #334155",
+                      color: checklistType === ct.value ? "#F1F5F9" : "#94A3B8",
                       fontFamily: "inherit",
-                      transition: "all 0.2s ease",
+                      transition: "all 0.1s ease",
                     }}
                   >
-                    <span style={{ fontSize: "11px", color: "#3B82F6", fontFamily: "monospace", opacity: 0.5, marginRight: "8px" }}>{ct.icon}</span>
+                    <span style={{ fontSize: "10px", color: "#3B82F6", fontFamily: "monospace", opacity: 0.5, marginRight: "6px" }}>{ct.icon}</span>
                     {ct.label}
                   </button>
                 ))}
@@ -370,14 +370,14 @@ export default function ChecklistPage() {
       )}
 
       {step === "loading" && (
-        <div className="card" style={{ maxWidth: "480px", margin: "0 auto", textAlign: "center", padding: "48px 36px" }}>
-          <h2 style={{ fontSize: "17px", fontWeight: 600, color: "#F8FAFC", marginBottom: "4px" }}>Generating Checklist</h2>
-          <p style={{ fontSize: "14px", color: "#94A3B8", marginBottom: "24px" }}>Processing documentation</p>
-          <div className="progress-bar" style={{ marginBottom: "8px", height: "6px" }}>
-            <div className="progress-fill" style={{ width: `${progress}%`, height: "6px" }} />
+        <div className="card" style={{ maxWidth: "480px", margin: "0 auto", textAlign: "center", padding: "48px 32px" }}>
+          <h2 style={{ fontSize: "18px", fontWeight: 600, color: "#F1F5F9", marginBottom: "4px" }}>Generating Checklist</h2>
+          <p style={{ fontSize: "13px", color: "#64748B", marginBottom: "20px" }}>Estimated time: ~12 seconds</p>
+          <div className="progress-bar" style={{ marginBottom: "8px" }}>
+            <div className="progress-fill" style={{ width: `${progress}%` }} />
           </div>
-          <p style={{ fontSize: "12px", color: "#3B82F6", fontWeight: 500, marginBottom: "16px" }}>{Math.round(progress)}%</p>
-          <div style={{ textAlign: "left", padding: "14px 18px", background: "rgba(0,0,0,0.25)", borderRadius: "8px", maxHeight: "160px", overflowY: "auto" }}>
+          <p style={{ fontSize: "12px", color: "#64748B", marginBottom: "16px" }}>{Math.round(progress)}%</p>
+          <div style={{ textAlign: "left", padding: "12px 16px", background: "rgba(0,0,0,0.2)", borderRadius: "6px", maxHeight: "160px", overflowY: "auto" }}>
             {logs.map((log, i) => (
               <p key={i} style={{ fontSize: "12px", color: "#94A3B8", marginBottom: "4px", fontFamily: "monospace" }}>
                 {log}
@@ -405,11 +405,11 @@ export default function ChecklistPage() {
           </div>
 
           <div className="card" style={{ padding: "32px" }}>
-            <div className="meta-grid" style={{ marginBottom: "24px", padding: "20px", background: "rgba(255,255,255,0.03)", borderRadius: "10px", border: "1px solid rgba(255,255,255,0.04)", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: "12px" }}>
-              <div><div className="stat-label">Document ID</div><div style={{ fontSize: "13px", color: "#F8FAFC", fontFamily: "monospace", marginTop: "2px", wordBreak: "break-all" }}>{savedSop.id}</div></div>
-              <div><div className="stat-label">Version</div><div style={{ fontSize: "13px", color: "#F8FAFC", marginTop: "2px" }}>1.0</div></div>
-              <div><div className="stat-label">Effective Date</div><div style={{ fontSize: "13px", color: "#F8FAFC", marginTop: "2px" }}>{savedSop.dateCreated}</div></div>
-              <div><div className="stat-label">Owner</div><div style={{ fontSize: "13px", color: "#F8FAFC", marginTop: "2px" }}>{savedSop.createdBy}</div></div>
+            <div className="meta-grid-5" style={{ marginBottom: "24px", padding: "16px", background: "rgba(0,0,0,0.15)", borderRadius: "6px" }}>
+              <div><div className="stat-label">Document ID</div><div style={{ fontSize: "13px", color: "#F1F5F9", fontFamily: "monospace", marginTop: "2px", wordBreak: "break-all" }}>{savedSop.id}</div></div>
+              <div><div className="stat-label">Version</div><div style={{ fontSize: "13px", color: "#F1F5F9", marginTop: "2px" }}>1.0</div></div>
+              <div><div className="stat-label">Effective Date</div><div style={{ fontSize: "13px", color: "#F1F5F9", marginTop: "2px" }}>{savedSop.dateCreated}</div></div>
+              <div><div className="stat-label">Owner</div><div style={{ fontSize: "13px", color: "#F1F5F9", marginTop: "2px" }}>{savedSop.createdBy}</div></div>
               <div><div className="stat-label">Jurisdiction</div><div style={{ fontSize: "13px", color: "#3B82F6", marginTop: "2px" }}>{savedSop.jurisdiction}</div></div>
             </div>
 
