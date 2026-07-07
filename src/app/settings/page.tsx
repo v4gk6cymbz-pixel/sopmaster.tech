@@ -136,7 +136,7 @@ export default function SettingsPage() {
         {/* Billing & Credits */}
         <div className="card" style={{ padding: "28px" }}>
           <div className="card-header" style={{ marginBottom: "20px" }}>Billing & Credits</div>
-          {company.subscriptionActive ? (
+          {company.subscriptionActive === "yes" ? (
             <div>
               <div className="data-row"><span className="data-label">Plan</span><span className="data-value">{limits.label}</span></div>
               <div className="data-row"><span className="data-label">Rate</span><span className="data-value">£{limits.price.toLocaleString()}/mo</span></div>

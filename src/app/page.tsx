@@ -518,7 +518,7 @@ export default function HomePage() {
 
   if (session.isDirector) {
     const totalSops = allCompanies.reduce((sum, c) => sum + getCompanySopCount(c.id), 0);
-    const subscribedCount = allCompanies.filter(c => c.subscriptionActive).length;
+    const subscribedCount = allCompanies.filter(c => c.subscriptionActive === "yes").length;
 
     return (
       <div style={{ maxWidth: "1120px", margin: "0 auto", padding: "40px 32px" }} className="fade-in">
@@ -607,10 +607,10 @@ export default function HomePage() {
                         {isDirectorCompany ? (
                           <span style={{ color: "#22C55E", fontSize: "11px" }}>Active</span>
                         ) : (
-                          <button onClick={() => adminSetSubscription(c.id, !c.subscriptionActive)}
-                            className={`btn ${c.subscriptionActive ? "btn-secondary" : "btn-primary"}`}
+                          <button onClick={() => adminSetSubscription(c.id, c.subscriptionActive !== "yes")}
+                            className={`btn ${c.subscriptionActive === "yes" ? "btn-secondary" : "btn-primary"}`}
                             style={{ fontSize: "10px", padding: "2px 8px" }}>
-                            {c.subscriptionActive ? "Deactivate" : "Activate"}
+                            {c.subscriptionActive === "yes" ? "Deactivate" : "Activate"}
                           </button>
                         )}
                       </td>

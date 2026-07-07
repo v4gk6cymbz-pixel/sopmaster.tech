@@ -62,7 +62,7 @@ export const api = {
   },
   admin: {
     list: () => request("/api/admin"),
-    setSubscription: (companyId: string, active: boolean) =>
+    setSubscription: (companyId: string, active: string) =>
       request("/api/admin/subscription", { method: "PUT", body: JSON.stringify({ companyId, active }) }),
     setCredits: (companyId: string, credits: number) =>
       request("/api/admin/credits", { method: "PUT", body: JSON.stringify({ companyId, credits }) }),

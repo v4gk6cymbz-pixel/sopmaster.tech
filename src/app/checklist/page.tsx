@@ -198,7 +198,7 @@ export default function ChecklistPage() {
   }, [router]);
 
   useEffect(() => {
-    if (company && !company.subscriptionActive && (!company.focus || company.focus !== "checklists")) router.push("/");
+    if (company && company.subscriptionActive !== "yes" && (!company.focus || company.focus !== "checklists")) router.push("/");
   }, [company, router]);
 
   useEffect(() => {

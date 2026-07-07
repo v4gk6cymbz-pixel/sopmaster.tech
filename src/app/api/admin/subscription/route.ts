@@ -11,7 +11,8 @@ export async function PUT(req: NextRequest) {
     const { companyId, active } = await req.json();
     if (!companyId) return badRequest("companyId is required");
 
-    await prisma.company.update({ where: { id: companyId }, data: { subscriptionActive: !!active } });
+    const val = typeof active === "string" ? active : (active ? "yes" : "no");
+    await prisma.company.update({ where: { id: companyId }, data: { subscriptionActive: val } });
     return ok({ success: true });
   } catch (error) {
     return serverError(error);

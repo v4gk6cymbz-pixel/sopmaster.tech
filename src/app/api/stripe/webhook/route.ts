@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
         } else if (session.metadata?.type === "subscription") {
           await prisma.company.update({
             where: { id: companyId },
-            data: { subscriptionActive: true, tier: session.metadata.tier || "solo" },
+            data: { subscriptionActive: "yes", tier: session.metadata.tier || "solo" },
           });
         }
         break;
@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
         const active = subscription.status === "active" || subscription.status === "trialing";
         await prisma.company.update({
           where: { id: companyId },
-          data: { subscriptionActive: active },
+          data: { subscriptionActive: active ? "yes" : "no" },
         });
         break;
       }

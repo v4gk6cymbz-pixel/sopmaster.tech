@@ -259,7 +259,7 @@ export const useStore = create<StoreState>((set, get) => ({
   activateSubscription: (tier: string) => {
     const companies = get().companies.map(c =>
       c.id === get().session?.companyId
-        ? { ...c, subscriptionActive: true, tier: tier as any }
+        ? { ...c, subscriptionActive: "yes", tier: tier as any }
         : c
     );
     set({ companies });
@@ -268,7 +268,7 @@ export const useStore = create<StoreState>((set, get) => ({
   cancelSubscription: () => {
     const companies = get().companies.map(c =>
       c.id === get().session?.companyId
-        ? { ...c, subscriptionActive: false }
+        ? { ...c, subscriptionActive: "no" }
         : c
     );
     set({ companies });
@@ -333,9 +333,10 @@ export const useStore = create<StoreState>((set, get) => ({
 
   adminSetSubscription: async (companyId: string, active: boolean) => {
     try {
-      await api.admin.setSubscription(companyId, active);
+      const val = active ? "yes" : "no";
+      await api.admin.setSubscription(companyId, val);
       set({
-        companies: get().companies.map(c => c.id === companyId ? { ...c, subscriptionActive: active } : c),
+        companies: get().companies.map(c => c.id === companyId ? { ...c, subscriptionActive: val } : c),
       });
     } catch (e) {
       console.error("Failed to set subscription:", e);

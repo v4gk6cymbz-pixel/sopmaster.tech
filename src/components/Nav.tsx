@@ -14,12 +14,12 @@ const NAV_ITEMS = [
   { href: "/settings", label: "Administration", icon: "A" },
 ];
 
-function isLocked(item: typeof NAV_ITEMS[number], company: { focus?: string; subscriptionActive?: boolean } | null, isDirector: boolean): boolean {
+function isLocked(item: typeof NAV_ITEMS[number], company: { focus?: string; subscriptionActive?: string } | null, isDirector: boolean): boolean {
   if (isDirector) return false;
   if (!company?.focus && !item.focus) return false;
   if (!item.focus) return false;
-  if (item.focus === "batch") return !company?.subscriptionActive;
-  if (company?.subscriptionActive) return false;
+  if (item.focus === "batch") return company?.subscriptionActive !== "yes";
+  if (company?.subscriptionActive === "yes") return false;
   return item.focus !== company?.focus;
 }
 

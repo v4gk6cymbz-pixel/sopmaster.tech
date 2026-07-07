@@ -77,7 +77,7 @@ export interface CompanyNode {
   email: string;
   pin: string;
   tier: FirmTier;
-  subscriptionActive: boolean;
+  subscriptionActive: string;
   credits: number;
   lifetimeCredits: number;
   createdAt: string;

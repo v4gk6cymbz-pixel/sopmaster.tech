@@ -13,7 +13,7 @@ model Company {
   email              String   @unique
   pinHash            String
   tier               String   @default("solo")
-  subscriptionActive Boolean  @default(false)
+  subscriptionActive String   @default("no")
   credits            Int      @default(100)
   lifetimeCredits    Int      @default(100)
   createdAt          DateTime @default(now())
