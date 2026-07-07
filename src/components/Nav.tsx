@@ -34,16 +34,18 @@ export default function Nav() {
 
   return (
     <header style={{
-      borderBottom: "1px solid #334155",
-      background: "#0F172A",
+      borderBottom: "1px solid rgba(255,255,255,0.06)",
+      background: "rgba(6, 13, 26, 0.8)",
+      backdropFilter: "blur(20px)",
+      WebkitBackdropFilter: "blur(20px)",
       position: "sticky",
       top: 0,
       zIndex: 50,
     }}>
       <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px" }}>
-        <div style={{ display: "flex", alignItems: "center", height: "52px", gap: "32px" }}>
-          <Link href="/" style={{ fontSize: "15px", fontWeight: 600, color: "#F1F5F9", textDecoration: "none", letterSpacing: "-0.01em", whiteSpace: "nowrap" }}>
-            SOPMaster
+        <div style={{ display: "flex", alignItems: "center", height: "56px", gap: "32px" }}>
+          <Link href="/" style={{ fontSize: "15px", fontWeight: 600, color: "#F8FAFC", textDecoration: "none", letterSpacing: "-0.01em", whiteSpace: "nowrap" }}>
+            SOP<span style={{ color: "#3B82F6" }}>Master</span>
           </Link>
 
           <nav style={{ display: "flex", gap: "4px", flex: 1, overflow: "visible", flexWrap: "wrap" }} className="desktop-nav">
@@ -51,8 +53,8 @@ export default function Nav() {
               const locked = isLocked(item);
               return locked ? (
                 <span key={item.href} className="nav-link" title="Pay to unlock"
-                  style={{ color: "#475569", cursor: "not-allowed", opacity: 0.6 }}>
-                  {item.label} 🔒
+                  style={{ color: "#475569", cursor: "not-allowed", opacity: 0.5 }}>
+                  {item.label}
                 </span>
               ) : (
                 <Link
@@ -62,6 +64,7 @@ export default function Nav() {
                   style={{
                     color: pathname === item.href ? "#3B82F6" : undefined,
                     fontWeight: pathname === item.href ? 500 : undefined,
+                    background: pathname === item.href ? "rgba(59,130,246,0.06)" : undefined,
                   }}
                 >
                   {item.label}
@@ -70,11 +73,12 @@ export default function Nav() {
             })}
           </nav>
 
-          <div style={{ display: "flex", alignItems: "center", gap: "16px" }} className="desktop-nav">
-            <span style={{ fontSize: "12px", color: "#64748B" }}>
-              {company?.name} &middot; {company?.credits ?? 0} credits
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }} className="desktop-nav">
+            <span style={{ fontSize: "13px", color: "#94A3B8", background: "rgba(255,255,255,0.03)", padding: "4px 12px", borderRadius: "6px", border: "1px solid rgba(255,255,255,0.06)" }}>
+              <span style={{ color: "#3B82F6", fontWeight: 600 }}>{company?.credits ?? 0}</span>
+              <span style={{ color: "#64748B", marginLeft: "4px" }}>credits</span>
             </span>
-            <button onClick={logout} className="btn-ghost" style={{ fontSize: "12px", padding: "4px 12px" }}>
+            <button onClick={logout} className="btn-ghost" style={{ fontSize: "12px", padding: "6px 14px" }}>
               Sign Out
             </button>
           </div>
