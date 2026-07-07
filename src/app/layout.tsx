@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import InitStore from "@/components/InitStore";
 
 const Nav = dynamic(() => import("@/components/Nav"), { ssr: false });
+const DataPoller = dynamic(() => import("@/components/DataPoller"), { ssr: false });
 const OnboardingTour = dynamic(() => import("@/components/OnboardingTour"), { ssr: false });
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
@@ -97,6 +98,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body style={{ background: "var(--navy-950)", minHeight: "100vh" }}>
         <InitStore />
         <Nav />
+        <DataPoller />
         <OnboardingTour />
         {children}
       </body>

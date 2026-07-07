@@ -44,6 +44,7 @@ interface StoreState {
   adminSetSubscription: (companyId: string, active: boolean) => Promise<void>;
   adminSetCredits: (companyId: string, credits: number) => Promise<void>;
   adminSetTier: (companyId: string, tier: string) => Promise<void>;
+  refreshSession: () => Promise<void>;
 }
 
 function formatDate(date: Date): string {
@@ -288,6 +289,27 @@ export const useStore = create<StoreState>((set, get) => ({
     const s = get().session;
     if (!s) return null;
     return get().companies.find(c => c.id === s.companyId) || null;
+  },
+
+  refreshSession: async () => {
+    try {
+      const token = getToken();
+      if (!token) return;
+      const data = await api.auth.me();
+      if (!data.session) return;
+      set({
+        session: data.session,
+        vault: data.vault || [],
+        companyProfile: data.company?.profile || {},
+      });
+      set((s) => ({
+        companies: s.companies.map((c) =>
+          c.id === data.session?.companyId ? { ...c, ...data.company, profile: data.company?.profile } : c
+        ),
+      }));
+    } catch (e) {
+      // silent — don't log out on transient errors
+    }
   },
 
   heartbeatTick: () => {

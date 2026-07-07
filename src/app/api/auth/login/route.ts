@@ -23,10 +23,23 @@ export async function POST(req: NextRequest) {
       if (!company) return badRequest("Invalid credentials");
     } else {
       if (!companyName?.trim()) return badRequest("Company name is required");
+      const normalized = companyName.trim();
       company = await prisma.company.findFirst({
-        where: { name: { equals: companyName.trim() } },
+        where: { name: { equals: normalized } },
         include: { team: true, profile: true },
       });
+      if (!company) {
+        const rows = await prisma.$queryRawUnsafe<Array<{ id: string }>>(
+          `SELECT id FROM Company WHERE LOWER(name) = LOWER(?)`,
+          normalized,
+        );
+        if (rows.length > 0) {
+          company = await prisma.company.findFirst({
+            where: { id: rows[0].id },
+            include: { team: true, profile: true },
+          });
+        }
+      }
       if (!company) return badRequest("Invalid credentials");
     }
 
