@@ -58,7 +58,7 @@ export default function SettingsPage() {
   };
 
   return (
-    <div style={{ maxWidth: "800px", margin: "0 auto", padding: "40px 32px" }} className="fade-in">
+    <div className="app-content" style={{ maxWidth: "800px", padding: "80px 32px 40px", marginLeft: "var(--sidebar-width)" }}>
       <div style={{ marginBottom: "36px" }}>
         <h1 style={{ fontSize: "28px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "8px", letterSpacing: "-0.02em" }}>
           Administration

@@ -101,7 +101,7 @@ export default function Nav() {
   return (
     <>
       {/* SIDE NAV */}
-      <aside style={{
+      <aside className={mobileOpen ? "mobile-open" : ""} style={{
         position: "fixed", top: 0, left: 0, width: "var(--sidebar-width)", height: "100vh",
         background: "var(--navy-950)",
         borderRight: "1px solid var(--glass-border)",
@@ -175,7 +175,8 @@ export default function Nav() {
       }}>
         {/* Mobile hamburger */}
         <button onClick={() => setMobileOpen(!mobileOpen)}
-          style={{ display: "none", background: "none", border: "none", color: "var(--text-primary)", fontSize: "18px", cursor: "pointer", padding: "4px", marginRight: "4px" }}>
+          className="mobile-hamburger"
+          style={{ background: "none", border: "none", color: "var(--text-primary)", fontSize: "18px", cursor: "pointer", padding: "4px", marginRight: "4px" }}>
           {mobileOpen ? "\u2715" : "\u2630"}
         </button>
 
@@ -277,8 +278,9 @@ export default function Nav() {
       <style>{`
         @media (max-width: 768px) {
           aside { transform: translateX(-100%); }
+          aside.mobile-open { transform: translateX(0); }
           header { left: 0 !important; }
-          button[onclick*="mobileOpen"] { display: flex !important; }
+          .mobile-hamburger { display: flex !important; }
         }
       `}</style>
     </>

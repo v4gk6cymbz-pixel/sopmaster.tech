@@ -39,7 +39,7 @@ function Landing() {
       <div ref={glowRef} style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0, transition: "background 0.3s ease" }} />
 
       {/* Cinematic hero */}
-      <section style={{ minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", position: "relative", zIndex: 1, padding: "40px 24px" }}>
+      <section className="landing-hero" style={{ minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", position: "relative", zIndex: 1, padding: "40px 24px" }}>
         <div style={{ position: "absolute", top: "40px", left: "50%", transform: "translateX(-50%)", display: "flex", alignItems: "center", gap: "10px" }}>
           <div style={{ width: "28px", height: "28px", borderRadius: "8px", background: "linear-gradient(135deg, var(--accent), #8B7335)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: 700, color: "#fff" }}>S</div>
           <span style={{ fontSize: "14px", fontWeight: 600, color: "var(--white)", letterSpacing: "-0.01em" }}>SOPMaster</span>
@@ -146,7 +146,7 @@ function Dashboard() {
   ];
 
   return (
-    <div style={{ padding: "80px 32px 40px", marginLeft: "var(--sidebar-width)", position: "relative", zIndex: 1 }}>
+    <div className="app-content" style={{ padding: "80px 32px 40px", marginLeft: "var(--sidebar-width)", position: "relative", zIndex: 1 }}>
       <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
         {/* Header */}
         <div style={{ marginBottom: "32px" }}>

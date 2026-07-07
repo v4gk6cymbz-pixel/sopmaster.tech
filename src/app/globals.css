@@ -553,12 +553,51 @@ label {
   .dash-grid { grid-template-columns: 1fr; }
   .command-bar { grid-template-columns: repeat(2, 1fr); }
 }
+/* === MOBILE RESPONSIVE === */
 @media (max-width: 768px) {
   .pricing-grid { grid-template-columns: 1fr; }
   .features-grid { grid-template-columns: 1fr; }
   .meta-grid-5 { grid-template-columns: repeat(2, 1fr); }
   .meta-grid-4 { grid-template-columns: 1fr; }
   .command-bar { grid-template-columns: 1fr; }
+
+  /* App content area — collapse sidebar margin + tighten padding */
+  [class*="app-content"] {
+    margin-left: 0 !important;
+    padding: 70px 16px 32px !important;
+  }
+
+  .dash-grid { grid-template-columns: 1fr !important; }
+  .doc-row { flex-wrap: wrap !important; gap: 4px !important; }
+  .doc-row span:nth-child(n+3) { flex: 0 0 auto !important; }
+
+  /* Landing page */
+  .landing-hero { padding: 24px 16px !important; }
+  .landing-features { grid-template-columns: 1fr !important; }
+
+  /* Cards */
+  .card, .glass, .workspace-card { padding: 16px !important; }
+
+  /* Tables / data rows */
+  .data-row { flex-direction: column; gap: 2px; padding: 8px 0; }
+
+  /* Heading sizing */
+  h1 { font-size: 24px !important; }
+  h2 { font-size: 16px !important; }
+
+  /* Inputs + buttons */
+  input, select, textarea { font-size: 16px !important; }
+  .btn, button { font-size: 13px !important; }
+
+  /* Forge wizard */
+  .forge-step-grid { grid-template-columns: 1fr !important; }
+
+  /* Batch */
+  .batch-phase-grid { grid-template-columns: 1fr !important; }
+  .dept-grid { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* Armory table */
+  .vault-table-header, .vault-table-row { flex-wrap: wrap; }
 }
 
 /* === SCROLLBAR === */

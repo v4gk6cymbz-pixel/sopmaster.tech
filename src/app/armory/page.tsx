@@ -51,7 +51,7 @@ export default function ArmoryPage() {
   const selectedSop = viewingSop ? vault.find(s => s.id === viewingSop) : null;
 
   return (
-    <div style={{ marginLeft: "var(--sidebar-width)", padding: "80px 32px 40px", position: "relative", zIndex: 1 }}>
+    <div className="app-content" style={{ marginLeft: "var(--sidebar-width)", padding: "80px 32px 40px", position: "relative", zIndex: 1 }}>
       <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
         <div style={{ marginBottom: "32px" }}>
           <div className="ogi-badge">Secure Archive</div>
