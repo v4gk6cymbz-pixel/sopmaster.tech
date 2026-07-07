@@ -71,7 +71,7 @@ export default function Nav() {
             }}>
               <span style={{
                 width: "28px", height: "28px", borderRadius: "8px",
-                background: "linear-gradient(135deg, var(--accent), #1D4ED8)",
+                background: "linear-gradient(135deg, var(--accent), #8B7335)",
                 display: "flex", alignItems: "center", justifyContent: "center",
                 fontSize: "13px", fontWeight: 700, color: "#fff",
               }}>S</span>
@@ -131,7 +131,7 @@ export default function Nav() {
               }}>
                 <span style={{ fontSize: "12px", color: "var(--text-tertiary)" }}>{company?.name}</span>
                 <span style={{ width: "1px", height: "14px", background: "var(--border)" }}></span>
-                <span style={{ fontSize: "12px", fontWeight: 600, color: session.isDirector ? "var(--gold)" : "var(--accent)" }}>
+                <span style={{ fontSize: "12px", fontWeight: 600, color: session.isDirector ? "var(--accent)" : "var(--accent)" }}>
                   {creditsDisplay} credits
                 </span>
               </div>

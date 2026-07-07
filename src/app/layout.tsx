@@ -141,7 +141,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body style={{ background: "#0F172A", minHeight: "100vh" }}>
+      <body style={{ background: "var(--bg-deep)", minHeight: "100vh" }}>
         <InitStore />
         <Nav />
         <OnboardingTour />
