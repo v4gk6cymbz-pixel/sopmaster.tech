@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getStripe, TIER_CREDITS } from "@/lib/api/stripe";
 import { prisma } from "@/lib/api/prisma";
+import type Stripe from "stripe";
+
+function toPeriodEndISO(sub: Stripe.Subscription): string | undefined {
+  return sub.current_period_end ? new Date(sub.current_period_end * 1000).toISOString() : undefined;
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -24,12 +29,31 @@ export async function POST(req: NextRequest) {
           if (credits > 0) {
             await prisma.company.update({
               where: { id: companyId },
-              data: { credits: { increment: credits }, lifetimeCredits: { increment: credits } },
+              data: {
+                credits: { increment: credits },
+                lifetimeCredits: { increment: credits },
+                stripeCustomerId: session.customer as string,
+              },
             });
           }
         } else if (session.metadata?.type === "subscription") {
           const tier = session.metadata.tier || "solo";
           const initialCredits = TIER_CREDITS[tier] || 0;
+          let subStatus: string | undefined;
+          let cancelAtEnd = false;
+          let periodEnd: string | undefined;
+
+          if (session.subscription && typeof session.subscription === "string") {
+            try {
+              const sub = await getStripe().subscriptions.retrieve(session.subscription);
+              subStatus = sub.status;
+              cancelAtEnd = sub.cancel_at_period_end ?? false;
+              periodEnd = toPeriodEndISO(sub);
+            } catch {
+              // fallback — proceed without sub details
+            }
+          }
+
           await prisma.company.update({
             where: { id: companyId },
             data: {
@@ -37,6 +61,11 @@ export async function POST(req: NextRequest) {
               tier,
               credits: { increment: initialCredits },
               lifetimeCredits: { increment: initialCredits },
+              stripeCustomerId: session.customer as string,
+              stripeSubscriptionId: session.subscription as string,
+              subscriptionStatus: subStatus || "active",
+              cancelAtPeriodEnd: cancelAtEnd,
+              currentPeriodEnd: periodEnd ? new Date(periodEnd) : undefined,
             },
           });
         }
@@ -45,13 +74,19 @@ export async function POST(req: NextRequest) {
 
       case "customer.subscription.updated":
       case "customer.subscription.deleted": {
-        const subscription = event.data.object;
-        const companyId = subscription.metadata?.companyId;
+        const sub = event.data.object;
+        const companyId = sub.metadata?.companyId;
         if (!companyId) break;
-        const active = subscription.status === "active" || subscription.status === "trialing";
+        const active = sub.status === "active" || sub.status === "trialing";
         await prisma.company.update({
           where: { id: companyId },
-          data: { subscriptionActive: active ? "yes" : "no" },
+          data: {
+            subscriptionActive: active ? "yes" : "no",
+            subscriptionStatus: sub.status,
+            cancelAtPeriodEnd: sub.cancel_at_period_end ?? false,
+            currentPeriodEnd: toPeriodEndISO(sub) ? new Date(toPeriodEndISO(sub)!) : undefined,
+            stripeSubscriptionId: sub.id,
+          },
         });
         break;
       }
@@ -64,24 +99,28 @@ export async function POST(req: NextRequest) {
           const companyId = subscription.metadata?.companyId;
           if (!companyId) break;
 
+          const baseData: any = {
+            currentPeriodEnd: toPeriodEndISO(subscription) ? new Date(toPeriodEndISO(subscription)!) : undefined,
+            subscriptionStatus: subscription.status,
+            cancelAtPeriodEnd: subscription.cancel_at_period_end ?? false,
+          };
+
           if (subscription.metadata?.type === "credits") {
             const credits = parseInt(subscription.metadata.credits || "0", 10);
             if (credits > 0) {
-              await prisma.company.update({
-                where: { id: companyId },
-                data: { credits: { increment: credits }, lifetimeCredits: { increment: credits } },
-              });
+              baseData.credits = { increment: credits };
+              baseData.lifetimeCredits = { increment: credits };
             }
           } else {
             const tier = subscription.metadata?.tier || "solo";
             const monthlyCredits = TIER_CREDITS[tier] || 0;
             if (monthlyCredits > 0) {
-              await prisma.company.update({
-                where: { id: companyId },
-                data: { credits: { increment: monthlyCredits }, lifetimeCredits: { increment: monthlyCredits } },
-              });
+              baseData.credits = { increment: monthlyCredits };
+              baseData.lifetimeCredits = { increment: monthlyCredits };
             }
           }
+
+          await prisma.company.update({ where: { id: companyId }, data: baseData });
         }
         break;
       }

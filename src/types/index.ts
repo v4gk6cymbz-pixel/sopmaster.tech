@@ -78,6 +78,11 @@ export interface CompanyNode {
   pin: string;
   tier: FirmTier;
   subscriptionActive: string;
+  stripeCustomerId?: string;
+  stripeSubscriptionId?: string;
+  subscriptionStatus?: string;
+  cancelAtPeriodEnd?: boolean;
+  currentPeriodEnd?: string;
   credits: number;
   lifetimeCredits: number;
   createdAt: string;

@@ -140,7 +140,20 @@ export default function SettingsPage() {
             <div>
               <div className="data-row"><span className="data-label">Plan</span><span className="data-value">{limits.label}</span></div>
               <div className="data-row"><span className="data-label">Rate</span><span className="data-value">£{limits.price.toLocaleString()}/mo</span></div>
-              <div className="data-row"><span className="data-label">Status</span><span className="data-value"><span className="status-dot active" style={{ marginRight: "4px" }}></span>Active</span></div>
+              <div className="data-row">
+                <span className="data-label">Status</span>
+                <span className="data-value">
+                  <span className={`status-dot ${company.subscriptionStatus === "active" ? "active" : company.subscriptionStatus === "past_due" ? "" : ""}`} style={{ marginRight: "4px" }}></span>
+                  {company.subscriptionStatus || "Active"}
+                  {company.cancelAtPeriodEnd && <span style={{ color: "var(--warning)", marginLeft: "8px", fontSize: "12px" }}>(cancels at period end)</span>}
+                </span>
+              </div>
+              {company.currentPeriodEnd && (
+                <div className="data-row">
+                  <span className="data-label">Current period ends</span>
+                  <span className="data-value">{new Date(company.currentPeriodEnd).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}</span>
+                </div>
+              )}
               <div style={{ display: "flex", gap: "10px", marginTop: "16px" }}>
                 <button onClick={async () => {
                   try {
@@ -155,7 +168,7 @@ export default function SettingsPage() {
                     console.error("Portal error:", e);
                   }
                 }} className="btn btn-secondary" style={{ padding: "12px 20px", fontSize: "14px" }}>
-                  Manage Subscription
+                  {company.cancelAtPeriodEnd ? "Reactivate Subscription" : "Manage Subscription"}
                 </button>
               </div>
               {session.isDirector && <p style={{ fontSize: "13px", color: "var(--warning)", marginTop: "12px" }}>Director override: unlimited credits.</p>}

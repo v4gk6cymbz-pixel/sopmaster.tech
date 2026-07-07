@@ -260,7 +260,7 @@ export const useStore = create<StoreState>((set, get) => ({
   activateSubscription: (tier: string) => {
     const companies = get().companies.map(c =>
       c.id === get().session?.companyId
-        ? { ...c, subscriptionActive: "yes", tier: tier as any }
+        ? { ...c, subscriptionActive: "yes", tier: tier as any, subscriptionStatus: "active", cancelAtPeriodEnd: false }
         : c
     );
     set({ companies });

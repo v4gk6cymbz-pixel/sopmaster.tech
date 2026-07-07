@@ -8,17 +8,22 @@ datasource db {
 }
 
 model Company {
-  id                 String   @id @default(cuid())
-  name               String   @unique
-  email              String   @unique
-  pinHash            String
-  tier               String   @default("solo")
-  subscriptionActive String   @default("no")
-  credits            Int      @default(100)
-  lifetimeCredits    Int      @default(100)
-  createdAt          DateTime @default(now())
-  jurisdiction       String   @default("UK")
-  focus              String?
+  id                   String    @id @default(cuid())
+  name                 String    @unique
+  email                String    @unique
+  pinHash              String
+  tier                 String    @default("solo")
+  subscriptionActive   String    @default("no")
+  stripeCustomerId     String?
+  stripeSubscriptionId String?
+  subscriptionStatus   String?
+  cancelAtPeriodEnd    Boolean   @default(false)
+  currentPeriodEnd     DateTime?
+  credits              Int       @default(100)
+  lifetimeCredits      Int       @default(100)
+  createdAt            DateTime  @default(now())
+  jurisdiction         String    @default("UK")
+  focus                String?
 
   team     TeamMember[]
   vault    SOP[]

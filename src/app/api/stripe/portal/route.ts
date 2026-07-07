@@ -15,11 +15,12 @@ export async function POST(req: NextRequest) {
     const origin = process.env["NEXT_PUBLIC_APP_URL"];
     if (!origin) return badRequest("NEXT_PUBLIC_APP_URL is not configured");
 
-    const customers = await getStripe().customers.list({
-      email: company.email,
-      limit: 1,
-    });
-    let customerId = customers.data[0]?.id;
+    let customerId = company.stripeCustomerId;
+
+    if (!customerId) {
+      const customers = await getStripe().customers.list({ email: company.email, limit: 1 });
+      customerId = customers.data[0]?.id;
+    }
 
     if (!customerId) {
       const customer = await getStripe().customers.create({
@@ -28,6 +29,7 @@ export async function POST(req: NextRequest) {
         metadata: { companyId: company.id },
       });
       customerId = customer.id;
+      await prisma.company.update({ where: { id: company.id }, data: { stripeCustomerId: customerId } });
     }
 
     const session = await getStripe().billingPortal.sessions.create({
