@@ -159,9 +159,11 @@ function LoginForm() {
 export default function LoginPage() {
   return (
     <Suspense fallback={
-      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "24px", background: "#0F172A" }}>
-        <div className="card" style={{ width: "100%", maxWidth: "400px", padding: "32px", textAlign: "center" }}>
-          <p style={{ fontSize: "14px", color: "#64748B" }}>Loading...</p>
+      <div className="splash-screen">
+        <div className="splash-card">
+          <div className="splash-logo">S</div>
+          <div className="splash-spinner"></div>
+          <p className="splash-text">Loading...</p>
         </div>
       </div>
     }>

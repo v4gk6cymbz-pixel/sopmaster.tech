@@ -30,8 +30,12 @@ export default function SettingsPage() {
   const [inviteCopied, setInviteCopied] = useState(false);
 
   if (!session || !company) return (
-    <div style={{ maxWidth: "960px", margin: "0 auto", padding: "32px 24px", textAlign: "center" }}>
-      <p style={{ color: "#64748B", fontSize: "14px" }}>Loading...</p>
+    <div className="splash-screen">
+      <div className="splash-card">
+        <div className="splash-logo">S</div>
+        <div className="splash-spinner"></div>
+        <p className="splash-text">Loading workspace...</p>
+      </div>
     </div>
   );
   const isDirector = session.isDirector;

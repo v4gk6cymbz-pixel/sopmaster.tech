@@ -25,8 +25,12 @@ export default function ChooseFocusPage() {
   };
 
   if (!session) return (
-    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#0F172A" }}>
-      <p style={{ color: "#64748B", fontSize: "14px" }}>Loading...</p>
+    <div className="splash-screen">
+      <div className="splash-card">
+        <div className="splash-logo">S</div>
+        <div className="splash-spinner"></div>
+        <p className="splash-text">Loading...</p>
+      </div>
     </div>
   );
 
