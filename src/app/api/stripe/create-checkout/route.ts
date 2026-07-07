@@ -9,8 +9,8 @@ export async function POST(req: NextRequest) {
     if (!auth) return unauthorized();
 
     const { type, tier, amount } = await req.json();
-    const origin = process.env["NEXT_PUBLIC_APP_URL"];
-    if (!origin) return badRequest("NEXT_PUBLIC_APP_URL is not configured");
+    const origin = process.env["APP_URL"];
+    if (!origin) return badRequest("APP_URL is not configured");
 
 
 
