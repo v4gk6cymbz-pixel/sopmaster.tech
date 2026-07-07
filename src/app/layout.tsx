@@ -4,77 +4,50 @@ import "./globals.css";
 import dynamic from "next/dynamic";
 import InitStore from "@/components/InitStore";
 
-const Nav = dynamic(() => import("@/components/Nav"), {
-  ssr: false,
-});
-
-const OnboardingTour = dynamic(() => import("@/components/OnboardingTour"), {
-  ssr: false,
-});
+const Nav = dynamic(() => import("@/components/Nav"), { ssr: false });
+const OnboardingTour = dynamic(() => import("@/components/OnboardingTour"), { ssr: false });
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
-export const viewport: Viewport = {
-  themeColor: "#0F172A",
-};
+export const viewport: Viewport = { themeColor: "#0A0F1E" };
 
 export const metadata: Metadata = {
   title: {
-    default: "SOPMaster | Operational Documentation for Consultants",
+    default: "SOPMaster | The World\u2019s First Operational Governance Infrastructure Platform",
     template: "%s | SOPMaster",
   },
   description:
-    "Operational documentation platform for consultants. Create, manage and maintain structured SOPs, operational checklists and department documentation.",
+    "SOPMaster is the world\u2019s first Operational Governance Infrastructure platform. Create, manage and govern Standard Operating Procedures, operational checklists and department documentation with enterprise-grade structure and compliance.",
   keywords: [
-    "operational documentation platform",
-    "SOP software for consultants",
+    "operational governance infrastructure",
+    "SOP management platform",
+    "standard operating procedures software",
+    "operational documentation",
+    "governance platform",
     "consultancy documentation tools",
-    "standard operating procedures",
-    "operational governance",
-    "consulting delivery framework",
-    "process documentation",
-    "compliance documentation",
-    "professional services operations",
-    "SOP management system",
+    "enterprise SOP software",
+    "compliance documentation platform",
+    "operational excellence",
+    "process governance",
   ],
-  icons: {
-    icon: "/favicon.svg",
-    shortcut: "/favicon.svg",
-    apple: "/favicon.svg",
-  },
+  icons: { icon: "/favicon.svg", shortcut: "/favicon.svg", apple: "/favicon.svg" },
   metadataBase: new URL("https://sopmaster.tech"),
-  alternates: {
-    canonical: "/",
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
+  alternates: { canonical: "/" },
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-video-preview": -1, "max-image-preview": "large", "max-snippet": -1 } },
   openGraph: {
-    type: "website",
-    locale: "en_GB",
-    siteName: "SOPMaster",
-    title: "SOPMaster | Operational Documentation for Consultants",
-    description:
-      "Operational documentation platform for consultants. Create, manage and maintain structured SOPs, operational checklists and department documentation.",
-    url: "https://sopmaster.tech",
-    countryName: "United Kingdom",
+    type: "website", locale: "en_GB", siteName: "SOPMaster",
+    title: "SOPMaster | Operational Governance Infrastructure",
+    description: "The world\u2019s first Operational Governance Infrastructure platform. Create, manage and govern operational procedures with enterprise-grade precision.",
+    url: "https://sopmaster.tech", countryName: "United Kingdom",
   },
   twitter: {
     card: "summary_large_image",
-    title: "SOPMaster | Operational Documentation for Consultants",
-    description:
-      "Operational documentation platform for consultants. Create, manage and maintain structured SOPs, operational checklists and department documentation.",
+    title: "SOPMaster | Operational Governance Infrastructure",
+    description: "The world\u2019s first Operational Governance Infrastructure platform.",
   },
   category: "business",
-  classification: "Business Software",
+  classification: "Enterprise Software",
+  other: { "application-name": "SOPMaster" },
 };
 
 const jsonLd = {
@@ -85,12 +58,9 @@ const jsonLd = {
       "@id": "https://sopmaster.tech/#website",
       url: "https://sopmaster.tech",
       name: "SOPMaster",
-      description:
-        "Professional operational documentation platform for consultants and consultancy firms. Create, manage and maintain structured Standard Operating Procedures, operational checklists and department-level documentation.",
+      description: "The world\u2019s first Operational Governance Infrastructure platform. Create, manage and govern Standard Operating Procedures, operational checklists and department documentation.",
       inLanguage: "en-GB",
       applicationCategory: "BusinessApplication",
-      keywords:
-        "SOP management, standard operating procedure software, compliance documentation, operational governance, consultancy documentation",
     },
     {
       "@type": "SoftwareApplication",
@@ -99,31 +69,17 @@ const jsonLd = {
       name: "SOPMaster",
       applicationCategory: "BusinessApplication",
       operatingSystem: "Web",
-      description:
-        "SOPMaster is a professional operational documentation platform that helps consultants and organisations create, manage and govern standard operating procedures with structured workflows, jurisdiction-aware compliance references, document verification and team collaboration tools.",
-      offers: {
-        "@type": "AggregateOffer",
-        priceCurrency: "GBP",
-        lowPrice: "400",
-        highPrice: "9000",
-        offerCount: "4",
-      },
-      featureList:
-        "structured SOP generation, jurisdiction-based compliance references, document verification hashing, batch document operations, team management, credit-based usage, multi-jurisdiction support, professional document export",
+      description: "SOPMaster is the world\u2019s first Operational Governance Infrastructure platform, providing enterprise-grade tools for creating, managing and governing operational procedures, checklists and department documentation.",
+      offers: { "@type": "AggregateOffer", priceCurrency: "GBP", lowPrice: "400", highPrice: "9000", offerCount: "4" },
     },
     {
       "@type": "Organization",
       "@id": "https://sopmaster.tech/#organization",
       url: "https://sopmaster.tech",
       name: "SOPMaster",
-      description:
-        "SOPMaster provides professional operational documentation software for consultants, consultancy firms and documentation professionals across multiple industries including finance, healthcare, professional services and technology.",
+      description: "SOPMaster provides the world\u2019s first Operational Governance Infrastructure platform for enterprises and consultancy firms.",
       email: "Support@sopmaster.tech",
-      contactPoint: {
-        "@type": "ContactPoint",
-        email: "Support@sopmaster.tech",
-        contactType: "customer support",
-      },
+      contactPoint: { "@type": "ContactPoint", email: "Support@sopmaster.tech", contactType: "customer support" },
     },
   ],
 };
@@ -136,16 +92,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{
           __html: `window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-VLSXQP4JEX');`,
         }} />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       </head>
-      <body style={{ background: "var(--bg-deep)", minHeight: "100vh" }}>
+      <body style={{ background: "var(--navy-950)", minHeight: "100vh" }}>
         <InitStore />
         <Nav />
         <OnboardingTour />
-        <main className="fade-in">{children}</main>
+        {children}
       </body>
     </html>
   );
