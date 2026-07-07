@@ -4,11 +4,11 @@ export default function TermsPage() {
   return (
     <div style={{ maxWidth: "800px", margin: "0 auto", padding: "64px 24px" }} className="fade-in">
       <div style={{ marginBottom: "48px" }}>
-        <h1 style={{ fontSize: "22px", fontWeight: 600, color: "#F1F5F9", marginBottom: "4px" }}>
+        <h1 style={{ fontSize: "28px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "8px", letterSpacing: "-0.02em" }}>
           Terms & Conditions
         </h1>
-        <p style={{ fontSize: "13px", color: "#64748B" }}>
-          Last updated: July 2026
+        <p style={{ fontSize: "15px", color: "var(--text-secondary)" }}>
+          Last updated: July 2026. These Terms & Conditions govern your use of the SOPMaster platform.
         </p>
       </div>
 

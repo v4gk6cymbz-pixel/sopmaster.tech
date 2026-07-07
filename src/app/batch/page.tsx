@@ -201,13 +201,13 @@ export default function BatchPage() {
   const isHalfPackage = selectedDepartments.length <= 7;
 
   return (
-    <div style={{ maxWidth: "1120px", margin: "0 auto", padding: "32px 24px" }} className="fade-in">
+    <div style={{ maxWidth: "1120px", margin: "0 auto", padding: "40px 32px" }} className="fade-in">
 
-      <div style={{ marginBottom: result ? "24px" : "20px" }}>
-        <h1 style={{ fontSize: "20px", fontWeight: 600, color: "#F1F5F9", marginBottom: "4px" }}>
-          BATCH BUILDER v3.0
+      <div style={{ marginBottom: result ? "28px" : "24px" }}>
+        <h1 style={{ fontSize: "28px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "8px", letterSpacing: "-0.02em" }}>
+          Batch Builder
         </h1>
-        <p style={{ fontSize: "13px", color: "#64748B" }}>
+        <p style={{ fontSize: "15px", color: "var(--text-secondary)" }}>
           Generate a complete Operational Infrastructure Package across multiple departments. 30 credits per department.
         </p>
       </div>
@@ -216,20 +216,21 @@ export default function BatchPage() {
 
       {/* Phase Stepper */}
       {!result && !generating && (
-        <div style={{ display: "flex", gap: "8px", marginBottom: "24px" }}>
+        <div style={{ display: "flex", gap: "10px", marginBottom: "28px", padding: "4px 0" }}>
           {PHASES.map((p, i) => (
             <div key={p.id} style={{
-              display: "flex", alignItems: "center", gap: "8px", padding: "8px 16px",
-              borderRadius: "8px", fontSize: "12px", fontWeight: 500, whiteSpace: "nowrap",
-              background: phase === p.id ? "rgba(59,130,246,0.12)" : "rgba(0,0,0,0.2)",
-              border: phase === p.id ? "1px solid rgba(59,130,246,0.3)" : "1px solid #1E293B",
-              color: phase === p.id ? "#3B82F6" : "#64748B",
+              display: "flex", alignItems: "center", gap: "10px", padding: "10px 18px",
+              borderRadius: "10px", fontSize: "13px", fontWeight: 500, whiteSpace: "nowrap",
+              background: phase === p.id ? "var(--accent-subtle)" : "var(--bg-card)",
+              border: phase === p.id ? "1px solid rgba(37, 99, 235, 0.3)" : "1px solid var(--border)",
+              color: phase === p.id ? "var(--accent)" : "var(--text-tertiary)",
+              transition: "all 0.2s",
             }}>
               <span style={{
-                width: "22px", height: "22px", borderRadius: "50%", display: "flex",
+                width: "24px", height: "24px", borderRadius: "50%", display: "flex",
                 alignItems: "center", justifyContent: "center", fontSize: "11px", fontWeight: 600,
-                background: phase === p.id ? "#3B82F6" : "#1E293B",
-                color: phase === p.id ? "#fff" : "#475569",
+                background: phase === p.id ? "var(--accent)" : "var(--bg-secondary)",
+                color: phase === p.id ? "#fff" : "var(--text-tertiary)",
               }}>{i + 1}</span>
               {p.label}
             </div>
@@ -240,11 +241,11 @@ export default function BatchPage() {
       {/* Phase 1 — Company DNA */}
       {phase === "dna" && !result && !generating && (
         <div>
-          <div className="card" style={{ marginBottom: "20px", borderLeft: "3px solid #3B82F6" }}>
-            <div className="card-header" style={{ fontSize: "13px" }}>
-              Phase 1 — Company DNA
+          <div className="card" style={{ marginBottom: "24px", borderLeft: "3px solid var(--accent)" }}>
+            <div className="card-header" style={{ fontSize: "14px", marginBottom: "20px" }}>
+              Company DNA
             </div>
-            <p style={{ fontSize: "12px", color: "#64748B", marginTop: "-8px", marginBottom: "20px" }}>
+            <p style={{ fontSize: "14px", color: "var(--text-tertiary)", marginTop: "-12px", marginBottom: "24px" }}>
               Define your company&apos;s operating DNA. Every SOP in the package inherits these settings.
             </p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
@@ -317,11 +318,11 @@ export default function BatchPage() {
       {/* Phase 2 — Business Map */}
       {phase === "map" && !result && !generating && (
         <div>
-          <div className="card" style={{ marginBottom: "20px", borderLeft: "3px solid #22C55E" }}>
-            <div className="card-header" style={{ fontSize: "13px" }}>
-              Phase 2 — Business Map
+          <div className="card" style={{ marginBottom: "24px", borderLeft: "3px solid var(--success)" }}>
+            <div className="card-header" style={{ fontSize: "14px", marginBottom: "20px" }}>
+              Business Map
             </div>
-            <p style={{ fontSize: "12px", color: "#64748B", marginTop: "-8px", marginBottom: "20px" }}>
+            <p style={{ fontSize: "14px", color: "var(--text-tertiary)", marginTop: "-12px", marginBottom: "24px" }}>
               Select the departments and processes to include. The SOP Factory will generate complete documentation for each.
             </p>
             <div style={{ marginBottom: "16px" }}>

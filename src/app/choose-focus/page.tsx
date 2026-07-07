@@ -35,28 +35,31 @@ export default function ChooseFocusPage() {
   );
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "24px", background: "#0F172A" }}>
-      <div style={{ width: "100%", maxWidth: "600px", textAlign: "center" }}>
-        <h1 style={{ fontSize: "22px", fontWeight: 700, color: "#F1F5F9", marginBottom: "8px" }}>
+    <div className="splash-screen" style={{ padding: "24px" }}>
+      <div style={{ width: "100%", maxWidth: "620px", textAlign: "center" }}>
+        <h1 style={{ fontSize: "28px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "8px" }}>
           What will you be creating?
         </h1>
-        <p style={{ fontSize: "14px", color: "#94A3B8", marginBottom: "32px" }}>
-          Choose your focus to get started.
+        <p style={{ fontSize: "15px", color: "var(--text-secondary)", marginBottom: "32px" }}>
+          Choose what you will be creating to get started. SOPs or checklists — we support both.
         </p>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
           <button
             onClick={() => handleChoice("sops")}
             disabled={busy}
             className="card"
             style={{
-              padding: "40px 24px", border: "1px solid rgba(59,130,246,0.3)", cursor: busy ? "not-allowed" : "pointer",
-              opacity: busy ? 0.5 : 1, display: "flex", flexDirection: "column", alignItems: "center", gap: "12px",
+              padding: "44px 28px", border: "1px solid rgba(37, 99, 235, 0.3)", cursor: busy ? "not-allowed" : "pointer",
+              opacity: busy ? 0.5 : 1, display: "flex", flexDirection: "column", alignItems: "center", gap: "16px",
             }}>
-            <div style={{ fontSize: "32px", fontWeight: 700, color: "#3B82F6" }}>SOPs</div>
-            <p style={{ fontSize: "13px", color: "#94A3B8", lineHeight: 1.5 }}>
+            <div style={{ width: "64px", height: "64px", borderRadius: "16px", background: "var(--accent-subtle)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <div style={{ fontSize: "28px", fontWeight: 700, color: "var(--accent)" }}>S</div>
+            </div>
+            <div style={{ fontSize: "20px", fontWeight: 700, color: "var(--text-primary)" }}>SOPs</div>
+            <p style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: 1.6 }}>
               Generate standard operating procedures with full governance structure.
             </p>
-            <div style={{ fontSize: "12px", color: "#64748B", marginTop: "8px" }}>
+            <div style={{ fontSize: "13px", color: "var(--text-tertiary)", marginTop: "4px", padding: "6px 14px", borderRadius: "20px", background: "var(--bg-card)" }}>
               100 free credits included
             </div>
           </button>
@@ -65,14 +68,17 @@ export default function ChooseFocusPage() {
             disabled={busy}
             className="card"
             style={{
-              padding: "40px 24px", border: "1px solid #334155", cursor: busy ? "not-allowed" : "pointer",
-              opacity: busy ? 0.5 : 1, display: "flex", flexDirection: "column", alignItems: "center", gap: "12px",
+              padding: "44px 28px", border: "1px solid var(--border)", cursor: busy ? "not-allowed" : "pointer",
+              opacity: busy ? 0.5 : 1, display: "flex", flexDirection: "column", alignItems: "center", gap: "16px",
             }}>
-            <div style={{ fontSize: "32px", fontWeight: 700, color: "#22C55E" }}>Checklists</div>
-            <p style={{ fontSize: "13px", color: "#94A3B8", lineHeight: 1.5 }}>
+            <div style={{ width: "64px", height: "64px", borderRadius: "16px", background: "rgba(16, 185, 129, 0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <div style={{ fontSize: "28px", fontWeight: 700, color: "var(--success)" }}>C</div>
+            </div>
+            <div style={{ fontSize: "20px", fontWeight: 700, color: "var(--text-primary)" }}>Checklists</div>
+            <p style={{ fontSize: "14px", color: "var(--text-secondary)", lineHeight: 1.6 }}>
               Create operational checklists for recurring processes.
             </p>
-            <div style={{ fontSize: "12px", color: "#64748B", marginTop: "8px" }}>
+            <div style={{ fontSize: "13px", color: "var(--text-tertiary)", marginTop: "4px", padding: "6px 14px", borderRadius: "20px", background: "var(--bg-card)" }}>
               10 free credits included
             </div>
           </button>

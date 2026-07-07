@@ -263,20 +263,20 @@ export default function ChecklistPage() {
   );
 
   return (
-    <div style={{ maxWidth: "960px", margin: "0 auto", padding: "32px 24px" }} className="fade-in">
-      <div style={{ marginBottom: "28px" }}>
-        <h1 style={{ fontSize: "20px", fontWeight: 600, color: "#F1F5F9", marginBottom: "4px" }}>
+    <div style={{ maxWidth: "960px", margin: "0 auto", padding: "40px 32px" }} className="fade-in">
+      <div style={{ marginBottom: "32px" }}>
+        <h1 style={{ fontSize: "28px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "8px", letterSpacing: "-0.02em" }}>
           Checklist Builder
         </h1>
-        <p style={{ fontSize: "13px", color: "#64748B" }}>
+        <p style={{ fontSize: "15px", color: "var(--text-secondary)" }}>
           Generate operational checklists for recurring processes. Each checklist costs 1 credit.
         </p>
       </div>
 
       {step === "input" && company.credits <= 0 && !session?.isDirector && (
-        <div className="card" style={{ marginBottom: "20px", padding: "16px 20px", borderColor: "#EF4444" }}>
-          <p style={{ fontSize: "13px", color: "#EF4444", fontWeight: 500 }}>No credits remaining.</p>
-          <p style={{ fontSize: "12px", color: "#94A3B8", marginTop: "4px" }}>Purchase credits in Administration to continue generating checklists.</p>
+        <div className="card" style={{ marginBottom: "24px", padding: "16px 20px", borderColor: "var(--danger)" }}>
+          <p style={{ fontSize: "14px", color: "var(--danger)", fontWeight: 500 }}>No credits remaining.</p>
+          <p style={{ fontSize: "13px", color: "var(--text-tertiary)", marginTop: "4px" }}>Purchase credits in Administration to continue generating checklists.</p>
         </div>
       )}
 

@@ -186,34 +186,35 @@ export default function ForgePage() {
   );
 
   return (
-    <div style={{ maxWidth: "1024px", margin: "0 auto", padding: "32px 24px" }} className="fade-in">
+    <div style={{ maxWidth: "1024px", margin: "0 auto", padding: "40px 32px" }} className="fade-in">
 
       {/* Header */}
-      <div style={{ marginBottom: step === "input" ? "28px" : "24px" }}>
-        <h1 style={{ fontSize: "20px", fontWeight: 600, color: "#F1F5F9", marginBottom: "4px" }}>
-          SOLO SOP BUILDER v2.0
+      <div style={{ marginBottom: step === "input" ? "32px" : "28px" }}>
+        <h1 style={{ fontSize: "28px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "8px", letterSpacing: "-0.02em" }}>
+          SOP Forge
         </h1>
-        <p style={{ fontSize: "13px", color: "#64748B" }}>
+        <p style={{ fontSize: "15px", color: "var(--text-secondary)" }}>
           Generate a complete operational document with governance, quality controls, and operational assets. 10 credits per SOP.
         </p>
       </div>
 
       {/* Phase Stepper */}
       {step === "input" && (
-        <div style={{ display: "flex", gap: "8px", marginBottom: "28px", overflowX: "auto" }}>
+        <div style={{ display: "flex", gap: "10px", marginBottom: "32px", overflowX: "auto", padding: "4px 0" }}>
           {PHASES.map((p, i) => (
             <div key={p.id} style={{
-              display: "flex", alignItems: "center", gap: "8px", padding: "8px 16px",
-              borderRadius: "8px", fontSize: "12px", fontWeight: 500, whiteSpace: "nowrap",
-              background: phase === p.id ? "rgba(59,130,246,0.12)" : "rgba(0,0,0,0.2)",
-              border: phase === p.id ? "1px solid rgba(59,130,246,0.3)" : "1px solid #1E293B",
-              color: phase === p.id ? "#3B82F6" : "#64748B",
+              display: "flex", alignItems: "center", gap: "10px", padding: "10px 18px",
+              borderRadius: "10px", fontSize: "13px", fontWeight: 500, whiteSpace: "nowrap",
+              background: phase === p.id ? "var(--accent-subtle)" : "var(--bg-card)",
+              border: phase === p.id ? "1px solid rgba(37, 99, 235, 0.3)" : "1px solid var(--border)",
+              color: phase === p.id ? "var(--accent)" : "var(--text-tertiary)",
+              transition: "all 0.2s",
             }}>
               <span style={{
-                width: "22px", height: "22px", borderRadius: "50%", display: "flex",
+                width: "24px", height: "24px", borderRadius: "50%", display: "flex",
                 alignItems: "center", justifyContent: "center", fontSize: "11px", fontWeight: 600,
-                background: phase === p.id ? "#3B82F6" : "#1E293B",
-                color: phase === p.id ? "#fff" : "#475569",
+                background: phase === p.id ? "var(--accent)" : "var(--bg-secondary)",
+                color: phase === p.id ? "#fff" : "var(--text-tertiary)",
               }}>{i + 1}</span>
               {p.label}
             </div>
@@ -224,11 +225,11 @@ export default function ForgePage() {
       {/* Phase 1 — Company Intelligence */}
       {phase === "company" && step === "input" && (
         <div>
-          <div className="card" style={{ marginBottom: "20px", borderLeft: "3px solid #3B82F6" }}>
-            <div className="card-header" style={{ fontSize: "13px" }}>
-              Phase 1 — Company Intelligence
+          <div className="card" style={{ marginBottom: "24px", borderLeft: "3px solid var(--accent)" }}>
+            <div className="card-header" style={{ fontSize: "14px", marginBottom: "20px" }}>
+              Company Intelligence
             </div>
-            <p style={{ fontSize: "12px", color: "#64748B", marginTop: "-8px", marginBottom: "20px" }}>
+            <p style={{ fontSize: "14px", color: "var(--text-tertiary)", marginTop: "-12px", marginBottom: "24px" }}>
               Build a complete profile of your organisation. This data powers every phase of the SOP engine.
             </p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
@@ -329,11 +330,11 @@ export default function ForgePage() {
       {/* Phase 2 — Process Intelligence */}
       {phase === "process" && step === "input" && (
         <div>
-          <div className="card" style={{ marginBottom: "20px", borderLeft: "3px solid #22C55E" }}>
-            <div className="card-header" style={{ fontSize: "13px" }}>
-              Phase 2 — Process Intelligence
+          <div className="card" style={{ marginBottom: "24px", borderLeft: "3px solid var(--success)" }}>
+            <div className="card-header" style={{ fontSize: "14px", marginBottom: "20px" }}>
+              Process Intelligence
             </div>
-            <p style={{ fontSize: "12px", color: "#64748B", marginTop: "-8px", marginBottom: "20px" }}>
+            <p style={{ fontSize: "14px", color: "var(--text-tertiary)", marginTop: "-12px", marginBottom: "24px" }}>
               Define the process you are documenting. The SOP engine uses this to build accurate, context-aware procedures.
             </p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
@@ -404,11 +405,11 @@ export default function ForgePage() {
       {/* Phase 3 — Workflow Mapping */}
       {phase === "workflow" && step === "input" && (
         <div>
-          <div className="card" style={{ marginBottom: "20px", borderLeft: "3px solid #F59E0B" }}>
-            <div className="card-header" style={{ fontSize: "13px" }}>
-              Phase 3 — Workflow Mapping
+          <div className="card" style={{ marginBottom: "24px", borderLeft: "3px solid var(--warning)" }}>
+            <div className="card-header" style={{ fontSize: "14px", marginBottom: "20px" }}>
+              Workflow Mapping
             </div>
-            <p style={{ fontSize: "12px", color: "#64748B", marginTop: "-8px", marginBottom: "20px" }}>
+            <p style={{ fontSize: "14px", color: "var(--text-tertiary)", marginTop: "-12px", marginBottom: "24px" }}>
               Map the process flow step by step. Define the decision points that branch the workflow.
             </p>
             <div style={{ marginBottom: "20px" }}>

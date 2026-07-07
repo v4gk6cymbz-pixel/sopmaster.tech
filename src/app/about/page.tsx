@@ -4,11 +4,11 @@ export default function AboutPage() {
   return (
     <div style={{ maxWidth: "800px", margin: "0 auto", padding: "64px 24px" }} className="fade-in">
       <div style={{ marginBottom: "48px" }}>
-        <h1 style={{ fontSize: "22px", fontWeight: 600, color: "#F1F5F9", marginBottom: "4px" }}>
+        <h1 style={{ fontSize: "28px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "8px", letterSpacing: "-0.02em" }}>
           About SOPMaster
         </h1>
-        <p style={{ fontSize: "13px", color: "#64748B" }}>
-          The operational documentation platform for consultancy professionals.
+        <p style={{ fontSize: "15px", color: "var(--text-secondary)" }}>
+          Learn more about SOPMaster — the operational documentation platform built for consultancy professionals.
         </p>
       </div>
 
