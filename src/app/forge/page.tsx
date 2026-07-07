@@ -88,7 +88,7 @@ export default function ForgePage() {
   }, [router]);
 
   useEffect(() => {
-    if (company && (!company.focus || company.focus !== "sops")) router.push("/");
+    if (company && !company.subscriptionActive && (!company.focus || company.focus !== "sops")) router.push("/");
   }, [company, router]);
 
   const addSoftware = (s: string) => { if (s.trim() && !softwareStack.includes(s.trim())) setSoftwareStack([...softwareStack, s.trim()]); };

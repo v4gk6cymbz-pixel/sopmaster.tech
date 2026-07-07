@@ -46,8 +46,11 @@ export async function POST(req: NextRequest) {
             email: email.trim().toLowerCase(),
           },
         },
+        profile: {
+          create: { companySize },
+        },
       },
-      include: { team: true },
+      include: { team: true, profile: true },
     });
 
     const tokenPayload = {
@@ -79,6 +82,7 @@ export async function POST(req: NextRequest) {
         jurisdiction: company.jurisdiction,
         team: company.team,
         focus: company.focus,
+        profile: company.profile,
       },
     });
   } catch (error) {

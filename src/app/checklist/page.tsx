@@ -198,7 +198,7 @@ export default function ChecklistPage() {
   }, [router]);
 
   useEffect(() => {
-    if (company && (!company.focus || company.focus !== "checklists")) router.push("/");
+    if (company && !company.subscriptionActive && (!company.focus || company.focus !== "checklists")) router.push("/");
   }, [company, router]);
 
   useEffect(() => {
@@ -219,6 +219,8 @@ export default function ChecklistPage() {
 
     setStep("loading"); setProgress(0); setLogs([]);
     setLogs((l) => [...l, "Generating checklist..."]);
+
+    await new Promise((r) => setTimeout(r, 15000));
 
     const hash = generateHash();
     const vHash = generateVerificationHash();

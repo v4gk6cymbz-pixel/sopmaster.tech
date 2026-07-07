@@ -6,17 +6,18 @@ import { useRouter } from "next/navigation";
 import type { Jurisdiction, FirmTier } from "@/types";
 import { JURISDICTION_REGULATORY, getTierLimits, redirectToStripe } from "@/lib/utils";
 
-const ALL_TIERS: { value: FirmTier; label: string; price: string; credits: string }[] = [
-  { value: "solo", label: "Solo Professional", price: "£400/mo", credits: "300 Credits" },
-  { value: "small", label: "Small Consultancy Plan", price: "£2,500/mo", credits: "2,500 Credits" },
-  { value: "medium", label: "Medium Consultancy Plan", price: "£5,100/mo", credits: "6,000 Credits" },
-  { value: "large", label: "Large Consultancy Plan", price: "£9,000/mo", credits: "12,000 Credits" },
+const ALL_TIERS: { value: FirmTier; label: string; price: string; credits: string; sizeKey: string }[] = [
+  { value: "solo", label: "Solo Professional", price: "£400/mo", credits: "300 Credits", sizeKey: "solo" },
+  { value: "small", label: "Small Consultancy Plan", price: "£2,500/mo", credits: "2,500 Credits", sizeKey: "1-20" },
+  { value: "medium", label: "Medium Consultancy Plan", price: "£5,100/mo", credits: "6,000 Credits", sizeKey: "21-200" },
+  { value: "large", label: "Large Consultancy Plan", price: "£9,000/mo", credits: "12,000 Credits", sizeKey: "201+" },
 ];
 
 export default function SettingsPage() {
   const router = useRouter();
   const session = useStore((s) => s.session);
   const getCompany = useStore((s) => s.getCompany);
+  const companyProfile = useStore((s) => s.companyProfile);
   const setJurisdiction = useStore((s) => s.setJurisdiction);
   const updatePin = useStore((s) => s.updatePin);
   const cancelSubscription = useStore((s) => s.cancelSubscription);
@@ -155,19 +156,31 @@ export default function SettingsPage() {
                 Current balance: {company.credits} credits. Activate a subscription for monthly credits.
               </p>
               <p style={{ fontSize: "14px", color: "var(--text-secondary)", marginBottom: "20px" }}>
-                Selected plan at signup: {getTierLimits(company.tier).label}
+                Your plan: {getTierLimits(company.tier).label} &middot; {getTierLimits(company.tier).credits} credits/mo
               </p>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
-                {ALL_TIERS.map(t => (
-                  <div key={t.value} style={{ padding: "16px 20px", border: "1px solid var(--border)", borderRadius: "10px", background: "var(--bg-card)" }}>
-                    <p style={{ fontSize: "15px", fontWeight: 600, color: "var(--text-primary)" }}>{t.label}</p>
-                    <p style={{ fontSize: "13px", color: "var(--text-tertiary)" }}>{t.credits} &middot; {t.price}</p>
-                    <button onClick={() => redirectToStripe("subscription", { tier: t.value })}
-                      className="btn btn-primary" style={{ marginTop: "12px", width: "100%", padding: "10px", fontSize: "13px" }}>
-                      Subscribe
-                    </button>
-                  </div>
-                ))}
+                {(() => {
+                  const sizeToTier: Record<string, string> = { solo: "solo", "1-20": "small", "21-200": "medium", "201+": "large" };
+                  const matchedTier = sizeToTier[companyProfile?.companySize || ""] || company.tier;
+                  const plan = ALL_TIERS.find(t => t.value === matchedTier);
+                  const priceLabel = plan ? `£${getTierLimits(matchedTier).price.toLocaleString()}/mo` : "—";
+                  return (
+                    <div key={matchedTier} style={{ padding: "20px 24px", border: "1px solid var(--border-light)", borderRadius: "12px", background: "var(--bg-card)" }}>
+                      <p style={{ fontSize: "16px", fontWeight: 600, color: "var(--text-primary)" }}>{plan?.label || "Select Plan"}</p>
+                      <p style={{ fontSize: "14px", color: "var(--accent)", marginTop: "4px" }}>{plan?.credits} &middot; {priceLabel}</p>
+                      <p style={{ fontSize: "12px", color: "var(--text-tertiary)", marginTop: "8px", lineHeight: 1.5 }}>
+                        {plan?.value === "solo" ? "Best for independent consultants and freelancers." :
+                         plan?.value === "small" ? "Best for small consultancy teams." :
+                         plan?.value === "medium" ? "Best for growing firms and practices." :
+                         "Best for established firms with multiple teams."}
+                      </p>
+                      <button onClick={() => redirectToStripe("subscription", { tier: matchedTier })}
+                        className="btn btn-primary" style={{ marginTop: "14px", width: "100%", padding: "12px", fontSize: "14px" }}>
+                        Subscribe — {priceLabel}
+                      </button>
+                    </div>
+                  );
+                })()}
               </div>
             </div>
           )}
