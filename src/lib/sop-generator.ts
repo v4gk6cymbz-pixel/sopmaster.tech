@@ -305,6 +305,13 @@ export function getLegislation(jurisdiction: Jurisdiction): LegislationSet {
   return map[jurisdiction] || map["UK"];
 }
 
+const STEP_FIELDS = [
+  "Step Number", "Step Name", "Objective", "Responsible Role", "Required Inputs",
+  "Required Systems", "Required Documents", "Detailed Actions", "Decision Points",
+  "Compliance Requirements", "Quality Check", "Expected Output", "Evidence to Retain",
+  "Common Errors", "Escalation Trigger",
+];
+
 function getTierLabel(size: CompanySize): string {
   const map: Record<CompanySize, string> = { "1-10": "Core Execution Tier", "10-50": "Operational Control Tier", "50+": "Enterprise Governance Tier" };
   return map[size];
@@ -346,239 +353,321 @@ function docRef(title: string): string {
   return `SOP-${title.substring(0, 3).toUpperCase()}-${new Date().getFullYear()}`;
 }
 
+function getIndustryContext(industry: string): { trigger: string; inputs: string; actions: string; errors: string; compliance: string; quality: string } {
+  const map: Record<string, { trigger: string; inputs: string; actions: string; errors: string; compliance: string; quality: string }> = {
+    Finance: { trigger: "Receive client instruction, transaction request, or regulatory filing deadline", inputs: "Client instructions, supporting documentation, regulatory forms, prior correspondence", actions: "Verify client identity, check AML clearance, process transaction, update ledgers, file regulatory return", errors: "Incorrect client details, AML not cleared, wrong transaction code, missed filing deadline", compliance: "FCA conduct rules, AML Regulations 2017, SM&CR, data protection", quality: "Client details verified, AML check complete, transaction coded correctly, within SLA" },
+    Healthcare: { trigger: "Receive patient referral, appointment request, or clinical result", inputs: "Patient demographics, referral letter, clinical notes, consent forms", actions: "Register patient, verify NHS number, schedule appointment, update clinical record, process results", errors: "Wrong patient record, incorrect NHS number, missed allergy flag, lost result", compliance: "CQC Fundamental Standards, NHS data security, information governance, UK GDPR", quality: "Patient identity confirmed, NHS number verified, consent recorded, record updated" },
+    SaaS: { trigger: "Receive user sign-up, subscription request, or support ticket", inputs: "User email, company details, billing information, product selection", actions: "Create tenant account, verify email, configure permissions, activate subscription, send welcome", errors: "Duplicate account, wrong pricing tier, activation failure, permission misconfiguration", compliance: "UK GDPR, data minimisation, PECR consent, NIS Regulations, ISO 27001 controls", quality: "Email verified, pricing correct, permissions applied, welcome sent within SLA" },
+    Construction: { trigger: "Receive site instruction, material delivery, or contractor arrival", inputs: "Site instructions, RAMS documentation, delivery notes, contractor credentials", actions: "Verify RAMS, induct contractor, inspect materials, log delivery, update site records", errors: "Outdated RAMS, missing PPE, wrong materials delivered, unqualified contractor", compliance: "CDM 2015, HSE regulations, Building Regulations, waste management", quality: "RAMS current, contractor qualified, materials match order, delivery logged" },
+    Accountancy: { trigger: "Receive client instruction, year-end file, or HMRC deadline notification", inputs: "Client records, prior accounts, tax computations, HMRC correspondence", actions: "Complete AML checks, prepare accounts, compute tax, file returns, send to client for approval", errors: "AML not completed, wrong tax code, missed relief, late filing", compliance: "ICAEW Code of Ethics, AML Regs 2017, HMRC standards, money laundering reporting", quality: "AML cleared, accounts agree to TB, tax computed correctly, filed before deadline" },
+    "E-Commerce": { trigger: "Receive customer order, return request, or inventory alert", inputs: "Customer details, order items, payment confirmation, shipping address", actions: "Verify stock, process payment, pick items, pack order, arrange shipping, update inventory", errors: "Out of stock, wrong item picked, address error, payment declined", compliance: "Consumer Contracts Regulations, distance selling, data protection, delivery SLAs", quality: "Stock confirmed, payment captured, address verified, tracking generated" },
+    ProfessionalServices: { trigger: "Receive client inquiry, signed engagement, or project brief", inputs: "Client contact details, signed agreement, project scope, reference materials", actions: "Set up client in CRM, assign team, schedule kick-off, prepare onboarding pack, send welcome", errors: "Wrong contact details, missing agreement, incorrect scope, delayed kick-off", compliance: "Engagement letter in place, AML checks complete, data protection, conflicts check", quality: "Agreement signed, AML cleared, team assigned, kick-off scheduled" },
+    Manufacturing: { trigger: "Receive production order, material delivery, or quality alert", inputs: "Production schedule, bill of materials, work instructions, batch records", actions: "Confirm materials, set up equipment, run production, inspect first-off, monitor output", errors: "Wrong material, incorrect setup, out-of-spec output, machine downtime", compliance: "ISO 9001, health and safety, environmental permits, product safety", quality: "Materials checked, first-off approved, process within spec, output recorded" },
+    Logistics: { trigger: "Receive shipment, delivery instructions, or return request", inputs: "Shipment manifest, delivery schedule, carrier details, customer contact", actions: "Log shipment, assign carrier, generate label, dispatch with tracking, confirm delivery", errors: "Wrong address, missed collection, lost parcel, incorrect tracking", compliance: "Carrier terms, insurance requirements, dangerous goods regs, delivery SLAs", quality: "Address confirmed, carrier assigned, tracking generated, delivery confirmed" },
+    Education: { trigger: "Receive enrolment application, course request, or assessment result", inputs: "Student details, application form, prior qualifications, course selection", actions: "Register student, verify qualifications, enrol in course, schedule classes, issue materials", errors: "Duplicate record, wrong course, missing prerequisites, timetable clash", compliance: "UK GDPR, safeguarding, exam board rules, data retention", quality: "Qualifications verified, course confirmed, timetable issued, records updated" },
+    Hospitality: { trigger: "Receive booking, guest check-in, or service request", inputs: "Guest details, booking reference, payment card, preferences", actions: "Confirm booking, assign room, check guest in, process payment, coordinate housekeeping", errors: "Overbooking, wrong room type, payment failure, lost booking", compliance: "Health and safety, fire safety, food hygiene, data protection, licensing", quality: "Booking confirmed, room ready, payment taken, preferences noted" },
+    RealEstate: { trigger: "Receive property instruction, viewing request, or offer", inputs: "Property details, seller instructions, buyer information, mortgage details", actions: "List property, arrange viewings, receive offers, progress sale, update CRM", errors: "Wrong price, missed viewing, lost offer, chain breakdown", compliance: "Consumer Protection Regs, money laundering, estate agency rules, data protection", quality: "Property listed correctly, offers recorded, AML checks done, chain managed" },
+  };
+  return map[industry] || { trigger: "Receive work request, instruction, or trigger event", inputs: "Work request details, customer information, reference materials, supporting documentation", actions: "Log request, verify details, process work, record output, confirm completion", errors: "Missing information, incorrect details, processing error, incomplete records", compliance: "Applicable legislation and regulatory requirements for the jurisdiction and sector", quality: "Details verified, processing complete, records accurate, output confirmed" };
+}
+
 function generateProcedureSteps(title: string, company: string, systems: string, industry: string, department: string, size: CompanySize, sopType: string): string[][] {
   const steps: string[][] = [];
   const sys = getSystemsList(systems);
   const primarySys = sys[0] || "the designated system";
   const secondarySys = sys.length > 1 ? sys[1] : primarySys;
-  const headcount = size === "1-10" ? 20 : size === "10-50" ? 200 : 500;
-  const band = size === "1-10" ? "startup and small business" : size === "10-50" ? "growing business" : "enterprise";
+  const band = size === "1-10" ? "startup / small business" : size === "10-50" ? "growing business" : "enterprise";
+  const ctx = getIndustryContext(industry);
 
-  const stepTemplates: ((n: number) => string[])[] = [
-    (n) => [
-      `Step ${n}: Procedure Initiation and Access Verification`,
-      `Objective: Confirm that all required systems are operational, user credentials are valid, and the operating environment is ready before commencing the ${title} procedure.`,
-      `The responsible person accesses ${primarySys} using their assigned credentials and verifies that their user profile carries the necessary permissions to execute the full procedure scope. Where ${secondarySys} interfaces with ${primarySys} as part of the workflow, cross-system connectivity is confirmed by generating a test transaction or performing a handshake check. Any system that returns an error, timeout, or access denial is logged immediately in the IT incident register and the procedure is paused until the issue is resolved. For organisations operating in the ${band} category, this step also requires confirmation that the procedure version displayed in the system matches the current authorised version from the document control register. The operator records the system check results, including timestamps and system response codes, in the procedure log.`,
-      `Responsible Person: ${size === "1-10" ? "Chief Operator" : size === "10-50" ? "Department Lead" : "System Administrator"}`,
-      `Systems Used: ${formatSystems(systems)}`,
-      "Documents Used: Procedure Initiation Checklist, System Access Log, Authorised User Register",
-      `Control Point: The procedure must not proceed past Step ${n} unless ${primarySys} confirms operational status and the operator's access level is verified against the authorised user matrix.`,
-      `Expected Output: Completed system verification checklist with timestamps, user identity confirmation, and system response codes stored in the procedure audit file.`,
-      `Exception Handling: If ${primarySys} is unavailable, the operator notifies IT Support immediately and logs the system failure in the incident register. The procedure is placed on hold. Processing resumes only after ${primarySys} has been restored and the operator has re-verified system access.`,
-    ],
-    (n) => [
-      `Step ${n}: Document Verification and Authorised Version Confirmation`,
-      `Objective: Verify that the ${title} procedure document is the current authorised version and that all referenced supporting documents are accessible and correctly versioned.`,
-      `The operator retrieves the ${title} procedure from the document management system and cross-references the document control number against the master document register. The version number, approval date, and next review date are confirmed as current. Any supporting forms, templates, checklists, or reference materials listed in the procedure are located and checked for version alignment. Where the ${industry} sector requires regulatory document retention or specific versioning protocols, the operator confirms that the document hierarchy complies with those requirements. For ${band} organisations, this step includes verifying that any jurisdiction-specific addenda or regulatory supplements attached to the procedure are the correct versions for the current compliance period. Discrepancies between the issued procedure and the document register are escalated to the document control officer within one hour.`,
-      `Responsible Person: ${size === "1-10" ? "Chief Operator" : "Procedure Operator"}`,
-      `Systems Used: ${primarySys} Document Management System, Master Document Register`,
-      "Documents Used: Master Document Register, Document Control Log, Approved Procedure Version",
-      `Control Point: No step beyond Step ${n} may be executed unless the procedure version in the document management system matches the authorised version from the document control register.`,
-      `Expected Output: Version confirmation recorded in the procedure log. Any version discrepancies logged in the document non-compliance register with escalation timestamp.`,
-      `Exception Handling: If the document version in the system does not match the approved version, the operator flags this to the document control officer and places the procedure on hold. The procedure may only continue once the correct version is confirmed and the discrepancy is investigated.`,
-    ],
-    (n) => [
-      `Step ${n}: Stakeholder Identification and Notification`,
-      `Objective: Identify all parties who must be notified of the ${title} procedure initiation and secure their acknowledgement before execution proceeds.`,
-      `The operator identifies the stakeholders who have a defined interest in the ${title} procedure outcome. This includes the procedure owner, the responsible supervisor, downstream process owners whose work may be affected by the output, the quality assurance contact, and any external parties such as clients, regulators, or third-party service providers who require notification. Using ${primarySys}, the operator sends a standardised procedure initiation notification to each stakeholder, specifying the procedure reference, expected duration, systems affected, and any actions required from the recipient. Stakeholders are asked to confirm receipt within a defined response window. For ${band} organisations operating under ${getLegislation("UK").corporate} standards, this notification forms part of the governance record and must be retained accordingly. Non-responding stakeholders are followed up by telephone or equivalent direct communication within two hours of the notification being sent.`,
-      `Responsible Person: ${size === "1-10" ? "Chief Operator" : size === "10-50" ? "Department Lead" : "Procedure Operator"}`,
-      `Systems Used: ${primarySys}, ${size === "50+" ? "Enterprise Communication Platform, Stakeholder Register" : "Communication Tools"}`,
-      "Documents Used: Stakeholder Register, Communication Log, Acknowledgement Tracking Sheet",
-      `Control Point: The procedure must not proceed past Step ${n} unless all mandatory stakeholders have acknowledged receipt of the notification. Non-mandatory stakeholders may be notified after Step ${n} completion.`,
-      `Expected Output: Stakeholder notification log with timestamps, acknowledgement receipts, and escalation records for non-responding parties.`,
-      `Exception Handling: If a mandatory stakeholder cannot be reached within the defined response window, the operator escalates to the next authority level. The procedure may proceed if the delegated authority provides written acknowledgement in place of the primary stakeholder.`,
-    ],
-    (n) => [
-      `Step ${n}: Resource and Materials Preparation`,
-      `Objective: Assemble all physical and digital resources required to execute the ${title} procedure and confirm that each resource meets the specified quality or compliance standard.`,
-      `The operator reviews the resource requirements defined in the procedure scope and assembles each item against the resource checklist. For digital resources, this includes confirming that the correct templates, data sets, reference files, and system configurations are loaded and accessible in ${primarySys}. For physical resources, the operator confirms availability of any printed forms, equipment, or materials and checks them against the specification. Where ${industry} sector regulations impose specific requirements on materials or data used in operational procedures, the operator verifies compliance before proceeding. In ${band} organisations, this step extends to confirming that third-party or outsourced resources have been ordered and confirmed with delivery timelines that do not conflict with the procedure schedule. Any resource that fails the readiness check is flagged, and the operator determines whether a suitable substitute is available or whether the procedure must be delayed.`,
-      `Responsible Person: ${size === "1-10" ? "Chief Operator" : "Operations Coordinator"}`,
-      `Systems Used: ${formatSystems(systems)}, Resource Management System, Procurement Log`,
-      "Documents Used: Resource Checklist, Materials Specification Sheet, Supplier Confirmation Records",
-      `Control Point: All critical-path resources must be confirmed as available and compliant before the procedure proceeds past Step ${n}. Substitute resources require documented approval from the responsible supervisor.`,
-      `Expected Output: Completed resource readiness checklist. Any resource substitutions documented with approval references. Supplier confirmations attached to the procedure file.`,
-      `Exception Handling: If a critical resource is unavailable and no approved substitute exists, the operator escalates to the department lead. The procedure start may be deferred. Non-critical resources may be procured while the procedure is in progress, but their absence must be documented as a risk item.`,
-    ],
-    (n) => [
-      `Step ${n}: Risk Assessment and Control Confirmation`,
-      `Objective: Conduct a pre-execution risk assessment for the ${title} procedure, confirm that all identified risks have assigned controls, and document any residual risk that requires active management during execution.`,
-      `The operator accesses the risk register in ${primarySys} and identifies the risk profile applicable to the ${title} procedure. Each risk listed in the procedure's risk register section is reviewed to confirm that the assigned control measures are in place and operational. For risks rated medium or higher, the operator verifies that the control owner has confirmed the control's effectiveness within the required review period. New risks identified since the last risk review are documented and assigned a provisional risk rating. Where ${industry} sector regulations prescribe specific risk assessment methodologies, those methodologies are followed and documented. The operator records the pre-execution risk assessment in the procedure log, noting any risks where controls are not fully operational and the mitigating actions that have been put in place. Residual risks that fall outside the organisation's risk appetite are escalated to the responsible authority level before the procedure proceeds.`,
-      `Responsible Person: ${size === "1-10" ? "Chief Operator" : size === "10-50" ? "Risk Owner" : "Risk and Compliance Officer"}`,
-      `Systems Used: ${primarySys} Risk Management Module, ${size === "50+" ? "Enterprise Risk Register, Governance Platform" : "Risk Register"}`,
-      "Documents Used: Risk Register Extract, Control Effectiveness Confirmation Records, Risk Assessment Methodology",
-      `Control Point: The procedure must not proceed past Step ${n} if any high-rated risk has an ineffective or untested control. Medium-rated risks with ineffective controls require documented acceptance from the risk owner before proceeding.`,
-      `Expected Output: Completed pre-execution risk assessment with control confirmation status, residual risk log, and escalation records for any risks exceeding appetite.`,
-      `Exception Handling: Where a control is found to be ineffective, the operator notifies the control owner and requests remediation within 24 hours. If the risk is time-sensitive and the procedure cannot be deferred, the risk owner may accept the risk in writing for a single execution only, with remediation required before the next scheduled execution.`,
-    ],
-    (n) => [
-      `Step ${n}: Procedure Execution — Phase One Initiation`,
-      `Objective: Commence the ${title} procedure by executing the initial phase in accordance with the defined sequence, capturing all inputs, and establishing the baseline record from which all subsequent steps are measured.`,
-      `The operator accesses the procedure workflow in ${primarySys} and initiates a new execution instance. The unique procedure reference identifier is recorded. All inputs required for Phase One are loaded into the system, including any customer data, reference materials, specifications, or authorisation codes specified in the procedure definition. The operator confirms that each input matches the expected format, value range, and quality standard defined in the procedure specification. Where ${industry} sector practice requires dual data entry or independent verification of inputs, this is completed before the first processing action is taken. The system captures the initiation timestamp, operator identity, and input values in the audit log. For ${band} organisations, Phase One may be subject to automated validation rules in ${primarySys} that prevent initiation if mandatory inputs are missing or out of range. The operator checks for any validation warnings or errors and resolves them before proceeding.`,
-      `Responsible Person: ${size === "1-10" ? "Chief Operator" : "Procedure Operator"}`,
-      `Systems Used: ${formatSystems(systems)}`,
-      "Documents Used: Procedure Specification, Input Validation Criteria, Phase One Checklist",
-      `Control Point: Phase One initiation must generate a confirmed audit log entry in ${primarySys} before any further processing steps can be taken. Manual workarounds are not permitted.`,
-      `Expected Output: Confirmed procedure initiation record with unique reference, input validation report, and audit log timestamp. Any validation warnings documented with resolution.`,
-      `Exception Handling: If ${primarySys} rejects the initiation due to validation failure, the operator reviews the validation error and corrects the input. If the input is correct but the system validation rule is inaccurate, the operator escalates to the system administrator for rule correction. Procedure initiation is deferred until the rule is corrected or an authorised override is obtained.`,
-    ],
-    (n) => [
-      `Step ${n}: Procedure Execution — Core Processing`,
-      `Objective: Execute the core processing activities of the ${title} procedure, processing each work item in the defined sequence and recording completion at each control point.`,
-      `The operator works through the core processing sequence defined in the procedure specification. Each sub-step is executed in the prescribed order. Outputs from each sub-step are captured in ${primarySys} before the next sub-step commences. Where the procedure involves decision points, the operator applies the defined criteria and documents the rationale for each decision. Any calculations, transformations, or data manipulations prescribed by the procedure are performed and the results are independently verified where the control framework requires segregation. For ${industry} operations, the operator pays particular attention to regulatory data handling requirements, ensuring that any personal data processed during this step is handled in accordance with applicable data protection legislation. The operator monitors processing against the expected timeline and flags any sub-step that exceeds its allocated processing window. In ${band} organisations, the system may automatically escalate overdue sub-steps to the responsible supervisor. The operator completes the core processing log and submits it for verification.`,
-      `Responsible Person: ${size === "1-10" ? "Chief Operator" : "Procedure Operator"}`,
-      `Systems Used: ${formatSystems(systems)}, Processing Log, Workflow Management Module`,
-      "Documents Used: Core Processing Specification, Decision Criteria Matrix, Processing Log Template",
-      `Control Point: Each sub-step within the core processing sequence must be completed and logged before the next sub-step begins. The system must not allow out-of-sequence processing. Segregation of duties applies where dual control is specified.`,
-      `Expected Output: Completed core processing log with timestamped sub-step records, decision rationales, verification results, and any timing deviations documented.`,
-      `Exception Handling: If a sub-step cannot be completed within its allocated processing window, the operator logs the delay and the reason, and escalates if the delay affects the overall procedure timeline. For sub-steps that require external input or approval, the operator follows up with the responsible party and records the follow-up action in the processing log.`,
-    ],
-    (n) => [
-      `Step ${n}: Quality Verification and Accuracy Check`,
-      `Objective: Independently verify that the outputs from the core processing phase are complete, accurate, and compliant with the ${title} procedure specification before proceeding to output generation.`,
-      `The operator or designated verifier conducts a systematic check of all core processing outputs against the expected results defined in the procedure specification. Each output item is examined for completeness, accuracy, formatting compliance, and adherence to regulatory or industry standards. Where the ${industry} sector requires independent verification of specific output types, the verifier confirms that this has been completed and documented. Numerical outputs are recalculated or independently derived where the control framework requires. Any discrepancies identified are logged in the quality discrepancy register. The verifier completes a quality verification checklist and records their identity, the verification timestamp, and the outcome. If the verification identifies errors or omissions, the operator returns to the relevant processing sub-step to make corrections. The corrected output is re-verified before the procedure proceeds to the next phase. For ${band} organisations, the quality verification step may be supported by automated validation tools within ${primarySys}, but the verifier's independent sign-off remains mandatory.`,
-      `Responsible Person: ${size === "1-10" ? "Chief Operator (self-verification with supervisor oversight)" : size === "10-50" ? "Quality Reviewer" : "Quality Assurance Specialist"}`,
-      `Systems Used: ${primarySys} Quality Module, ${size === "50+" ? "Independent Validation Tool" : ""}`,
-      "Documents Used: Quality Verification Checklist, Expected Output Specification, Discrepancy Register",
-      `Control Point: No output may proceed to the next step without a completed quality verification. Verification must be performed by a person independent of the core processing execution.`,
-      `Expected Output: Completed quality verification checklist with pass/fail determination, discrepancy log (if applicable), and verifier identity and timestamp.`,
-      `Exception Handling: If verification identifies discrepancies exceeding the acceptable quality threshold defined in the procedure specification, the entire core processing phase is returned for rework. The rework is completed, re-verified, and documented. Persistent quality failures trigger a process improvement review.`,
-    ],
-    (n) => [
-      `Step ${n}: Output Generation and Documentation`,
-      `Objective: Generate the formal outputs of the ${title} procedure, compile supporting documentation, and prepare the output package for distribution or further processing.`,
-      `The operator generates the procedure outputs using ${primarySys}. Each output document is checked against the output specification to confirm that it contains all mandatory fields, correct data, and appropriate formatting. Where the ${industry} sector requires specific output formats for regulatory submissions or client reporting, the operator confirms compliance with those format requirements. Outputs that require authorisation or approval before release are identified and queued for the appropriate approval workflow. The operator compiles a complete output package that includes the primary output document, all supporting evidence, the procedure log, and any exception or deviation records generated during execution. The output package is stored in the designated document management location with a unique file reference that cross-references to the procedure record in ${primarySys}. For ${band} organisations, this step includes confirming that the output package complies with any applicable record-keeping standards and that the file naming convention follows the organisational standard.`,
-      `Responsible Person: ${size === "1-10" ? "Chief Operator" : "Procedure Operator"}`,
-      `Systems Used: ${formatSystems(systems)}, Document Management System, Output Generation Module`,
-      "Documents Used: Output Specification, Document Template, Output Package Checklist",
-      `Control Point: Outputs must be validated against the output specification before they are released from this step. Any output that does not meet specification must be corrected before proceeding.`,
-      `Expected Output: Completed output package with validated documents, supporting evidence, procedure log, and exception records. Output package stored with correct file reference and naming convention.`,
-      `Exception Handling: If the output generation process in ${primarySys} produces unexpected results or system errors, the operator logs the issue and consults the system administrator or vendor support. Outputs may be generated using the approved manual fallback procedure documented in the business continuity plan while the system issue is investigated.`,
-    ],
-    (n) => [
-      `Step ${n}: Compliance Verification and Regulatory Alignment Check`,
-      `Objective: Verify that the ${title} procedure execution and its outputs comply with all applicable legal, regulatory, and industry standards identified in the procedure's legislative framework.`,
-      `The operator or compliance reviewer conducts a systematic check of the procedure execution against the compliance obligation register. Each regulatory requirement identified in the procedure's compliance matrix is reviewed to confirm that the execution has addressed it. Where ${getLegislation("UK").dataProtection} applies to any personal data processed during this procedure, the reviewer confirms that data processing has been conducted in accordance with the data protection principles, that a lawful basis for processing has been documented, and that any data subject rights requests have been handled within the statutory timeframe. Employment law obligations under ${getLegislation("UK").employment} are reviewed where the procedure involves staff-related decisions. Health and safety compliance under ${getLegislation("UK").healthSafety} is confirmed where the procedure has workplace safety implications. Any compliance gaps are documented and assigned for remediation. The reviewer records the compliance verification outcome and attaches it to the procedure file.`,
-      `Responsible Person: ${size === "1-10" ? "Chief Operator with external advisor review" : size === "10-50" ? "Compliance Reviewer" : "Compliance Officer"}`,
-      `Systems Used: ${primarySys} Compliance Module, Compliance Obligation Register`,
-      "Documents Used: Compliance Obligation Register, Regulatory Alignment Checklist, Data Processing Record",
-      `Control Point: The procedure must not proceed to the approval stage unless all mandatory compliance obligations have been verified as met. Any non-compliance must be escalated to the responsible authority level.`,
-      `Expected Output: Completed compliance verification checklist, documented confirmation of legislative alignment, and any non-compliance records with assigned remediation actions.`,
-      `Exception Handling: If a compliance gap is identified, the reviewer assesses its materiality. Material gaps are escalated to the compliance officer and the procedure output is held pending remediation. Non-material gaps may proceed with a corrective action plan attached to the procedure record.`,
-    ],
-    (n) => [
-      `Step ${n}: Exception and Deviation Reconciliation`,
-      `Objective: Review all exceptions, deviations, and discrepancies that occurred during the ${title} procedure execution, confirm that each has been appropriately resolved or escalated, and document the final status.`,
-      `The operator reviews the exception and deviation logs generated during the procedure execution. Each entry is examined to confirm that a root cause has been identified, a corrective action has been taken or planned, and the residual risk has been assessed. Exceptions that were escalated during execution are checked to confirm that the escalation was acknowledged by the appropriate authority level and that a response or decision was received. Any exceptions that remain open at this stage are reviewed for materiality. Open exceptions rated medium or higher are escalated to the department lead or compliance officer for immediate decision. The operator compiles an exception reconciliation report that lists each exception, its root cause, the corrective action taken, the escalation status, and the final disposition. This report becomes part of the permanent procedure record. For ${band} organisations, the exception reconciliation report is reviewed by the quality assurance function before the procedure is closed.`,
-      `Responsible Person: ${size === "1-10" ? "Chief Operator" : size === "10-50" ? "Department Lead" : "Quality Assurance Manager"}`,
-      `Systems Used: ${primarySys} Exception Management Module`,
-      "Documents Used: Exception Log, Deviation Register, Exception Reconciliation Report Template",
-      `Control Point: All exceptions rated medium or higher must have a documented disposition before the procedure record can be finalised. Open exceptions without an assigned owner or target date are escalated immediately.`,
-      `Expected Output: Completed exception reconciliation report showing each exception's root cause, corrective action, escalation history, and final status. Any unresolved exceptions with escalation documentation.`,
-      `Exception Handling: If an exception cannot be resolved within the procedure timeline, it is formally transferred to the organisational issues register with a designated owner, target resolution date, and interim risk acceptance. The procedure record cross-references the issues register entry.`,
-    ],
-    (n) => [
-      `Step ${n}: Approval and Authorisation Gate`,
-      `Objective: Obtain formal approval of the ${title} procedure outputs from the authorised approver, confirming that the procedure has been executed in accordance with the defined specification and that outputs are fit for purpose.`,
-      `The operator submits the complete procedure record, including the output package, compliance verification, quality verification, and exception reconciliation report, to the designated approver in ${primarySys}. The approver reviews the complete record against the approval criteria defined in the procedure governance framework. The review covers: completeness of the execution record, accuracy of outputs, compliance with regulatory and legislative requirements, resolution or escalation of all exceptions, and alignment with the defined scope and objectives. The approver may request additional information or clarification, in which case the operator provides the requested information within two hours. Once satisfied, the approver formally approves the procedure in ${primarySys}, which triggers the closure workflow. The approval is recorded with the approver's identity, timestamp, and any conditions attached to the approval. For ${band} organisations, the approval chain follows the authority matrix defined in the procedure governance section, with higher-value or higher-risk procedures requiring approval at a more senior level.`,
-      `Responsible Person: ${size === "1-10" ? "Chief Operator or External Consultant" : size === "10-50" ? "Department Head" : "Department Head or Executive Sponsor"}`,
-      `Systems Used: ${primarySys} Approval Workflow Module`,
-      "Documents Used: Procedure Record, Approval Criteria Matrix, Authority Matrix",
-      `Control Point: No procedure may be closed without formal approval recorded in ${primarySys}. Retrospective approval is not permitted. The approver must be independent of the execution where the control framework requires segregation.`,
-      `Expected Output: Formal approval record with approver identity, timestamp, approval conditions (if any), and system-generated approval reference.`,
-      `Exception Handling: If the required approver is unavailable, the pre-designated deputy or delegate assumes approval authority. If no deputy exists, the procedure is escalated to the next authority level. Approval by delegation is recorded with the delegating authority's pre-authorisation reference.`,
-    ],
-    (n) => [
-      `Step ${n}: Record Collation and Evidence File Compilation`,
-      `Objective: Compile all records generated during the ${title} procedure into a structured evidence file that demonstrates complete and compliant execution for audit and regulatory purposes.`,
-      `The operator assembles the complete evidence file by collecting all records generated during the procedure execution. This includes the procedure log, system audit trail extracts, quality verification checklists, compliance verification records, exception and deviation logs, approval records, and the final output package. Each document is checked for readability, completeness, and correct file naming. The evidence file is structured according to the organisational evidence filing standard, with each document indexed against the corresponding procedure step. Where the ${industry} sector requires specific evidence formats or certification, the operator confirms that these requirements are met. The operator generates an evidence file index that lists each document, its source, its version, and the procedure step it supports. The complete evidence file is stored in the document management system with the correct retention classification applied. The system generates a checksum or verification hash for the evidence file to detect any subsequent unauthorised modification. For ${band} organisations, this evidence file constitutes the primary defence in any regulatory investigation or audit.`,
-      `Responsible Person: ${size === "1-10" ? "Chief Operator" : "Procedure Operator"}`,
-      `Systems Used: ${formatSystems(systems)}, Document Management System, Evidence Management Module`,
-      "Documents Used: Evidence File Index, Document Naming Convention Guide, Evidence Quality Criteria",
-      `Control Point: Every procedure step must have corresponding evidence in the evidence file. Any step without supporting evidence is documented as an exception, and the procedure record must include a justification.`,
-      `Expected Output: Complete evidence file with indexed documents, verification hash, and retention classification. Evidence file index cross-referenced to procedure steps.`,
-      `Exception Handling: If a required piece of evidence cannot be located, the operator investigates whether it was generated during execution. If it was not generated, this is documented as a procedural non-compliance. If it was generated but lost, the operator attempts to retrieve it from system backups. Unrecoverable evidence is documented with a statement of why it is missing and what mitigating records exist.`,
-    ],
-    (n) => [
-      `Step ${n}: Stakeholder Notification and Output Distribution`,
-      `Objective: Distribute the ${title} procedure outputs to all identified stakeholders, confirm receipt, and provide any necessary briefing or contextual information to support effective use of the outputs.`,
-      `The operator identifies the distribution list from the stakeholder register updated in Step ${n - 11}. Each stakeholder receives a notification that the procedure outputs are available, along with a summary of the key outcomes, any actions required from the recipient, and the availability of supporting documentation in the document management system. Where the ${industry} sector or regulatory framework requires formal handover of specific outputs, the operator arranges the handover and obtains a receipt. Stakeholders who require a briefing on the outputs are offered a briefing session within five working days. The operator confirms that the distribution is complete by checking read receipts, system access logs, or signed acknowledgements. Non-responsive stakeholders are followed up within two working days. The distribution record is added to the procedure file, confirming that each stakeholder has been notified and has either received the outputs or been offered access. For ${band} organisations, stakeholders with regulatory or compliance responsibilities receive priority notification.`,
-      `Responsible Person: ${size === "1-10" ? "Chief Operator" : "Procedure Operator"}`,
-      `Systems Used: ${primarySys}, ${size === "50+" ? "Enterprise Communication Platform" : "Communication Tools"}`,
-      "Documents Used: Stakeholder Distribution List, Output Summary Document, Distribution Tracking Log",
-      `Control Point: All mandatory stakeholders must receive notification of output availability before the procedure is formally closed. Optional stakeholders may be notified after closure.`,
-      `Expected Output: Completed distribution log with stakeholder acknowledgements, follow-up records, and distribution tracking confirmation.`,
-      `Exception Handling: If a mandatory stakeholder does not acknowledge receipt within the defined period, the operator escalates to the stakeholder's line manager. If the stakeholder is unavailable, a deputy or delegate is identified and notified.`,
-    ],
-  ];
+  function s(num: string, name: string, obj: string, role: string, inputs: string, reqSys: string, docs: string, actions: string, decisions: string, compliance: string, quality: string, output: string, evidence: string, errors: string, escalation: string): string[] {
+    return [num, name, obj, role, inputs, reqSys, docs, actions, decisions, compliance, quality, output, evidence, errors, escalation];
+  }
 
-  const enterpriseSteps: ((n: number) => string[])[] = [
-    (n) => [
-      `Step ${n}: Periodic Progress Monitoring and Control Adjustment`,
-      `Objective: Monitor the execution progress of the ${title} procedure against the planned timeline, adjust resource allocation if required, and document any material variances for management review.`,
-      `The department lead or supervisor reviews the execution progress report generated by ${primarySys}. Actual progress is compared against the planned timeline for each completed step. Any step that has exceeded its allocated duration or is approaching its deadline is flagged for attention. Where the ${industry} sector imposes specific timing requirements for operational procedures, compliance with those timing requirements is verified. The supervisor adjusts resource allocation if required to bring the procedure back on track, documenting the adjustment and its rationale. Material variances, defined as any step exceeding 120 percent of its allocated time, are escalated to the department head with a variance explanation and corrective action plan. The progress monitoring record is added to the procedure file. For enterprises operating at scale, this monitoring step is supported by automated dashboard reporting in ${primarySys}, but the supervisor's independent assessment and sign-off remain mandatory before the procedure proceeds to the next phase.`,
-      `Responsible Person: ${size === "10-50" ? "Supervisor" : "Department Head"}`,
-      `Systems Used: ${primarySys} Reporting Module, ${size === "50+" ? "Enterprise Dashboard, Resource Management System" : "Progress Tracking Tool"}`,
-      "Documents Used: Progress Report, Variance Analysis Template, Resource Adjustment Log",
-      `Control Point: Procedures with variances exceeding the defined threshold must have documented corrective action before proceeding. The department head reviews and approves all variance records.`,
-      `Expected Output: Completed progress monitoring report with variance analysis, resource adjustment records, and escalation documentation for material variances.`,
-      `Exception Handling: If the procedure is running significantly behind schedule, the department head may authorise additional resources or approve a revised timeline. Any timeline revision is documented and communicated to all stakeholders.`,
-    ],
-    (n) => [
-      `Step ${n}: Process Improvement and Optimisation Review`,
-      `Objective: Evaluate the execution of the ${title} procedure to identify opportunities for process improvement, efficiency gains, or control enhancement, and document recommendations for the next review cycle.`,
-      `The operator and supervisor conduct a post-execution review of the ${title} procedure. The review examines the procedure's efficiency, effectiveness, and control performance based on the data captured during execution. Particular attention is given to steps that experienced delays, generated exceptions, required rework, or produced unexpected outcomes. The reviewer identifies whether these issues resulted from procedure design, system limitations, operator training gaps, or external factors. Recommendations for improvement are documented in the continuous improvement register. Each recommendation is assigned a priority rating based on its potential impact on efficiency, risk reduction, or compliance improvement. For ${industry} sector procedures, improvement recommendations that affect regulatory compliance outcomes are flagged for pre-implementation review by the compliance officer. The improvement review record is added to the procedure file and the recommendations are scheduled for consideration at the next procedure governance review meeting.`,
-      `Responsible Person: ${size === "10-50" ? "Supervisor" : "Process Improvement Specialist"}`,
-      `Systems Used: ${primarySys}, Continuous Improvement Register`,
-      "Documents Used: Procedure Execution Data, Improvement Recommendation Template, Continuous Improvement Register",
-      `Control Point: Every ${title} procedure execution must have a process improvement review completed before closure. The review may conclude that no improvements are required, but the review must still be documented.`,
-      `Expected Output: Completed improvement review record with recommendations, priority ratings, and scheduled review date. All recommendations logged in the continuous improvement register.`,
-      `Exception Handling: If the operator or supervisor identifies a systemic issue that poses an immediate risk to procedure effectiveness or compliance, they escalate it as a high-priority finding. The procedure owner initiates an expedited procedure review within 10 working days.`,
-    ],
-  ];
+  steps.push(s("1",
+    `Receive and Register ${title} Request`,
+    `To capture the incoming work request for ${title}, confirm it is legitimate and complete, and register it in ${primarySys} with a unique tracking reference.`,
+    size === "1-10" ? `${department} Operator` : size === "10-50" ? `${department} Duty Officer` : `${department} Processing Operator`,
+    `${ctx.inputs}. Contact name, contact method, date received.`,
+    `${primarySys}${secondarySys !== primarySys ? `, ${secondarySys}` : ""}`,
+    `${title} Request Form, Customer Record (if existing), Service Agreement or Contract Reference`,
+    `1. Open ${primarySys} and navigate to the work intake module.\n2. Identify the new request — email, phone, portal submission, or internal trigger.\n3. Enter the customer or requestor name, contact details, and company name.\n4. Record the date received, required completion date, and priority level.\n5. Attach any supporting documents received with the request.\n6. Generate a unique reference number and confirm it is visible in the system.\n7. Assign the request to the appropriate team or person based on workflow rules.\n8. Send an acknowledgement to the requestor confirming receipt and reference number.`,
+    `IF the request is outside agreed scope THEN notify supervisor before proceeding. IF the requestor is a new customer THEN create a preliminary record and flag for AML checks.`,
+    `Record lawful basis for processing any personal data. ${size === "10-50" || size === "50+" ? "Conflicts check must be completed before acceptance." : ""}`,
+    "Mandatory fields complete. Supporting documents attached. Reference generated. Requestor acknowledged within SLA.",
+    `Registered request with unique reference ${title[0].toUpperCase() + title.slice(1).replace(/[^a-zA-Z0-9]/g, "")}-XXXX in ${primarySys}. Acknowledgement sent.`,
+    `System record in ${primarySys}. Request acknowledgement sent to requestor. Supporting documents stored against reference.`,
+    "Incorrect customer details. Missing supporting documents. Wrong priority. Duplicate reference. Delayed acknowledgement.",
+    "System unavailable — notify IT and use manual log. Request outside scope — escalate to supervisor. Time-sensitive — flag for immediate processing."));
 
-  const enterpriseSteps2: ((n: number) => string[])[] = [
-    (n) => [
-      `Step ${n}: Management Review and Strategic Alignment Confirmation`,
-      `Objective: Conduct a management-level review of the ${title} procedure execution outcome, confirm strategic alignment with organisational objectives, and authorise any changes to the procedure framework arising from lessons learned.`,
-      `The department head or executive sponsor reviews the complete procedure record, including the execution summary, performance metrics, exception reconciliation, quality verification, compliance confirmation, and improvement recommendations. The review confirms that the procedure output supports the organisation's strategic objectives for the ${industry} sector and that any regulatory or compliance obligations have been fully discharged. Where the procedure has identified systemic issues or strategic risks, the management review assigns ownership and target dates for resolution. The reviewer signs off on the procedure closure, confirming that all required steps have been completed to an acceptable standard. The management review record is added to the governance section of the procedure file. For enterprises operating under enhanced governance standards, this management review is a mandatory control gate before the procedure record is archived and any lessons learned are incorporated into the next procedure review cycle.`,
-      `Responsible Person: ${size === "50+" ? "Executive Sponsor" : "Department Head"}`,
-      `Systems Used: ${primarySys} Governance Dashboard`,
-      "Documents Used: Complete Procedure Record, Management Review Checklist, Strategic Alignment Matrix",
-      `Control Point: The procedure must not be archived until the management review is completed and signed off. Any strategic risks or systemic issues identified must have assigned owners and target dates.`,
-      `Expected Output: Completed management review record with sign-off, strategic alignment confirmation, and assigned actions for any systemic or strategic findings.`,
-      `Exception Handling: If the management review identifies a material issue that requires further investigation, the reviewer may defer closure and request a supplementary review. The supplementary review is completed within 10 working days.`,
-    ],
-    (n) => [
-      `Step ${n}: Final Archival and Record Retention Confirmation`,
-      `Objective: Complete the archival of the ${title} procedure record, confirm that the correct retention period has been applied, and generate the archival certificate that serves as the permanent record of compliance.`,
-      `The operator confirms that the complete procedure record, including the evidence file, approval records, exception reconciliation, and management review sign-off, has been stored in the document management system. The retention period applicable to the procedure is confirmed against the organisational retention schedule, taking into account the ${getLegislation("UK").retention}. The retention classification is applied in the document management system, and any automated deletion or review triggers are configured. The system generates an archival certificate that confirms the procedure reference, title, execution date, approving authority, evidence file verification hash, retention period, and archival date. The archival certificate is stored in the permanent company record. For ${band} organisations, the archival certificate serves as the definitive evidence of compliance and must be producible within the response time required by any regulatory authority or audit body. The operator confirms that the archived record is accessible only to authorised personnel and that access is logged.`,
-      `Responsible Person: ${size === "1-10" ? "Chief Operator" : "Records Administrator"}`,
-      `Systems Used: ${primarySys} Document Management System, Records Retention Module`,
-      "Documents Used: Retention Schedule, Archival Certificate Template, Records Management Policy",
-      `Control Point: The procedure record must not be deleted or modified after archival. Any post-archival access is logged and requires documented authorisation. The archival certificate is the definitive closure record.`,
-      `Expected Output: Completed archival with retention classification applied, verification hash generated, and archival certificate stored in the permanent company record.`,
-      `Exception Handling: If the document management system cannot apply the required retention classification, the operator notifies the system administrator. The record is held in a controlled holding state with restricted access until the retention classification can be applied correctly. Manual retention tracking is implemented as a temporary measure.`,
-    ],
-  ];
+  steps.push(s("2",
+    `Validate Information and Input Completeness`,
+    `To verify that all required information has been received, is accurate, and is sufficient to process the ${title} request without delays caused by missing data.`,
+    size === "1-10" ? `${department} Operator` : size === "10-50" ? `${department} Processing Officer` : `${department} Vetting Officer`,
+    "Registered request details, supporting documents, customer records, any prior correspondence or reference files.",
+    `${primarySys}${sys.length > 1 ? `, ${sys[1]}` : ""}`,
+    "Validation Checklist, Data Completeness Criteria, Mandatory Fields Register",
+    `1. Open the registered request in ${primarySys}.\n2. Review each mandatory field against the completeness criteria.\n3. Check all supporting documents are present, legible, and correctly formatted.\n4. Verify customer details against existing records where available.\n5. Flag any missing, incomplete, or inconsistent information.\n6. Contact the requestor to obtain missing items — record the request and response deadline.\n7. Update the request record with validation status: Complete, Incomplete, or Awaiting Information.\n8. If complete, mark the request as validated and ready for processing.`,
+    `IF information is incomplete THEN notify requestor with specific list of missing items and set status to Awaiting Information. IF information is inconsistent with existing records THEN flag for review before proceeding.`,
+    `${ctx.compliance}. Ensure no personal data is processed beyond what is necessary for validation.`,
+    "All mandatory fields present and accurate. Supporting documents complete and legible. No data inconsistencies found.",
+    "Validated request record with completeness status. Requestor notified of any missing items.",
+    `Validation record in ${primarySys}. Communication log with requestor (if follow-up required).`,
+    "Missing fields not identified. Inconsistent data not flagged. Supporting documents not checked. Incorrect validation status assigned.",
+    "Requestor unresponsive within 48 hours — escalate to supervisor. Critical information missing — do not proceed without escalation approval."));
 
-  const baseSteps = stepTemplates;
-  const extraSteps = size === "10-50" ? enterpriseSteps : size === "50+" ? [...enterpriseSteps, ...enterpriseSteps2] : [];
+  steps.push(s("3",
+    `Prepare Processing Environment and Resources`,
+    `To set up all systems, templates, reference materials, and resources needed to process the ${title} request before commencing the operational work.`,
+    size === "1-10" ? `${department} Operator` : size === "10-50" ? `${department} Processing Officer` : `${department} Resource Coordinator`,
+    "Validated request record, procedure specification, approved templates, system access credentials.",
+    `${primarySys}${sys.slice(1).map(s => `, ${s}`).join("")}`,
+    `${title} Procedure Specification, Approved Templates, Resource Checklist, ${size === "50+" ? "Work Package Authorisation" : ""}`,
+    `1. Open the validated request record in ${primarySys}.\n2. Access the ${title} procedure specification and identify all required templates and tools.\n3. Open required templates in ${primarySys} or relevant business applications.\n4. Confirm all data fields in the templates match the information received.\n5. Gather any reference materials, pricing guides, regulatory tables, or knowledge base articles needed.\n6. ${size === "10-50" || size === "50+" ? "Check resource availability — confirm personnel, equipment, and third-party services are available." : "Confirm all materials are accessible and ready."}\n7. Prepare a work folder or digital workspace for the processing activities.\n8. Confirm the setup is complete and ready for processing to begin.`,
+    `IF a required template or reference is outdated THEN retrieve the current version from the document management system. IF a required system is unavailable THEN follow the manual fallback procedure.`,
+    `${ctx.compliance}. Use only approved templates. Unauthorised modifications to templates are not permitted.`,
+    "Correct templates selected. Reference materials current. All systems accessible. Workspace configured.",
+    "Ready-to-process work package with all templates, reference materials, and resources assembled and verified.",
+    `Resource checklist completed. Template version numbers recorded. Workspace reference in ${primarySys}.`,
+    "Wrong template selected. Outdated reference materials used. Missing resources not identified. System access not confirmed.",
+    "Required template not available — contact document control. System unavailable — implement manual fallback. Resource shortfall — notify supervisor for reallocation."));
 
-  const allTemplates = [...baseSteps, ...extraSteps];
+  steps.push(s("4",
+    `Execute Primary Processing Actions`,
+    `To perform the core operational work for ${title}, following the defined sequence of actions and capturing results at each stage.`,
+    size === "1-10" ? `${department} Operator` : size === "10-50" ? `${department} Processing Officer` : `${department} Processing Specialist`,
+    "Validated request, prepared templates, reference materials, customer data, processing instructions.",
+    `${primarySys}${sys.length > 1 ? `, ${sys.slice(1).join(", ")}` : ""}`,
+    `${title} Procedure Steps, Processing Work Instructions, ${size === "50+" ? "Segregation of Duties Matrix" : ""}`,
+    `1. Open the work package in ${primarySys}.\n2. Follow the ${title} processing instructions in sequence — do not skip or reorder steps.\n3. Enter or process the first data set — customer details, financial information, case details, or product specifications.\n4. Apply any calculations, validations, or transformations required by the procedure.\n5. ${size === "10-50" || size === "50+" ? "Where dual entry is required, confirm both entries match before proceeding." : "Verify each entry against source documents."}\n6. Complete all primary processing fields and confirm the system accepts the data without errors.\n7. Save the work in progress — do not close the record until all primary processing is complete.\n8. Record the time taken and any observations about the processing activity.`,
+    `IF the system rejects an entry THEN review the error message and correct the data. IF a required approval is needed before proceeding THEN pause and submit for approval. IF the requestor has special instructions THEN note them and follow accordingly.`,
+    `${ctx.compliance}. Record all processing steps in the system audit log. Never bypass mandatory fields or validation rules.`,
+    "All primary processing completed. Data entered matches source documents. No system validation errors. Processing time within target.",
+    `Completed primary processing record with all data entered, validated, and saved in ${primarySys}.`,
+    `Processing log in ${primarySys}. Source documents retained against the reference. Audit trail of all data entries.`,
+    "Data entry errors. Skipped mandatory fields. Processing steps out of sequence. Calculations incorrect. Validation overrides used without authorisation.",
+    "System error during processing — save work and contact IT. Data discrepancy found — stop and investigate. Processing time exceeds SLA — notify supervisor."));
+
+  steps.push(s("5",
+    `Verify Processing Accuracy and Completeness`,
+    `To check that all primary processing actions were completed correctly, no errors were introduced, and the output is ready for the next stage.`,
+    size === "1-10" ? `${department} Operator (self-check)` : size === "10-50" ? `${department} Quality Checker` : `${department} Quality Assurance Officer`,
+    "Completed processing record, source documents, reference materials, quality criteria checklist.",
+    `${primarySys}`,
+    "Quality Verification Checklist, Processing Specification, Source Documents",
+    `1. Open the completed processing record in ${primarySys}.\n2. Compare each data entry against the source documents — check for transcription errors.\n3. ${size === "10-50" || size === "50+" ? "Re-calculate any totals, percentages, or derived values independently." : "Spot-check calculations and data transformations."}\n4. Confirm all mandatory fields are populated and formatted correctly.\n5. Check that any attachments or supporting documents are correctly linked.\n6. ${size === "50+" ? "Verify segregation of duties — the processing operator and checker must be different individuals." : "If errors are found, correct them and note the correction."}\n7. Record the verification outcome as Pass or Fail in the system.\n8. If Pass, mark the record as verified and ready for the next step. If Fail, log the errors and return for correction.`,
+    `IF verification fails THEN return the record to the processing operator with clear error descriptions. IF the same error appears on multiple records THEN flag a systemic issue to the supervisor.`,
+    `${ctx.compliance}. Quality checks must be completed before any output is released. ${size === "50+" ? "Independent verification is mandatory — processing operator cannot verify own work." : ""}`,
+    "All data verified against source. No transcription errors. Mandatory fields complete. Attachments correct.",
+    `Verified processing record with Pass/Fail determination recorded in ${primarySys}. Quality checklist completed.`,
+    "Quality verification record with checker identity and timestamp. Error log (if corrections were needed).",
+    "Verification skipped or rushed. Errors not caught. Self-verification where independent check was required. Corrections not re-verified.",
+    "Failed verification twice on same item — escalate to supervisor. Systemic error pattern — notify quality manager. Dispute on verification outcome — refer to supervisor."));
+
+  steps.push(s("6",
+    `Handle Exceptions, Corrections, and Edge Cases`,
+    `To identify, document, and resolve any exceptions, errors, or non-standard situations that arose during processing, ensuring they are properly recorded and resolved before the work proceeds.`,
+    size === "1-10" ? `${department} Operator` : size === "10-50" ? `${department} Processing Officer` : `${department} Exception Handler`,
+    "Failed verification record, error descriptions, source documents, correction instructions.",
+    `${primarySys}, ${size === "50+" ? "Exception Management System" : ""}`,
+    "Exception Log, Correction Procedure, Error Classification Guide, Escalation Matrix",
+    `1. Review the errors or exceptions identified during verification.\n2. Determine the root cause of each error — data entry, system issue, missing information, or procedural gap.\n3. Correct each error following the correction procedure — do not overwrite original records without an audit trail.\n4. ${size === "10-50" || size === "50+" ? "Document the correction in the exception log with the original value, corrected value, reason, and authorisation." : "Note the correction and the reason in the processing notes."}\n5. If the correction requires re-verification, submit the corrected record for a fresh quality check.\n6. Log any non-standard situations or edge cases in the exception register.\n7. If the exception indicates a procedural gap, recommend a procedure update for the next review cycle.\n8. Confirm all corrections are complete and the record is ready to proceed.`,
+    `IF the correction requires supervisor approval THEN pause and submit for approval before making the change. IF the error was caused by a system issue THEN log with IT support. IF the exception reveals a training gap THEN notify the training coordinator.`,
+    `${ctx.compliance}. All corrections must be auditable — never delete or overwrite records without a documented reason and authorisation.`,
+    "Root cause identified. Correction made with audit trail. Re-verification completed if required. Exception logged.",
+    "Corrected record with full audit trail. Exception log entry with root cause, correction, and authorisation.",
+    `Exception log entry. Correction audit trail in ${primarySys}. Re-verification record (if applicable).`,
+    "Corrections made without audit trail. Root cause not investigated. Same error repeated without escalation. Authorisation bypassed.",
+    "Correction requires system-level access — escalate to IT. Error indicates compliance breach — notify compliance officer. Repeated errors — escalate to department lead."));
+
+  steps.push(s("7",
+    `Complete Secondary and Follow-Up Processing`,
+    `To perform any remaining processing activities, follow-up actions, or downstream steps required to complete the ${title} request, including generating outputs for review.`,
+    size === "1-10" ? `${department} Operator` : size === "10-50" ? `${department} Processing Officer` : `${department} Processing Specialist`,
+    "Verified processing record, exception log, output templates, reference materials.",
+    `${primarySys}${sys.slice(1).map(s => `, ${s}`).join("")}`,
+    `${title} Output Specification, Document Templates, ${size === "50+" ? "Quality Plan" : ""}`,
+    `1. Open the verified and corrected record in ${primarySys}.\n2. Complete any secondary processing steps — additional calculations, cross-references, or downstream updates.\n3. Generate the primary output document using the approved template.\n4. Complete all output fields, summary sections, and required statements.\n5. ${size === "10-50" || size === "50+" ? "Attach all supporting documentation, evidence, and reference materials to the output package." : "Attach supporting documents and reference materials."}\n6. Review the completed output for formatting, completeness, and professional presentation.\n7. ${size === "50+" ? "Apply document classification and retention labelling as per the information governance policy." : "Save the output with the correct file naming convention."}\n8. Mark the record as Output Complete and ready for quality review.`,
+    `IF the output requires specialist review (legal, technical, compliance) THEN flag for specialist review before proceeding. IF the output needs regulatory formatting THEN confirm compliance with regulatory standards.`,
+    `${ctx.compliance}. Outputs must be complete, accurate, and formatted correctly before submission for quality review.`,
+    "Secondary processing complete. Output document generated correctly. All supporting materials attached. Formatting checked.",
+    "Completed output package ready for quality review, with all supporting documentation compiled and saved.",
+    "Output document. Supporting evidence file. Document classification and retention label applied.",
+    "Incomplete output. Missing supporting documents. Wrong template used. Formatting errors. Incorrect retention label.",
+    "Output rejected by system validation — correct and resubmit. Specialist review identifies issues — address before quality review. Output deadline missed — escalate."));
+
+  steps.push(s("8",
+    `Conduct Quality Review and Approval`,
+    `To perform a final quality review of the completed output package, confirm it meets the required standards, and obtain formal approval for release.`,
+    size === "1-10" ? `${department} Lead / Senior Operator` : size === "10-50" ? `${department} Quality Reviewer` : `${department} Quality Assurance Manager`,
+    "Completed output package, source documents, quality criteria, approval authority matrix.",
+    `${primarySys} Approval Workflow Module`,
+    `Quality Review Checklist, Approval Authority Matrix, ${title} Output Specification`,
+    `1. Open the completed output package in ${primarySys}.\n2. Review the output against the quality criteria — accuracy, completeness, formatting, compliance.\n3. ${size === "10-50" || size === "50+" ? "Conduct an independent review — do not review work you personally processed." : "Review with a fresh perspective — check for any errors or omissions."}\n4. Verify all supporting evidence is present and correctly referenced.\n5. ${size === "50+" ? "Confirm segregation of duties — reviewer must be independent of the processing operator." : ""}\n6. Record the review outcome — Approve, Approve with Conditions, or Reject.\n7. If approved, submit the output through the formal approval workflow in ${primarySys}.\n8. If rejected, return to the processing operator with clear reasons and required corrections.`,
+    `IF the output does not meet quality standards THEN reject with specific reasons and return for correction. IF conditions are attached to approval THEN record them and confirm before release. IF the approver is unavailable THEN follow the deputy approval process.`,
+    `${ctx.compliance}. No output may be released without formal quality review and approval. ${size === "10-50" || size === "50+" ? "Independent review is mandatory." : ""}`,
+    "Quality criteria met. Supporting evidence complete. Approval obtained from authorised person. Conditions addressed.",
+    "Approved output package with quality review record, approval chain, and authorisation timestamp.",
+    "Quality review checklist completed. Approval record with approver identity, date, and conditions. Output package marked as Approved.",
+    "Review not conducted. Approval obtained from unauthorised person. Conditions not addressed. Evidence not checked.",
+    "Review identifies compliance issue — notify compliance officer. Approver unavailable — follow deputy process. Output rejected twice — escalate to department head."));
+
+  steps.push(s("9",
+    `Deliver Completed Outputs and Confirm Receipt`,
+    `To deliver the completed ${title} output to the customer or requestor, confirm receipt, and provide any necessary instructions or context for using the output.`,
+    size === "1-10" ? `${department} Operator` : size === "10-50" ? `${department} Processing Officer` : `${department} Client Delivery Coordinator`,
+    "Approved output package, delivery instructions, customer contact details, distribution list.",
+    `${primarySys}, Email System, ${size === "50+" ? "Client Portal" : ""}`,
+    "Delivery Checklist, Customer Contact Record, Distribution Confirmation Log",
+    `1. Open the approved output package in ${primarySys}.\n2. ${size === "10-50" || size === "50+" ? "Prepare the delivery message with output summary, actions required, and contact for questions." : "Prepare a delivery email or notification with the output summary."}\n3. Send the output to the customer or requestor through the agreed channel (email, portal, hard copy).\n4. Confirm the delivery was successful and the customer has received the output.\n5. ${size === "50+" ? "For regulated outputs, request written acknowledgement of receipt and understanding." : "Request acknowledgement of receipt."}\n6. Log the delivery date, time, and method in ${primarySys}.\n7. If the customer has follow-up questions, answer them or assign to the appropriate person.\n8. Mark the delivery as Complete in the system.`,
+    `IF the customer does not acknowledge receipt within the expected timeframe THEN follow up by phone or alternative channel. IF the customer rejects the output THEN investigate the reason and escalate if necessary.`,
+    `${ctx.compliance}. Output delivery must comply with any regulatory deadlines or service level agreements. ${size === "50+" ? "Written acknowledgement required for regulated outputs." : ""}`,
+    "Output delivered through agreed channel. Customer acknowledged receipt. Delivery logged in system.",
+    `Completed delivery with customer acknowledgement and delivery confirmation recorded in ${primarySys}.`,
+    `Delivery confirmation. Customer acknowledgement. Delivery record in ${primarySys}. Distribution log completed.`,
+    "Wrong customer contacted. Output sent to wrong address. Delivery not confirmed. Acknowledgement not obtained. SLA missed.",
+    "Customer rejects output — investigate and escalate to supervisor. Customer unreachable — document attempts and escalate. Regulatory delivery deadline at risk — escalate immediately."));
+
+  steps.push(s("10",
+    `Update Records, Close Out, and Notify Stakeholders`,
+    `To finalise all system records, close the work request, notify relevant stakeholders of completion, and ensure the record is ready for archival.`,
+    size === "1-10" ? `${department} Operator` : size === "10-50" ? `${department} Processing Officer` : `${department} Records Coordinator`,
+    "Completed work record, delivery confirmation, stakeholder list, close-out checklist.",
+    `${primarySys}, ${size === "50+" ? "Governance Dashboard, Stakeholder Notification System" : "Communication Tools"}`,
+    `Close-Out Checklist, Stakeholder Notification Template, ${size === "50+" ? "Governance Close-Out Report" : ""}`,
+    `1. Open the completed work record in ${primarySys}.\n2. Update the record status to Completed — add the completion date, time, and final notes.\n3. ${size === "10-50" || size === "50+" ? "Notify internal stakeholders — supervisor, downstream teams, and any other parties who need to know the work is complete." : "Notify any stakeholders who need to know the work is complete."}\n4. ${size === "50+" ? "Generate the close-out summary report including processing time, exceptions handled, and quality outcome." : ""}\n5. Complete the close-out checklist and confirm all actions are done.\n6. Ensure the record has no open actions, pending approvals, or unresolved exceptions.\n7. Lock the record against further editing (if the system supports it) or mark as Final.\n8. Confirm the record is ready for the archival step.`,
+    `IF there are open actions or unresolved exceptions THEN do not close the record until they are resolved. IF the customer has outstanding queries THEN ensure they are assigned before closing.`,
+    `${ctx.compliance}. Records must be complete, accurate, and locked before archival. Open actions must not remain on completed records.`,
+    "All actions complete. No open items. Stakeholders notified. Record status set to Completed.",
+    "Completed and locked work record with all actions finalised, stakeholders notified, and close-out checklist signed off.",
+    `Close-out checklist. Stakeholder notifications. Completion record in ${primarySys}. Close-out summary (if applicable).`,
+    "Record closed with open actions. Stakeholders not notified. Close-out checklist incomplete. Record not locked.",
+    "Open actions cannot be resolved before deadline — escalate to supervisor. Stakeholder disputes completion — investigate. Record integrity concern — notify compliance."));
+
+  steps.push(s("11",
+    `Compile Evidence File and Verify Completeness`,
+    `To assemble all records, documents, and evidence generated during the ${title} process into a structured evidence file that demonstrates complete and compliant execution.`,
+    size === "1-10" ? `${department} Operator` : size === "10-50" ? `${department} Quality Reviewer` : `${department} Records Administrator`,
+    "Work record, processing log, communications, approvals, delivery confirmation, quality records.",
+    `${primarySys} Document Management System`,
+    `Evidence File Index, ${size === "50+" ? "Evidence Quality Criteria, Retention Schedule" : "Retention Schedule"}`,
+    `1. Open the completed work record in ${primarySys} and navigate to the evidence management section.\n2. Collect all records generated during the process — initiation, validation, processing, verification, corrections, approvals, delivery, and close-out.\n3. ${size === "10-50" || size === "50+" ? "Check each document for readability, completeness, and correct file naming." : "Check documents are present and legible."}\n4. Organise the evidence in a logical structure indexed against the procedure steps.\n5. ${size === "50+" ? "Generate a verification checksum or hash for the evidence file to detect unauthorised modification." : ""}\n6. Apply the correct retention classification based on the ${company} retention schedule.\n7. Confirm the evidence file is complete — no step is missing supporting evidence.\n8. Save the evidence file in the document management system.`,
+    `IF evidence is missing for a step THEN document the gap and the reason. IF the evidence file contains errors THEN correct before finalising.`,
+    `${ctx.compliance}. ${getLegislation("UK").dataProtection} — personal data in evidence must be retained no longer than necessary. Evidence must be stored in unalterable format.`,
+    "Evidence complete for all steps. Documents legible and correctly named. Retention classification applied.",
+    "Complete indexed evidence file with verification hash (if applicable) stored in document management system with correct retention.",
+    "Evidence file index. Document management system record. Verification hash/certificate. Retention classification applied.",
+    "Missing evidence not identified. Incorrect retention classification. Documents not indexed. Evidence file incomplete.",
+    "Critical evidence cannot be located — escalate to IT for recovery. Retention classification unclear — consult compliance officer. File integrity concern — escalate."));
+
+  steps.push(s("12",
+    `Archive Records per Retention Policy`,
+    `To formally archive the completed ${title} record with the correct retention period, confirm the archival is compliant with policy, and generate the archival certificate.`,
+    size === "1-10" ? `${department} Operator` : size === "10-50" ? `${department} Records Officer` : `${department} Records Manager`,
+    "Completed work record, evidence file, archival checklist, retention schedule.",
+    `${primarySys} Document Management System, Records Management Module`,
+    `Archival Checklist, Retention Schedule, ${size === "50+" ? "Archival Certificate Template" : ""}`,
+    `1. Confirm the record is complete and locked — no further edits are expected.\n2. ${size === "10-50" || size === "50+" ? "Apply the retention classification from the retention schedule — confirm the retention period and trigger date." : "Apply the retention classification."}\n3. Configure any automated deletion or review triggers in the document management system.\n4. ${size === "50+" ? "Generate the archival certificate with reference, title, dates, classification, and evidence hash." : "Create the archival record in the document management system."}\n5. Save the archival certificate or record in the permanent company archive.\n6. Confirm the archived record is accessible only to authorised personnel with logged access.\n7. ${size === "50+" ? "Notify the records manager that the archival is complete." : ""}\n8. Update the master records register with the archival status and location.`,
+    `IF the retention classification is unclear THEN consult the compliance officer or retention schedule owner. IF the system cannot apply the retention trigger THEN set a manual review date and escalate to IT.`,
+    `${ctx.compliance}. ${getLegislation("UK").retention}. Archived records must not be modified or deleted outside the disposal process.`,
+    "Retention classification applied. Archive confirmed in system. Access controls verified. Certificate generated (if applicable).",
+    "Archived record with correct retention classification, access controls, and archival certificate in permanent company archive.",
+    "Archival certificate. Master records register update. Retention classification applied. Deletion/review triggers configured.",
+    "Wrong retention period applied. Record not locked before archival. Access controls not configured. Archival not logged.",
+    "System cannot apply retention — escalate to IT. Retention period expired but legal hold may apply — consult compliance officer. Archival failed — escalate."));
+
+  steps.push(s("13",
+    `Confirm Completion with Customer and Obtain Feedback`,
+    `To formally close the ${title} engagement with the customer, confirm their satisfaction, obtain feedback, and identify any follow-up actions or improvement opportunities.`,
+    size === "1-10" ? `${department} Lead / Owner` : size === "10-50" ? `${department} Account Manager` : `${department} Client Relationship Manager`,
+    "Completed output, delivery confirmation, customer contact details, feedback form.",
+    `${primarySys}, ${size === "50+" ? "Customer Relationship Management System, Survey Platform" : "Email / Communication Tools"}`,
+    `Completion Confirmation Template, Feedback Form, ${size === "50+" ? "Customer Satisfaction Survey" : ""}`,
+    `1. Contact the customer to confirm they have received and are satisfied with the completed ${title} output.\n2. ${size === "10-50" || size === "50+" ? "Ask if they need any clarification, additional work, or further support." : "Ask if they have any questions or need further support."}\n3. Request formal confirmation of completion — email acknowledgement, signed completion certificate, or portal confirmation.\n4. Record the completion confirmation in ${primarySys}.\n5. ${size === "50+" ? "Send a customer satisfaction survey or feedback request." : "Ask for informal feedback on the process."}\n6. Record any feedback received — positive or negative — against the work record.\n7. If the customer identifies issues, log them for resolution and assign to the appropriate person.\n8. Mark the overall engagement as Closed in ${primarySys}.`,
+    `IF the customer is not satisfied THEN investigate the issue, resolve or escalate, and do not close until resolved. IF the customer requests additional work THEN create a new work request rather than extending the current one.`,
+    `${ctx.compliance}. Customer completion confirmation should be retained as evidence of service delivery and contractual fulfilment.`,
+    "Customer confirms satisfaction. Completion confirmation obtained. Feedback recorded. Follow-up actions assigned if needed.",
+    "Confirmed completion with customer satisfaction confirmation and feedback recorded against closed work record.",
+    `Customer completion confirmation (email, certificate, portal record). Feedback record. Closed work record in ${primarySys}.`,
+    "Completion not formally confirmed. Customer dissatisfaction not addressed. Feedback not recorded. Follow-up actions not assigned.",
+    "Customer disputes completion — escalate to account manager. Serious dissatisfaction — escalate to department head. Complaint received — follow complaint procedure."));
+
+  const extraSteps: string[][] = [];
+
+  if (size === "10-50" || size === "50+") {
+    extraSteps.push(s("14",
+      `Supervisor Review and Independent Quality Verification`,
+      `To conduct an independent supervisory review of the completed work, verify quality standards were met, and authorise the final closure of the record.`,
+      `${department} Supervisor / Team Lead`,
+      "Completed work record, quality checklist, exception log, evidence file, close-out report.",
+      `${primarySys}, Quality Management System`,
+      `Supervisory Review Checklist, ${size === "50+" ? "Performance Metrics Report" : ""}, Team Performance Log`,
+      `1. Review the complete work record — processing, quality checks, exceptions, approvals, delivery, and closure.\n2. Verify that quality standards were met at every stage — spot-check records where necessary.\n3. ${size === "50+" ? "Review the exception log — confirm all exceptions were properly resolved or escalated." : ""}\n4. Confirm segregation of duties was maintained (processing operator ≠ checker ≠ approver).\n5. Assess the overall quality and timeliness of the completed work.\n6. Record the supervisory review outcome — Approved, Minor Observations, or Requires Improvement.\n7. If observations are raised, agree corrective actions with the team member and set review dates.\n8. If approved, authorise the final closure of the record and submit for archival.`,
+      `IF the review identifies quality concerns THEN return for correction with specific observations. IF a team member requires additional training THEN notify the training coordinator.`,
+      `${ctx.compliance}. Supervisory review confirms compliance with procedure, regulatory requirements, and quality standards.`,
+      "Work record reviewed. Quality standards met. Exceptions resolved. Observations addressed. Closure authorised.",
+      "Completed supervisory review with approval, observations (if any), and closure authorisation.",
+      "Supervisory review record. Quality spot-check records. Observation log with corrective actions.",
+      "Review not conducted. Quality issues missed. Observations not documented. Closure authorised without full review.",
+      "Systemic quality issues identified — escalate to department head. Team member performance concern — escalate to HR. Compliance concern — notify compliance officer."));
+  }
+
+  if (size === "50+") {
+    extraSteps.push(s("15",
+      `Compliance Confirmation and Regulatory Alignment Check`,
+      `To conduct a final compliance review of the completed work, confirm alignment with all applicable legal and regulatory requirements, and sign off the compliance record.`,
+      `Compliance Officer / ${department} Compliance Reviewer`,
+      "Completed work record, compliance checklist, regulatory obligation register, evidence file.",
+      `${primarySys}${sys.length > 1 ? `, ${sys[1]} Compliance Module` : ""}`,
+      `Compliance Obligation Register, ${getLegislation("UK").dataProtection} Requirements, ${ctx.compliance} Checklist`,
+      `1. Review the complete work record against the compliance obligation register.\n2. Confirm data protection compliance — lawful basis recorded, data minimised, subject rights considered.\n3. Verify regulatory filings or notifications were made (if applicable to the ${industry} sector).\n4. Check that the evidence file contains all required compliance documentation.\n5. Confirm the retention classification matches regulatory requirements.\n6. Record any compliance observations or recommendations for future processes.\n7. Sign off the compliance record — or flag non-compliance for escalation.\n8. Update the compliance monitoring dashboard with the review outcome.`,
+      `IF a compliance gap is identified THEN assess materiality and escalate to compliance manager. IF a regulatory filing was missed THEN notify the responsible authority within the permitted timeframe and document the corrective action.`,
+      `${ctx.compliance}. ${getLegislation("UK").retention}. Non-compliance must be escalated immediately to the compliance manager and relevant stakeholders.`,
+      "Compliance obligations met. Data protection confirmed. Regulatory alignment verified. Evidence complete.",
+      "Signed compliance confirmation record with alignment verified against all applicable legal and regulatory obligations.",
+      "Compliance checklist completed. Compliance sign-off record. Regulatory alignment confirmation. Evidence of regulatory filings (if applicable).",
+      "Compliance check not performed. Regulatory obligation missed. Data protection non-compliance not identified. Sign-off given without verification.",
+      "Material non-compliance identified — escalate to compliance manager and legal. Regulatory breach — notify relevant authority. Evidence of non-compliance — preserve and escalate."));
+
+    extraSteps.push(s("16",
+      `Management Review and Strategic Alignment Confirmation`,
+      `To present the completed work to management for review, confirm alignment with strategic objectives, and authorise any broader improvements arising from lessons learned.`,
+      `${department} Head / Executive Sponsor`,
+      "Completed work summary, performance metrics, exception analysis, compliance record, team feedback.",
+      `${primarySys} Governance Dashboard, ${size === "50+" ? "Executive Reporting System" : ""}`,
+      `Management Review Checklist, ${company} Strategic Objectives Document, Performance Dashboard`,
+      `1. Review the work completion summary — scope, quality, timeliness, exceptions, and compliance outcome.\n2. Compare performance against KPIs — completion rate, SLA compliance, first-pass quality, exception rate.\n3. Assess whether the work aligns with ${company}'s strategic and operational objectives.\n4. Review the exception analysis — identify patterns, root causes, and systemic issues.\n5. Consider improvement recommendations from the team and feedback from the customer.\n6. Approve the work as strategically aligned or identify areas requiring corrective action.\n7. Assign any strategic actions or improvement initiatives to responsible owners with target dates.\n8. Sign off the management review record.`,
+      `IF strategic misalignment is identified THEN document the gap and assign corrective actions. IF systemic issues are found THEN initiate a process improvement review.`,
+      `${ctx.compliance}. Management review confirms the work supports the organisation's strategic objectives and governance framework.`,
+      "Strategic alignment confirmed. KPIs reviewed. Exceptions analysed. Improvement actions assigned (if any).",
+      "Completed management review with strategic alignment confirmation, KPI assessment, and improvement actions.",
+      "Management review record. Signed management review checklist. Improvement action register update.",
+      "Review not conducted. Strategic misalignment not identified. Improvement opportunities missed. Actions assigned without follow-up.",
+      "Significant strategic misalignment — escalate to board or executive committee. Critical systemic risk identified — initiate immediate review. Customer complaint at executive level — escalate."));
+  }
+
+  const allSteps = [...steps, ...extraSteps];
   const stepCount = getStepCount(size);
 
-  for (let i = 0; i < Math.min(stepCount, allTemplates.length); i++) {
-    steps.push(allTemplates[i](i + 1));
+  while (allSteps.length < stepCount) {
+    const n = allSteps.length + 1;
+    allSteps.push(s(String(n),
+      `${title} — Supplementary Processing Step ${n}`,
+      `To complete any remaining processing activities required for the ${title} request, ensuring nothing is omitted before closure.`,
+      size === "1-10" ? `${department} Operator` : size === "10-50" ? `${department} Processing Officer` : `${department} Processing Specialist`,
+      "Work record, reference materials, processing instructions, completion checklist.",
+      `${primarySys}`,
+      `${title} Supplementary Work Instructions`,
+      `1. Open the work record in ${primarySys}.\n2. Review the completion checklist to identify any remaining actions.\n3. Complete each remaining action in sequence.\n4. Verify each action produces the expected output.\n5. Update the record with the completed actions.\n6. Confirm no actions remain outstanding.\n7. Save the updated record.\n8. Proceed to the close-out step.`,
+      "IF any action cannot be completed THEN document the reason and escalate to supervisor.",
+      `${ctx.compliance}. All actions must be completed and documented before closure.`,
+      "All supplementary actions completed. Record updated. No outstanding items.",
+      "Completed supplementary processing with all actions finalised and recorded.",
+      "Supplementary processing log. Updated work record. Completion checklist signed off.",
+      "Supplementary steps skipped. Actions not documented. Record not updated.",
+      "Remaining actions cannot be completed — escalate to supervisor for decision."));
   }
 
-  while (steps.length < stepCount) {
-    const n = steps.length + 1;
-    const baseIdx = n % baseSteps.length;
-    const template = baseSteps[baseIdx];
-    steps.push(template(n));
-  }
-
-  return steps;
+  return allSteps;
 }
 
 function generateSection(sectionNumber: string, heading: string, content: string[]): SOPSection {
@@ -634,16 +723,17 @@ export function generateSOPDocument(
   ]));
 
   sections.push(generateSection("03", "Executive Summary", [
-    `This Standard Operating Procedure defines the mandatory protocol for "${title}" at ${company}. It establishes a ${stepCount}-step controlled execution framework designed to deliver consistent, auditable, and compliant outcomes across all operational contexts.`,
-    `The procedure operates within the ${industry} sector under ${jurisdiction} jurisdiction and is classified as ${sopType || "Operational"}. It applies to all personnel engaged in the execution, supervision, quality assurance, and governance of the activities it describes.`,
+    `This Standard Operating Procedure has been prepared by a Principal Operations Consultant for ${company}. It defines the mandatory protocol for "${title}" and establishes a ${stepCount}-step execution framework designed to be implementation-ready, audit-ready, and commercially valuable.`,
+    `The procedure operates within the ${industry} sector under ${jurisdiction} jurisdiction and is classified as ${sopType || "Operational"}. It applies to all personnel engaged in executing, supervising, quality assuring, and governing the activities it describes.`,
+    `This document answers four questions: how the work is actually performed, how quality is maintained, how compliance is demonstrated, and how evidence is retained. A new employee with no prior knowledge should be able to complete the task safely, consistently, accurately, and compliantly using only this document.`,
     `Adherence to this procedure is mandatory. Non-compliance exposes ${company} to regulatory sanction, operational failure, audit qualification, and legal liability. All exceptions must be documented, justified, and escalated through the defined governance channels.`,
-    `This document has been prepared to the standard expected by regulatory authorities, external auditors, and professional consultancy practice. It is designed to be implemented immediately, used by operational staff, reviewed by consultants, and stored as permanent company documentation.`,
+    `This document has been prepared to the standard expected by regulatory authorities, external auditors, and professional consultancy practice. It is designed to be handed directly to a paying client and implemented immediately without significant editing.`,
   ]));
 
   sections.push(generateSection("04", "Purpose", [
-    `The purpose of this Standard Operating Procedure is to establish a definitive, repeatable, and auditable methodology for executing "${title}" across all operational areas of ${company}. It serves as the single source of truth for how this activity must be conducted, supervised, recorded, and governed.`,
-    `This procedure is designed to achieve five primary objectives: first, to standardise execution so that every instance of "${title}" produces consistent outcomes regardless of which operator performs the work. Second, to embed regulatory and legislative compliance into every step of the workflow, eliminating reliance on individual knowledge or discretion. Third, to create a complete and defensible audit trail that demonstrates compliance with applicable legal, regulatory, and industry standards. Fourth, to define clear accountability boundaries through assigned roles, responsibilities, and authority levels. Fifth, to establish a framework for continuous improvement through documented performance measurement, exception analysis, and periodic review.`,
-    `This procedure does not replace professional judgement where it is required, but it mandates that any exercise of judgement be documented with the rationale, the factors considered, and the authority under which the judgement was exercised.`,
+    `This Standard Operating Procedure serves as the single source of truth for how "${title}" must be conducted, supervised, recorded, and governed at ${company}. It is designed to be handed to a new employee who has no prior knowledge of this process and enable them to complete the work correctly.`,
+    `The procedure achieves four objectives. First, it explains how the work is actually performed — the specific actions, systems, and decisions required at each step. Second, it embeds quality checks into every operational activity so errors are caught before they reach the customer. Third, it integrates compliance requirements directly into the workflow rather than treating them as a separate review step. Fourth, it specifies the evidence that must be retained at each stage to demonstrate complete and compliant execution.`,
+    `Every paragraph in this document provides practical implementation value. Generic filler has been removed. Each procedure step has been written as if by a senior operations consultant who has personally performed this work and is explaining it to a new team member.`,
   ]));
 
   sections.push(generateSection("05", "Scope", [
@@ -788,9 +878,8 @@ export function generateSOPDocument(
 
   sections.push(generateSection("15", "Procedure", [
     `This section contains the complete ${stepCount}-step execution procedure for "${title}". Each step must be executed in sequence. No step may be skipped, reordered, or omitted without documented authorisation from the responsible approver as defined in the authority matrix.`,
-    ...generateProcedureSteps(title, company, systems, industry, sopType, resolvedSize, sopType).map((step, idx) => {
-      const fields = ["Step Number", "Step Name", "Objective", "Detailed Instructions", "Responsible Person", "Systems Used", "Documents Used", "Control Point", "Expected Output", "Exception Handling"];
-      return `<PROCEDURE_STEP>${fields.map((f, fi) => `[${f}] ${step[fi] || ""}`).join("\n")}</PROCEDURE_STEP>`;
+    ...generateProcedureSteps(title, company, systems, industry, sopType, resolvedSize, sopType).map((step) => {
+      return `<PROCEDURE_STEP>${STEP_FIELDS.map((f, fi) => `[${f}] ${step[fi] || ""}`).join("\n")}</PROCEDURE_STEP>`;
     }),
     `Upon completion of all ${stepCount} steps, the operator confirms that the procedure execution is complete and submits the procedure record for quality verification and approval per the defined workflow.`,
   ]));
