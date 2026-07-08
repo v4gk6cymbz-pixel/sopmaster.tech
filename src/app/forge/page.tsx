@@ -38,6 +38,8 @@ export default function ForgePage() {
   const [softwareInput, setSoftwareInput] = useState("");
   const [departments, setDepartments] = useState("");
   const [services, setServices] = useState("");
+  const [showAdvancedCompany, setShowAdvancedCompany] = useState(false);
+  const [showAdvancedProcess, setShowAdvancedProcess] = useState(false);
   const [processName, setProcessName] = useState("");
   const [processPurpose, setProcessPurpose] = useState("");
   const [processGoal, setProcessGoal] = useState("");
@@ -161,26 +163,35 @@ export default function ForgePage() {
           <div>
             <div className="glass" style={{ padding: "28px", marginBottom: "24px" }}>
               <div className="card-header" style={{ marginBottom: "16px" }}>Company Intelligence</div>
-              <p style={{ fontSize: "13px", color: "var(--text-tertiary)", marginTop: "-8px", marginBottom: "20px" }}>Define your organisation profile. This data drives every phase of the engineering engine.</p>
+              <p style={{ fontSize: "13px", color: "var(--text-tertiary)", marginTop: "-8px", marginBottom: "20px" }}>Tell us about your company. Just the essentials to get started.</p>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
-                <div><label>Company Name</label><input type="text" value={compName} onChange={(e) => setCompName(e.target.value)} placeholder="Your company name" /></div>
+                <div><label>Company Name *</label><input type="text" value={compName} onChange={(e) => setCompName(e.target.value)} placeholder="Your company name" /></div>
                 <div><label>Industry</label><select value={industry} onChange={(e) => setIndustry(e.target.value as Industry)}>{["ProfessionalServices","Finance","Healthcare","SaaS","Construction","Accountancy","E-Commerce","Manufacturing","Logistics","Education","Hospitality","RealEstate"].map(i => <option key={i} value={i}>{i.replace(/([A-Z])/g, " $1").trim()}</option>)}</select></div>
                 <div><label>Jurisdiction</label><select value={jurisdiction} onChange={(e) => { setJurisdiction(e.target.value); setCompanyJurisdiction(e.target.value); }}>{Object.entries(JURISDICTION_REGULATORY).map(([key, val]) => <option key={key} value={key}>{val.name}</option>)}</select></div>
-                <div><label>Employees</label><input type="number" value={headcount} onChange={(e) => setHeadcount(e.target.value)} placeholder="Number of employees" /></div>
-                <div><label>Growth Stage</label><select value={growthStage} onChange={(e) => setGrowthStage(e.target.value)}>{GROWTH_STAGES.map(g => <option key={g} value={g}>{g}</option>)}</select></div>
-                <div><label>Business Model</label><select value={businessModel} onChange={(e) => setBusinessModel(e.target.value)}>{BUSINESS_MODELS.map(m => <option key={m} value={m}>{m}</option>)}</select></div>
-                <div><label>Risk Level</label><select value={riskLevel} onChange={(e) => setRiskLevel(e.target.value)}>{RISK_LEVELS.map(r => <option key={r} value={r}>{r}</option>)}</select></div>
-                <div><label>Brand Tone</label><input type="text" value={brandTone} onChange={(e) => setBrandTone(e.target.value)} placeholder="e.g., Professional, Technical" /></div>
+                <div><label>Company Size *</label><input type="number" value={headcount} onChange={(e) => setHeadcount(e.target.value)} placeholder="Number of employees" /></div>
               </div>
-              <div style={{ marginTop: "14px" }}><label>Compliance Requirements</label><input type="text" value={complianceReqs} onChange={(e) => setComplianceReqs(e.target.value)} placeholder="e.g., ISO 9001, GDPR, FCA" /></div>
-              <div style={{ marginTop: "14px" }}><label>Products / Services</label><textarea value={services} onChange={(e) => setServices(e.target.value)} placeholder="List your key products and services" rows={2} /></div>
-              <div style={{ marginTop: "14px" }}><label>Departments</label><input type="text" value={departments} onChange={(e) => setDepartments(e.target.value)} placeholder="e.g., Sales, Operations, Finance, HR" /></div>
-              <div style={{ marginTop: "14px" }}>
-                <label>Software Stack</label>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "4px", marginBottom: "8px" }}>{softwareStack.map((s) => (<span key={s} className="tag tag-blue" style={{ cursor: "pointer" }} onClick={() => removeSoftware(s)}>{s} &times;</span>))}</div>
-                <input type="text" value={softwareInput} onChange={(e) => setSoftwareInput(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") { addSoftware(softwareInput); setSoftwareInput(""); } }} placeholder="Type system name and press Enter" />
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "4px", marginTop: "8px" }}>{SYSTEMS_PRESETS.filter(s => !softwareStack.includes(s)).map((s) => (<button key={s} onClick={() => addSoftware(s)} className="tag" style={{ cursor: "pointer", background: "transparent" }}>+ {s}</button>))}</div>
-              </div>
+              <button onClick={() => setShowAdvancedCompany(!showAdvancedCompany)} className="btn-ghost" style={{ fontSize: "12px", marginTop: "16px", padding: "6px 12px", color: "var(--text-tertiary)", cursor: "pointer", background: "none", border: "1px solid var(--glass-border)", borderRadius: "6px", fontFamily: "inherit" }}>
+                {showAdvancedCompany ? "− Hide advanced fields" : "+ Add company details (optional)"}
+              </button>
+              {showAdvancedCompany && (
+                <div className="fade-in" style={{ marginTop: "16px", paddingTop: "16px", borderTop: "1px solid var(--glass-border)" }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
+                    <div><label>Growth Stage</label><select value={growthStage} onChange={(e) => setGrowthStage(e.target.value)}>{GROWTH_STAGES.map(g => <option key={g} value={g}>{g}</option>)}</select></div>
+                    <div><label>Business Model</label><select value={businessModel} onChange={(e) => setBusinessModel(e.target.value)}>{BUSINESS_MODELS.map(m => <option key={m} value={m}>{m}</option>)}</select></div>
+                    <div><label>Risk Level</label><select value={riskLevel} onChange={(e) => setRiskLevel(e.target.value)}>{RISK_LEVELS.map(r => <option key={r} value={r}>{r}</option>)}</select></div>
+                    <div><label>Brand Tone</label><input type="text" value={brandTone} onChange={(e) => setBrandTone(e.target.value)} placeholder="e.g., Professional, Technical" /></div>
+                  </div>
+                  <div style={{ marginTop: "14px" }}><label>Compliance Requirements</label><input type="text" value={complianceReqs} onChange={(e) => setComplianceReqs(e.target.value)} placeholder="e.g., ISO 9001, GDPR, FCA" /></div>
+                  <div style={{ marginTop: "14px" }}><label>Products / Services</label><textarea value={services} onChange={(e) => setServices(e.target.value)} placeholder="List your key products and services" rows={2} /></div>
+                  <div style={{ marginTop: "14px" }}><label>Departments</label><input type="text" value={departments} onChange={(e) => setDepartments(e.target.value)} placeholder="e.g., Sales, Operations, Finance, HR" /></div>
+                  <div style={{ marginTop: "14px" }}>
+                    <label>Software Stack</label>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: "4px", marginBottom: "8px" }}>{softwareStack.map((s) => (<span key={s} className="tag tag-blue" style={{ cursor: "pointer" }} onClick={() => removeSoftware(s)}>{s} &times;</span>))}</div>
+                    <input type="text" value={softwareInput} onChange={(e) => setSoftwareInput(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") { addSoftware(softwareInput); setSoftwareInput(""); } }} placeholder="Type system name and press Enter" />
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: "4px", marginTop: "8px" }}>{SYSTEMS_PRESETS.filter(s => !softwareStack.includes(s)).map((s) => (<button key={s} onClick={() => addSoftware(s)} className="tag" style={{ cursor: "pointer", background: "transparent" }}>+ {s}</button>))}</div>
+                  </div>
+                </div>
+              )}
             </div>
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
               {error && <p style={{ fontSize: "12px", color: "var(--danger)", marginRight: "16px", alignSelf: "center" }}>{error}</p>}
@@ -193,19 +204,28 @@ export default function ForgePage() {
           <div>
             <div className="glass" style={{ padding: "28px", marginBottom: "24px" }}>
               <div className="card-header" style={{ marginBottom: "16px" }}>Process Intelligence</div>
-              <p style={{ fontSize: "13px", color: "var(--text-tertiary)", marginTop: "-8px", marginBottom: "20px" }}>Define the process being documented. The engineering engine uses this to build context-aware procedures.</p>
+              <p style={{ fontSize: "13px", color: "var(--text-tertiary)", marginTop: "-8px", marginBottom: "20px" }}>Name the process and who owns it. We&apos;ll handle the rest.</p>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
                 <div><label>Process Name *</label><input type="text" value={processName} onChange={(e) => setProcessName(e.target.value)} placeholder="e.g., Client Onboarding" /></div>
                 <div><label>Process Owner *</label><input type="text" value={processOwner} onChange={(e) => setProcessOwner(e.target.value)} placeholder="e.g., Operations Manager" /></div>
-                <div style={{ gridColumn: "1 / -1" }}><label>Purpose</label><textarea value={processPurpose} onChange={(e) => setProcessPurpose(e.target.value)} placeholder="Why does this process exist?" rows={2} /></div>
-                <div style={{ gridColumn: "1 / -1" }}><label>Business Goal</label><textarea value={processGoal} onChange={(e) => setProcessGoal(e.target.value)} placeholder="What business outcome does this process drive?" rows={2} /></div>
-                <div><label>Department</label><input type="text" value={processDept} onChange={(e) => setProcessDept(e.target.value)} placeholder="e.g., Sales" /></div>
-                <div><label>Trigger</label><input type="text" value={processTrigger} onChange={(e) => setProcessTrigger(e.target.value)} placeholder="What starts this process?" /></div>
-                <div><label>Frequency</label><select value={processFrequency} onChange={(e) => setProcessFrequency(e.target.value)}>{["Hourly","Daily","Weekly","Monthly","Quarterly","Annually","Ad-hoc"].map(f => <option key={f} value={f}>{f}</option>)}</select></div>
-                <div><label>Estimated Duration</label><input type="text" value={processDuration} onChange={(e) => setProcessDuration(e.target.value)} placeholder="e.g., 30 minutes" /></div>
-                <div><label>Process Risk</label><select value={processRisk} onChange={(e) => setProcessRisk(e.target.value)}>{RISK_LEVELS.map(r => <option key={r} value={r}>{r}</option>)}</select></div>
-                <div><label>KPIs / Success Metrics</label><input type="text" value={processKpis} onChange={(e) => setProcessKpis(e.target.value)} placeholder="e.g., Time to complete, Error rate" /></div>
+                <div style={{ gridColumn: "1 / -1" }}><label>Purpose (optional)</label><textarea value={processPurpose} onChange={(e) => setProcessPurpose(e.target.value)} placeholder="Why does this process exist?" rows={2} /></div>
               </div>
+              <button onClick={() => setShowAdvancedProcess(!showAdvancedProcess)} className="btn-ghost" style={{ fontSize: "12px", marginTop: "16px", padding: "6px 12px", color: "var(--text-tertiary)", cursor: "pointer", background: "none", border: "1px solid var(--glass-border)", borderRadius: "6px", fontFamily: "inherit" }}>
+                {showAdvancedProcess ? "− Hide advanced fields" : "+ Add process details (optional)"}
+              </button>
+              {showAdvancedProcess && (
+                <div className="fade-in" style={{ marginTop: "16px", paddingTop: "16px", borderTop: "1px solid var(--glass-border)" }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
+                    <div style={{ gridColumn: "1 / -1" }}><label>Business Goal</label><textarea value={processGoal} onChange={(e) => setProcessGoal(e.target.value)} placeholder="What business outcome does this process drive?" rows={2} /></div>
+                    <div><label>Department</label><input type="text" value={processDept} onChange={(e) => setProcessDept(e.target.value)} placeholder="e.g., Sales" /></div>
+                    <div><label>Trigger</label><input type="text" value={processTrigger} onChange={(e) => setProcessTrigger(e.target.value)} placeholder="What starts this process?" /></div>
+                    <div><label>Frequency</label><select value={processFrequency} onChange={(e) => setProcessFrequency(e.target.value)}>{["Hourly","Daily","Weekly","Monthly","Quarterly","Annually","Ad-hoc"].map(f => <option key={f} value={f}>{f}</option>)}</select></div>
+                    <div><label>Estimated Duration</label><input type="text" value={processDuration} onChange={(e) => setProcessDuration(e.target.value)} placeholder="e.g., 30 minutes" /></div>
+                    <div><label>Process Risk</label><select value={processRisk} onChange={(e) => setProcessRisk(e.target.value)}>{RISK_LEVELS.map(r => <option key={r} value={r}>{r}</option>)}</select></div>
+                    <div><label>KPIs / Success Metrics</label><input type="text" value={processKpis} onChange={(e) => setProcessKpis(e.target.value)} placeholder="e.g., Time to complete, Error rate" /></div>
+                  </div>
+                </div>
+              )}
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div style={{ display: "flex", gap: "12px", marginLeft: "auto" }}>
