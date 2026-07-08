@@ -62,7 +62,7 @@ export default function Nav() {
         const locked = isLocked(item, company ?? null, !!session.isDirector);
         const active = pathname === item.href;
         return locked ? (
-          <span key={item.href} title="Subscribe to unlock"
+          <span key={item.href} title="Subscribe to unlock" aria-label={`${item.label} — subscribe to unlock`}
             style={{
               display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px",
               borderRadius: "10px", fontSize: "13px", fontWeight: 500,
@@ -149,7 +149,7 @@ export default function Nav() {
               {creditsDisplay} credits
             </div>
           </div>
-          <button onClick={logout} title="Sign out" style={{
+          <button onClick={logout} title="Sign out" aria-label="Sign out" style={{
             width: "28px", height: "28px", borderRadius: "8px",
             background: "none", border: "1px solid var(--glass-border)",
             color: "var(--text-tertiary)", cursor: "pointer", fontFamily: "inherit",
@@ -176,6 +176,7 @@ export default function Nav() {
         {/* Mobile hamburger */}
         <button onClick={() => setMobileOpen(!mobileOpen)}
           className="mobile-hamburger"
+          aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"}
           style={{ background: "none", border: "none", color: "var(--text-primary)", fontSize: "18px", cursor: "pointer", padding: "4px", marginRight: "4px" }}>
           {mobileOpen ? "\u2715" : "\u2630"}
         </button>
@@ -186,7 +187,7 @@ export default function Nav() {
 
         <div style={{ flex: 1 }} />
 
-        <button onClick={() => setSearchOpen(true)}
+        <button onClick={() => setSearchOpen(true)} aria-label="Search documents"
           style={{
             display: "flex", alignItems: "center", gap: "8px", padding: "7px 14px",
             borderRadius: "8px", fontSize: "12px", color: "var(--text-tertiary)",
@@ -252,7 +253,7 @@ export default function Nav() {
                 style={{ flex: 1, border: "none", background: "none", fontSize: "15px", color: "var(--text-primary)", outline: "none" }}
                 onKeyDown={(e) => { if (e.key === "Enter") { setSearchOpen(false); } }}
               />
-              <button onClick={() => setSearchOpen(false)} style={{ background: "var(--glass-bg)", border: "1px solid var(--glass-border)", borderRadius: "6px", color: "var(--text-tertiary)", cursor: "pointer", fontSize: "10px", padding: "4px 8px", fontFamily: "inherit" }}>
+              <button onClick={() => setSearchOpen(false)} aria-label="Close search" style={{ background: "var(--glass-bg)", border: "1px solid var(--glass-border)", borderRadius: "6px", color: "var(--text-tertiary)", cursor: "pointer", fontSize: "10px", padding: "4px 8px", fontFamily: "inherit" }}>
                 Esc
               </button>
             </div>

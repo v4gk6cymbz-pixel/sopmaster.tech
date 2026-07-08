@@ -2,6 +2,7 @@
 
 export default function TermsPage() {
   return (
+    <main id="main-content">
     <div style={{ maxWidth: "800px", margin: "0 auto", padding: "64px 24px" }} className="fade-in">
       <div className="hero-section" style={{ padding: "40px 0 48px", textAlign: "left" }}>
         <div className="ogi-badge">Legal</div>
@@ -20,7 +21,7 @@ export default function TermsPage() {
       </div>
 
       <div className="glass" style={{ padding: "32px", marginBottom: "24px" }}>
-        <p className="card-header" style={{ marginBottom: "16px" }}>1. Platform Usage</p>
+        <h2 className="card-header" style={{ marginBottom: "16px" }}>1. Platform Usage</h2>
         <p style={{ fontSize: "14px", color: "var(--slate-300)", lineHeight: 1.7, marginBottom: "12px" }}>
           1.1 SOPMaster provides a professional operational documentation platform for consultants, consultancy firms and documentation professionals to create, manage and store Standard Operating Procedures, operational checklists and related documentation.
         </p>
@@ -36,7 +37,7 @@ export default function TermsPage() {
       </div>
 
       <div className="glass" style={{ padding: "32px", marginBottom: "24px" }}>
-        <p className="card-header" style={{ marginBottom: "16px" }}>2. Accounts</p>
+        <h2 className="card-header" style={{ marginBottom: "16px" }}>2. Accounts</h2>
         <p style={{ fontSize: "14px", color: "var(--slate-300)", lineHeight: 1.7, marginBottom: "12px" }}>
           2.1 You must register for an account to access the Platform. You are responsible for maintaining the confidentiality of your account credentials, including your PIN, and for all activities that occur under your account.
         </p>
@@ -52,7 +53,7 @@ export default function TermsPage() {
       </div>
 
       <div className="glass" style={{ padding: "32px", marginBottom: "24px" }}>
-        <p className="card-header" style={{ marginBottom: "16px" }}>3. Credits</p>
+        <h2 className="card-header" style={{ marginBottom: "16px" }}>3. Credits</h2>
         <p style={{ fontSize: "14px", color: "var(--slate-300)", lineHeight: 1.7, marginBottom: "12px" }}>
           3.1 Credits are the platform currency used to generate documents. Each document generation consumes a specified number of credits as displayed in the Platform.
         </p>
@@ -68,7 +69,7 @@ export default function TermsPage() {
       </div>
 
       <div className="glass" style={{ padding: "32px", marginBottom: "24px" }}>
-        <p className="card-header" style={{ marginBottom: "16px" }}>4. Subscriptions</p>
+        <h2 className="card-header" style={{ marginBottom: "16px" }}>4. Subscriptions</h2>
         <p style={{ fontSize: "14px", color: "var(--slate-300)", lineHeight: 1.7, marginBottom: "12px" }}>
           4.1 Subscription plans provide a recurring allocation of credits and access to Platform features based on the selected tier. Subscription fees are billed monthly in advance.
         </p>
@@ -84,7 +85,7 @@ export default function TermsPage() {
       </div>
 
       <div className="glass" style={{ padding: "32px", marginBottom: "24px" }}>
-        <p className="card-header" style={{ marginBottom: "16px" }}>5. Payments</p>
+        <h2 className="card-header" style={{ marginBottom: "16px" }}>5. Payments</h2>
         <p style={{ fontSize: "14px", color: "var(--slate-300)", lineHeight: 1.7, marginBottom: "12px" }}>
           5.1 All payments are processed securely through Stripe, our third-party payment processor. By providing payment information, you authorise Stripe to charge the applicable fees to your designated payment method.
         </p>
@@ -97,7 +98,7 @@ export default function TermsPage() {
       </div>
 
       <div className="glass" style={{ padding: "32px", marginBottom: "24px" }}>
-        <p className="card-header" style={{ marginBottom: "16px" }}>6. Refunds</p>
+        <h2 className="card-header" style={{ marginBottom: "16px" }}>6. Refunds</h2>
         <p style={{ fontSize: "14px", color: "var(--slate-300)", lineHeight: 1.7, marginBottom: "12px" }}>
           6.1 Subscription fees are non-refundable except as required by applicable consumer protection law.
         </p>
@@ -113,7 +114,7 @@ export default function TermsPage() {
       </div>
 
       <div className="glass" style={{ padding: "32px", marginBottom: "24px" }}>
-        <p className="card-header" style={{ marginBottom: "16px" }}>7. Acceptable Use</p>
+        <h2 className="card-header" style={{ marginBottom: "16px" }}>7. Acceptable Use</h2>
         <p style={{ fontSize: "14px", color: "var(--slate-300)", lineHeight: 1.7, marginBottom: "12px" }}>
           7.1 You agree to use the Platform only for lawful purposes and in a manner that does not infringe the rights of others or restrict their use and enjoyment of the Platform.
         </p>
@@ -143,7 +144,7 @@ export default function TermsPage() {
       </div>
 
       <div className="glass" style={{ padding: "32px", marginBottom: "24px" }}>
-        <p className="card-header" style={{ marginBottom: "16px" }}>8. Intellectual Property</p>
+        <h2 className="card-header" style={{ marginBottom: "16px" }}>8. Intellectual Property</h2>
         <p style={{ fontSize: "14px", color: "var(--slate-300)", lineHeight: 1.7, marginBottom: "12px" }}>
           8.1 The SOPMaster platform, including its design, code, brand, logo and underlying technology, is the intellectual property of SOPMaster Limited and is protected by applicable copyright, trademark and other intellectual property laws.
         </p>
@@ -159,7 +160,7 @@ export default function TermsPage() {
       </div>
 
       <div className="glass" style={{ padding: "32px", marginBottom: "24px" }}>
-        <p className="card-header" style={{ marginBottom: "16px" }}>9. Platform Availability</p>
+        <h2 className="card-header" style={{ marginBottom: "16px" }}>9. Platform Availability</h2>
         <p style={{ fontSize: "14px", color: "var(--slate-300)", lineHeight: 1.7, marginBottom: "12px" }}>
           9.1 We strive to maintain high availability of the Platform but do not guarantee uninterrupted or error-free operation. The Platform may be unavailable for scheduled maintenance, emergency repairs or circumstances beyond our control.
         </p>
@@ -172,7 +173,7 @@ export default function TermsPage() {
       </div>
 
       <div className="glass" style={{ padding: "32px", marginBottom: "24px" }}>
-        <p className="card-header" style={{ marginBottom: "16px" }}>10. Limitation of Liability</p>
+        <h2 className="card-header" style={{ marginBottom: "16px" }}>10. Limitation of Liability</h2>
         <p style={{ fontSize: "14px", color: "var(--slate-300)", lineHeight: 1.7, marginBottom: "12px" }}>
           10.1 To the maximum extent permitted by applicable law, SOPMaster Limited, its directors, employees and agents shall not be liable for any indirect, incidental, special, consequential or punitive damages arising out of or relating to your use of the Platform.
         </p>
@@ -188,7 +189,7 @@ export default function TermsPage() {
       </div>
 
       <div className="glass" style={{ padding: "32px", marginBottom: "24px" }}>
-        <p className="card-header" style={{ marginBottom: "16px" }}>11. Account Suspension</p>
+        <h2 className="card-header" style={{ marginBottom: "16px" }}>11. Account Suspension</h2>
         <p style={{ fontSize: "14px", color: "var(--slate-300)", lineHeight: 1.7, marginBottom: "12px" }}>
           11.1 We reserve the right to suspend or terminate your account immediately if:
         </p>
@@ -215,7 +216,7 @@ export default function TermsPage() {
       </div>
 
       <div className="glass" style={{ padding: "32px", marginBottom: "24px" }}>
-        <p className="card-header" style={{ marginBottom: "16px" }}>12. Governing Law</p>
+        <h2 className="card-header" style={{ marginBottom: "16px" }}>12. Governing Law</h2>
         <p style={{ fontSize: "14px", color: "var(--slate-300)", lineHeight: 1.7, marginBottom: "12px" }}>
           12.1 These Terms are governed by and construed in accordance with the laws of England and Wales.
         </p>
@@ -228,7 +229,7 @@ export default function TermsPage() {
       </div>
 
       <div className="glass" style={{ padding: "32px" }}>
-        <p className="card-header" style={{ marginBottom: "16px" }}>13. Contact</p>
+        <h2 className="card-header" style={{ marginBottom: "16px" }}>13. Contact</h2>
         <p style={{ fontSize: "14px", color: "var(--slate-300)", lineHeight: 1.7, marginBottom: "12px" }}>
           For questions, complaints or notices relating to these Terms, please contact us:
         </p>
@@ -237,5 +238,6 @@ export default function TermsPage() {
         </p>
       </div>
     </div>
+    </main>
   );
 }

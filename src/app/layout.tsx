@@ -40,11 +40,13 @@ export const metadata: Metadata = {
     title: "SOPMaster | Operational Governance Infrastructure",
     description: "The world\u2019s first Operational Governance Infrastructure platform. Create, manage and govern operational procedures with enterprise-grade precision.",
     url: "https://sopmaster.tech", countryName: "United Kingdom",
+    images: [{ url: "/og-image.svg", width: 1200, height: 630, alt: "SOPMaster \u2014 The Operational Governance Infrastructure Platform" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "SOPMaster | Operational Governance Infrastructure",
     description: "The world\u2019s first Operational Governance Infrastructure platform.",
+    images: [{ url: "/og-image.svg", alt: "SOPMaster \u2014 The Operational Governance Infrastructure Platform" }],
   },
   category: "business",
   classification: "Enterprise Software",
@@ -96,6 +98,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       </head>
       <body style={{ background: "var(--navy-950)", minHeight: "100vh" }}>
+        <a href="#main-content" className="skip-link">Skip to main content</a>
         <InitStore />
         <Nav />
         <DataPoller />

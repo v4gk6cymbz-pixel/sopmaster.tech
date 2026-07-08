@@ -2,6 +2,7 @@
 
 export default function PrivacyPage() {
   return (
+    <main id="main-content">
     <div style={{ maxWidth: "800px", margin: "0 auto", padding: "64px 24px" }} className="fade-in">
       <div className="hero-section" style={{ padding: "40px 0 48px", textAlign: "left" }}>
         <div className="ogi-badge">Legal</div>
@@ -20,7 +21,7 @@ export default function PrivacyPage() {
       </div>
 
       <div className="glass" style={{ padding: "32px", marginBottom: "24px" }}>
-        <p className="card-header" style={{ marginBottom: "16px" }}>1. Information We Collect</p>
+        <h2 className="card-header" style={{ marginBottom: "16px" }}>1. Information We Collect</h2>
         <div style={{ display: "grid", gap: "16px" }}>
           <div>
             <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--white)", marginBottom: "4px" }}>Account Information</h3>
@@ -44,7 +45,7 @@ export default function PrivacyPage() {
       </div>
 
       <div className="glass" style={{ padding: "32px", marginBottom: "24px" }}>
-        <p className="card-header" style={{ marginBottom: "16px" }}>2. Payment Processing</p>
+        <h2 className="card-header" style={{ marginBottom: "16px" }}>2. Payment Processing</h2>
         <p style={{ fontSize: "14px", color: "var(--slate-300)", lineHeight: 1.7, marginBottom: "12px" }}>
           We use Stripe, a third-party payment processor, to handle all subscription and credit purchases. Your payment card details are processed and stored by Stripe in accordance with their privacy and security policies. We do not store, process or have access to your full payment card numbers.
         </p>
@@ -54,7 +55,7 @@ export default function PrivacyPage() {
       </div>
 
       <div className="glass" style={{ padding: "32px", marginBottom: "24px" }}>
-        <p className="card-header" style={{ marginBottom: "16px" }}>3. Cookies</p>
+        <h2 className="card-header" style={{ marginBottom: "16px" }}>3. Cookies</h2>
         <p style={{ fontSize: "14px", color: "var(--slate-300)", lineHeight: 1.7, marginBottom: "12px" }}>
           Our platform uses essential cookies required for authentication and session management. These cookies are necessary for the platform to function and do not track your activity across other websites.
         </p>
@@ -67,7 +68,7 @@ export default function PrivacyPage() {
       </div>
 
       <div className="glass" style={{ padding: "32px", marginBottom: "24px" }}>
-        <p className="card-header" style={{ marginBottom: "16px" }}>4. Data Security</p>
+        <h2 className="card-header" style={{ marginBottom: "16px" }}>4. Data Security</h2>
         <p style={{ fontSize: "14px", color: "var(--slate-300)", lineHeight: 1.7, marginBottom: "12px" }}>
           We implement appropriate technical and organisational measures to protect your personal information against unauthorised access, alteration, disclosure or destruction. These measures include encryption in transit (TLS), secure credential hashing, access controls and regular security reviews.
         </p>
@@ -77,7 +78,7 @@ export default function PrivacyPage() {
       </div>
 
       <div className="glass" style={{ padding: "32px", marginBottom: "24px" }}>
-        <p className="card-header" style={{ marginBottom: "16px" }}>5. Data Retention</p>
+        <h2 className="card-header" style={{ marginBottom: "16px" }}>5. Data Retention</h2>
         <p style={{ fontSize: "14px", color: "var(--slate-300)", lineHeight: 1.7, marginBottom: "12px" }}>
           We retain your personal information for as long as your account remains active and for a reasonable period thereafter to comply with legal obligations, resolve disputes and enforce our agreements.
         </p>
@@ -90,7 +91,7 @@ export default function PrivacyPage() {
       </div>
 
       <div className="glass" style={{ padding: "32px", marginBottom: "24px" }}>
-        <p className="card-header" style={{ marginBottom: "16px" }}>6. Your Rights</p>
+        <h2 className="card-header" style={{ marginBottom: "16px" }}>6. Your Rights</h2>
         <p style={{ fontSize: "14px", color: "var(--slate-300)", lineHeight: 1.7, marginBottom: "12px" }}>
           Under UK data protection law, you have the following rights regarding your personal information:
         </p>
@@ -120,7 +121,7 @@ export default function PrivacyPage() {
       </div>
 
       <div className="glass" style={{ padding: "32px", marginBottom: "24px" }}>
-        <p className="card-header" style={{ marginBottom: "16px" }}>7. Contact Information</p>
+        <h2 className="card-header" style={{ marginBottom: "16px" }}>7. Contact Information</h2>
         <p style={{ fontSize: "14px", color: "var(--slate-300)", lineHeight: 1.7, marginBottom: "12px" }}>
           If you have any questions about this privacy policy or how we handle your data, please contact us:
         </p>
@@ -130,7 +131,7 @@ export default function PrivacyPage() {
       </div>
 
       <div className="glass" style={{ padding: "32px" }}>
-        <p className="card-header" style={{ marginBottom: "16px" }}>8. Updates to This Policy</p>
+        <h2 className="card-header" style={{ marginBottom: "16px" }}>8. Updates to This Policy</h2>
         <p style={{ fontSize: "14px", color: "var(--slate-300)", lineHeight: 1.7, marginBottom: "12px" }}>
           We may update this privacy policy from time to time to reflect changes in our practices, legal requirements or operational needs. Material changes will be notified to you via the email address associated with your account or through a notice on the platform.
         </p>
@@ -139,5 +140,6 @@ export default function PrivacyPage() {
         </p>
       </div>
     </div>
+    </main>
   );
 }

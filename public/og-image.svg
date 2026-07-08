@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#05080F"/>
+      <stop offset="50%" stop-color="#0A0F1E"/>
+      <stop offset="100%" stop-color="#0F1629"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#D4A843"/>
+      <stop offset="100%" stop-color="#C4953A"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="40" y="40" width="1120" height="550" rx="16" fill="none" stroke="rgba(212,168,67,0.15)" stroke-width="1"/>
+  <text x="80" y="180" font-family="Inter, system-ui, sans-serif" font-size="72" font-weight="700" fill="#ffffff" letter-spacing="-2">SOPMaster</text>
+  <text x="80" y="260" font-family="Inter, system-ui, sans-serif" font-size="28" font-weight="400" fill="#94A3B8" letter-spacing="-0.5">The Operational Governance</text>
+  <text x="80" y="300" font-family="Inter, system-ui, sans-serif" font-size="28" font-weight="400" fill="#94A3B8" letter-spacing="-0.5">Infrastructure Platform</text>
+  <rect x="80" y="340" width="80" height="4" rx="2" fill="url(#accent)"/>
+  <text x="80" y="400" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="400" fill="#64748B">Create · Manage · Govern</text>
+  <text x="80" y="430" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="400" fill="#64748B">Standard Operating Procedures · Checklists · Documentation</text>
+  <rect x="80" y="480" width="280" height="48" rx="8" fill="url(#accent)"/>
+  <text x="220" y="510" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="600" fill="#0A0F1E" text-anchor="middle">sopmaster.tech</text>
+</svg>

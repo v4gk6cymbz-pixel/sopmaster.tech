@@ -114,6 +114,7 @@ export default function BatchPage() {
   if (!session || !company) return <div className="splash-screen"><div className="splash-card"><div className="splash-logo">S</div><div className="splash-spinner"></div><p className="splash-text">Loading workspace...</p></div></div>;
 
   return (
+    <main id="main-content">
     <div className="app-content" style={{ marginLeft: "var(--sidebar-width)", padding: "80px 32px 40px", position: "relative", zIndex: 1 }}>
       <div style={{ maxWidth: "1120px", margin: "0 auto" }}>
         <div style={{ marginBottom: result ? "28px" : "24px" }}>
@@ -238,5 +239,6 @@ export default function BatchPage() {
         )}
       </div>
     </div>
+    </main>
   );
 }

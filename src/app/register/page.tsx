@@ -37,6 +37,7 @@ export default function RegisterPage() {
   };
 
   return (
+    <main id="main-content">
     <div className="splash-screen" style={{ padding: "24px", position: "relative", overflow: "hidden" }}>
       <div style={{ position: "absolute", width: "500px", height: "500px", borderRadius: "50%",
         background: "radial-gradient(circle, rgba(201,160,90,0.025) 0%, transparent 60%)",
@@ -132,5 +133,6 @@ export default function RegisterPage() {
         </div>
       </div>
     </div>
+    </main>
   );
 }

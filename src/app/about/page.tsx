@@ -2,6 +2,7 @@
 
 export default function AboutPage() {
   return (
+    <main id="main-content">
     <div style={{ maxWidth: "800px", margin: "0 auto", padding: "64px 24px" }} className="fade-in">
       <div className="hero-section" style={{ padding: "40px 0 48px", textAlign: "left" }}>
         <div className="ogi-badge">About</div>
@@ -14,7 +15,7 @@ export default function AboutPage() {
       </div>
 
       <div className="glass" style={{ padding: "32px", marginBottom: "24px" }}>
-        <p className="card-header" style={{ marginBottom: "16px" }}>Our Purpose</p>
+        <h2 className="card-header" style={{ marginBottom: "16px" }}>Our Purpose</h2>
         <p style={{ fontSize: "14px", color: "var(--slate-300)", lineHeight: 1.7, marginBottom: "16px" }}>
           SOPMaster is a professional Operational Governance Infrastructure platform purpose-built for consultants, consultancy firms and documentation professionals. We provide the infrastructure to create, manage and maintain structured Standard Operating Procedures, operational checklists and department-level documentation that improves consistency, efficiency and client delivery.
         </p>
@@ -24,7 +25,7 @@ export default function AboutPage() {
       </div>
 
       <div className="glass" style={{ padding: "32px", marginBottom: "24px" }}>
-        <p className="card-header" style={{ marginBottom: "16px" }}>Built for Consultants, by Consultants</p>
+        <h2 className="card-header" style={{ marginBottom: "16px" }}>Built for Consultants, by Consultants</h2>
         <p style={{ fontSize: "14px", color: "var(--slate-300)", lineHeight: 1.7, marginBottom: "16px" }}>
           Consultancy firms face a persistent challenge: delivering consistent, high-quality operational documentation across every client engagement. SOPMaster solves this by providing a structured documentation framework that captures processes, policies and procedures in a repeatable, auditable format.
         </p>
@@ -37,7 +38,7 @@ export default function AboutPage() {
       </div>
 
       <div className="glass" style={{ padding: "32px", marginBottom: "24px" }}>
-        <p className="card-header" style={{ marginBottom: "16px" }}>What We Offer</p>
+        <h2 className="card-header" style={{ marginBottom: "16px" }}>What We Offer</h2>
         <div style={{ display: "grid", gap: "20px" }}>
           <div>
             <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--white)", marginBottom: "6px" }}>Standard Operating Procedures</h3>
@@ -67,7 +68,7 @@ export default function AboutPage() {
       </div>
 
       <div className="glass" style={{ padding: "32px", marginBottom: "24px" }}>
-        <p className="card-header" style={{ marginBottom: "16px" }}>Why Operational Governance Infrastructure Matters</p>
+        <h2 className="card-header" style={{ marginBottom: "16px" }}>Why Operational Governance Infrastructure Matters</h2>
         <p style={{ fontSize: "14px", color: "var(--slate-300)", lineHeight: 1.7, marginBottom: "16px" }}>
           Well-structured operational documentation is the foundation of scalable consultancy delivery. It ensures every engagement follows a consistent methodology, reduces the risk of oversight or omission, and provides clients with lasting value that extends beyond the engagement period.
         </p>
@@ -80,7 +81,7 @@ export default function AboutPage() {
       </div>
 
       <div className="glass" style={{ padding: "32px" }}>
-        <p className="card-header" style={{ marginBottom: "16px" }}>Our Commitment</p>
+        <h2 className="card-header" style={{ marginBottom: "16px" }}>Our Commitment</h2>
         <p style={{ fontSize: "14px", color: "var(--slate-300)", lineHeight: 1.7, marginBottom: "16px" }}>
           We are committed to providing a reliable, professional platform that consultancy firms can depend on for their day-to-day documentation needs. Our focus is on quality, consistency and the practical realities of delivering professional services.
         </p>
@@ -92,5 +93,6 @@ export default function AboutPage() {
         </p>
       </div>
     </div>
+    </main>
   );
 }

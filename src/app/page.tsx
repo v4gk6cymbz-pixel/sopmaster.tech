@@ -239,6 +239,6 @@ function Dashboard() {
 
 export default function HomePage() {
   const session = useStore((s) => s.session);
-  if (!session) return <Landing />;
-  return <Dashboard />;
+  if (!session) return <main id="main-content"><Landing /></main>;
+  return <main id="main-content"><Dashboard /></main>;
 }

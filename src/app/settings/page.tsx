@@ -58,6 +58,7 @@ export default function SettingsPage() {
   };
 
   return (
+    <main id="main-content">
     <div className="app-content" style={{ maxWidth: "800px", padding: "80px 32px 40px", marginLeft: "var(--sidebar-width)" }}>
       <div style={{ marginBottom: "36px" }}>
         <h1 style={{ fontSize: "28px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "8px", letterSpacing: "-0.02em" }}>
@@ -72,7 +73,7 @@ export default function SettingsPage() {
 
         {/* Company Profile */}
         <div className="card" style={{ padding: "28px" }}>
-          <div className="card-header" style={{ marginBottom: "20px" }}>Company Profile</div>
+          <h2 className="card-header" style={{ marginBottom: "20px" }}>Company Profile</h2>
           <div className="data-row"><span className="data-label">Company</span><span className="data-value">{company.name}</span></div>
           <div className="data-row"><span className="data-label">Email</span><span className="data-value">{session?.isDirector ? "Director Account" : company.email}</span></div>
           <div className="data-row"><span className="data-label">Plan</span><span className="data-value">{limits.label}</span></div>
@@ -83,7 +84,7 @@ export default function SettingsPage() {
 
         {/* Jurisdiction */}
         <div className="card" style={{ padding: "28px" }}>
-          <div className="card-header" style={{ marginBottom: "20px" }}>Jurisdiction</div>
+          <h2 className="card-header" style={{ marginBottom: "20px" }}>Jurisdiction</h2>
           <p style={{ fontSize: "14px", color: "var(--text-tertiary)", marginBottom: "14px" }}>
             Your jurisdiction determines the regulatory context applied to your documents.
           </p>
@@ -100,7 +101,7 @@ export default function SettingsPage() {
         {/* Security PIN */}
         {isDirector && (
           <div className="card" style={{ padding: "28px" }}>
-            <div className="card-header" style={{ marginBottom: "20px" }}>Security PIN</div>
+            <h2 className="card-header" style={{ marginBottom: "20px" }}>Security PIN</h2>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px", marginBottom: "16px" }}>
               <div>
                 <label>New PIN</label>
@@ -120,7 +121,7 @@ export default function SettingsPage() {
         {/* Share Link */}
         {isDirector && (
           <div className="card" style={{ padding: "28px" }}>
-            <div className="card-header" style={{ marginBottom: "20px" }}>Share Link</div>
+            <h2 className="card-header" style={{ marginBottom: "20px" }}>Share Link</h2>
             <p style={{ fontSize: "14px", color: "var(--text-tertiary)", marginBottom: "14px" }}>
               Share this link with team members to grant access to your company.
             </p>
@@ -135,7 +136,7 @@ export default function SettingsPage() {
 
         {/* Billing & Credits */}
         <div className="card" style={{ padding: "28px" }}>
-          <div className="card-header" style={{ marginBottom: "20px" }}>Billing & Credits</div>
+          <h2 className="card-header" style={{ marginBottom: "20px" }}>Billing & Credits</h2>
           {company.subscriptionActive === "yes" ? (
             <div>
               <div className="data-row"><span className="data-label">Plan</span><span className="data-value">{limits.label}</span></div>
@@ -212,7 +213,7 @@ export default function SettingsPage() {
         {/* Top Up Credits */}
         {isDirector && (
           <div className="card" style={{ padding: "28px" }}>
-            <div className="card-header" style={{ marginBottom: "20px" }}>Top Up Credits</div>
+            <h2 className="card-header" style={{ marginBottom: "20px" }}>Top Up Credits</h2>
             <p style={{ fontSize: "14px", color: "var(--text-tertiary)", marginBottom: "16px" }}>Purchase additional credits. Credits never expire.</p>
             <div className="meta-grid-4" style={{ gap: "12px" }}>
               {[{ c: 100, p: 85 }, { c: 300, p: 142.99 }, { c: 500, p: 220 }, { c: 1000, p: 300 }].map((pack) => (
@@ -232,7 +233,7 @@ export default function SettingsPage() {
         {/* Delete Account */}
         {isDirector && (
           <div className="card" style={{ padding: "28px", borderColor: "rgba(239,68,68,0.2)" }}>
-            <div className="card-header" style={{ marginBottom: "20px", color: "var(--danger)" }}>Delete Account</div>
+            <h2 className="card-header" style={{ marginBottom: "20px", color: "var(--danger)" }}>Delete Account</h2>
             <p style={{ fontSize: "14px", color: "var(--text-secondary)", marginBottom: "16px" }}>
               Permanently delete all data for this organisation. This cannot be undone.
             </p>
@@ -249,5 +250,6 @@ export default function SettingsPage() {
 
       </div>
     </div>
+    </main>
   );
 }

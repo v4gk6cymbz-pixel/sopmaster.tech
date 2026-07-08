@@ -164,6 +164,7 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
+    <main id="main-content">
     <Suspense fallback={
       <div className="splash-screen">
         <div className="splash-card">
@@ -175,5 +176,6 @@ export default function LoginPage() {
     }>
       <LoginForm />
     </Suspense>
+    </main>
   );
 }

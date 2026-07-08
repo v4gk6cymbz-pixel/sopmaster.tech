@@ -37,6 +37,7 @@ export default function ChooseFocusPage() {
   );
 
   return (
+    <main id="main-content">
     <div className="splash-screen" style={{ padding: "24px" }}>
       <div style={{ width: "100%", maxWidth: "620px", textAlign: "center" }}>
         <div className="ogi-badge" style={{ marginBottom: "16px" }}>Getting Started</div>
@@ -106,5 +107,6 @@ export default function ChooseFocusPage() {
         </div>
       </div>
     </div>
+    </main>
   );
 }

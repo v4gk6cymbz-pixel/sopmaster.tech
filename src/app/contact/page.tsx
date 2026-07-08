@@ -2,6 +2,7 @@
 
 export default function ContactPage() {
   return (
+    <main id="main-content">
     <div style={{ maxWidth: "800px", margin: "0 auto", padding: "64px 24px" }} className="fade-in">
       <div className="hero-section" style={{ padding: "40px 0 48px", textAlign: "left" }}>
         <div className="ogi-badge">Contact</div>
@@ -14,7 +15,7 @@ export default function ContactPage() {
       </div>
 
       <div className="glass" style={{ padding: "32px", marginBottom: "24px" }}>
-        <p className="card-header" style={{ marginBottom: "20px" }}>Email Support</p>
+        <h2 className="card-header" style={{ marginBottom: "20px" }}>Email Support</h2>
         <p style={{ fontSize: "14px", color: "var(--slate-300)", lineHeight: 1.7, marginBottom: "4px" }}>
           <a href="mailto:Support@sopmaster.tech" style={{ color: "var(--accent)", textDecoration: "none", fontWeight: 500 }}>
             Support@sopmaster.tech
@@ -26,7 +27,7 @@ export default function ContactPage() {
       </div>
 
       <div className="glass" style={{ padding: "32px", marginBottom: "24px" }}>
-        <p className="card-header" style={{ marginBottom: "20px" }}>What We Can Help With</p>
+        <h2 className="card-header" style={{ marginBottom: "20px" }}>What We Can Help With</h2>
         <div style={{ display: "grid", gap: "16px" }}>
           <div>
             <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--white)", marginBottom: "4px" }}>Account Assistance</h3>
@@ -56,7 +57,7 @@ export default function ContactPage() {
       </div>
 
       <div className="glass" style={{ padding: "32px" }}>
-        <p className="card-header" style={{ marginBottom: "20px" }}>Response Times</p>
+        <h2 className="card-header" style={{ marginBottom: "20px" }}>Response Times</h2>
         <div style={{ display: "grid", gap: "12px" }}>
           <div className="data-row" style={{ marginBottom: 0 }}>
             <span className="data-label">Email support</span>
@@ -73,5 +74,6 @@ export default function ContactPage() {
         </div>
       </div>
     </div>
+    </main>
   );
 }
