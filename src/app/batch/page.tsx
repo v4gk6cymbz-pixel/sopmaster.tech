@@ -103,9 +103,16 @@ export default function BatchPage() {
     setGenerating(true); setProgress(0); setLogs([]); setResult(null);
     setLogs(l => [...l, "Generating batch documents across selected departments..."]);
     setLogs(l => [...l, `Analysing ${selectedDepartments.length} departments...`]);
-    await new Promise((r) => setTimeout(r, 200));
-    setProgress(50);
-    await new Promise((r) => setTimeout(r, 200));
+    const delayMs = selectedDepartments.length * 60000;
+    const totalSteps = Math.round(delayMs / 500);
+    await new Promise<void>((resolve) => {
+      let step = 0;
+      const timer = setInterval(() => {
+        step++;
+        setProgress(Math.min((step / totalSteps) * 95, 95));
+        if (step >= totalSteps) { clearInterval(timer); resolve(); }
+      }, 500);
+    });
     const batchResult = generateBatchPackage({ companyName: companyName.trim(), industry, companySize, businessModel, softwareStack: softwareStack.length > 0 ? softwareStack : ["internal system"], businessGoals, operationalChallenges, departments: selectedDepartments });
     if (!session?.isDirector) try { await deductCredit(batchCost); } catch {}
     setProgress(100); setResult(batchResult); setLogs(l => [...l, `Package complete: ${batchResult.totalCount} SOPs across ${selectedDepartments.length} departments`]); setGenerating(false);

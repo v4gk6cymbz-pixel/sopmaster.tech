@@ -103,9 +103,15 @@ export default function ForgePage() {
     setLogs((l) => [...l, "Building company intelligence profile..."]);
     setLogs((l) => [...l, "Running governance engine diagnostics..."]);
     abortRef.current = new AbortController();
-    await new Promise((r) => setTimeout(r, 200));
-    setProgress(50);
-    await new Promise((r) => setTimeout(r, 200));
+    const totalSteps = 60;
+    let step = 0;
+    await new Promise<void>((resolve) => {
+      const timer = setInterval(() => {
+        step++;
+        setProgress(Math.min((step / totalSteps) * 95, 95));
+        if (step >= totalSteps) { clearInterval(timer); resolve(); }
+      }, 500);
+    });
     setLogs((l) => [...l, "Generating SOP document with full structure..."]);
     const sopDoc = generateSOPDocument(title, compName, softwareStack.join(", "), headcount, jurisdiction as Jurisdiction, size, industry, sopType);
     if (!session?.isDirector) try { await deductCredit(10); } catch {}

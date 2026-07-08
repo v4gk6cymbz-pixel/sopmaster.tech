@@ -241,11 +241,11 @@ export default function ChecklistPage() {
       } catch { setError("Failed to deduct credit. Try again."); return; }
     }
     setStep("loading"); setProgress(0); setLogs([]); setLogs((l) => [...l, "Generating checklist..."]);
-    await new Promise((r) => setTimeout(r, 3000));
+    await new Promise((r) => setTimeout(r, 5000));
     setProgress(30); setLogs((l) => [...l, "Applying industry-specific content..."]);
-    await new Promise((r) => setTimeout(r, 3000));
+    await new Promise((r) => setTimeout(r, 5000));
     setProgress(60); setLogs((l) => [...l, "Building checklist items with data capture fields..."]);
-    await new Promise((r) => setTimeout(r, 3000));
+    await new Promise((r) => setTimeout(r, 5000));
     setProgress(85); setLogs((l) => [...l, "Formatting document..."]);
     const hash = generateHash(); const vHash = generateVerificationHash(); const now = new Date();
     const sections = generateChecklistContent(checklistType, industry, jurisdiction, compName);
