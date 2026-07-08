@@ -20,13 +20,13 @@ export function formatDate(date: Date): string {
   return date.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
 }
 
-export function getTierLimits(tier: string): { credits: number; documentLimit: number; label: string; price: number } {
+export function getTierLimits(tier: string): { credits: number; documentLimit: number; label: string; price: number; teamMemberLimit: number } {
   switch (tier) {
-    case "solo": return { credits: 300, documentLimit: 300, label: "Solo Professional", price: 400 };
-    case "small": return { credits: 2500, documentLimit: 2500, label: "Small Consultancy Plan", price: 2500 };
-    case "medium": return { credits: 6000, documentLimit: 6000, label: "Medium Consultancy Plan", price: 5100 };
-    case "large": return { credits: 12000, documentLimit: 12000, label: "Large Consultancy Plan", price: 9000 };
-    default: return { credits: 10, documentLimit: 10, label: "Starter", price: 0 };
+    case "solo": return { credits: 300, documentLimit: 300, label: "Solo Professional", price: 400, teamMemberLimit: 0 };
+    case "small": return { credits: 2500, documentLimit: 2500, label: "Small Consultancy Plan", price: 2500, teamMemberLimit: 20 };
+    case "medium": return { credits: 6000, documentLimit: 6000, label: "Medium Consultancy Plan", price: 5100, teamMemberLimit: 200 };
+    case "large": return { credits: 12000, documentLimit: 12000, label: "Large Consultancy Plan", price: 9000, teamMemberLimit: 1000 };
+    default: return { credits: 10, documentLimit: 10, label: "Starter", price: 0, teamMemberLimit: 0 };
   }
 }
 

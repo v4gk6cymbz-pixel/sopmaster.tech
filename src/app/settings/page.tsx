@@ -77,7 +77,7 @@ export default function SettingsPage() {
           <div className="data-row"><span className="data-label">Email</span><span className="data-value">{session?.isDirector ? "Director Account" : company.email}</span></div>
           <div className="data-row"><span className="data-label">Plan</span><span className="data-value">{limits.label}</span></div>
           <div className="data-row"><span className="data-label">Created</span><span className="data-value">{company.createdAt}</span></div>
-          <div className="data-row"><span className="data-label">Team Members</span><span className="data-value">{company.team.length}</span></div>
+          <div className="data-row"><span className="data-label">Team Members</span><span className="data-value">{company.team.length}{limits.teamMemberLimit > 0 ? ` / ${limits.teamMemberLimit}` : ""}</span></div>
           <div className="data-row"><span className="data-label">Credits</span><span className="data-value">{company.credits} ({company.lifetimeCredits} lifetime)</span></div>
         </div>
 
