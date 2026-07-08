@@ -5,38 +5,38 @@ import { useStore } from "@/lib/store";
 
 const STEPS = [
   {
-    title: "All systems are open!",
-    subtitle: "Your subscription is active and all features are unlocked.",
+    title: "Welcome to the platform!",
+    subtitle: "Your workspace is ready",
     description:
-      "You now have full access to SOPMaster. Generate operational documents, build checklists, run batch operations, and manage your vault.",
+      "You've been given free credits to get started. Head to the Forge to build SOPs (10 credits each) or the Checklist Studio to build checklists (1 credit each). Your credits are displayed in the top bar.",
     emoji: "\u2728",
   },
   {
-    title: "Operational Documents",
-    subtitle: "Build single SOPs with the SOLO SOP BUILDER",
+    title: "SOP Forge",
+    subtitle: "Build operational documents",
     description:
-      "Use the Forge to generate complete operational documents with governance, quality controls, and compliance triggers.",
+      "Use the Forge to generate complete SOPs with governance, quality controls, and compliance triggers. Each SOP costs 10 credits. You can build up to 3 SOPs with your free credits.",
     emoji: "\uD83D\uDCC4",
   },
   {
-    title: "Checklists",
-    subtitle: "Quick procedural checklists in seconds",
+    title: "Checklist Studio",
+    subtitle: "Quick procedural checklists",
     description:
-      "Generate professional checklists for onboarding, audits, inspections, and recurring tasks.",
+      "Generate professional checklists for onboarding, audits, inspections, and recurring tasks. Each checklist costs 1 credit. You can build up to 10 with your free credits.",
     emoji: "\u2714\uFE0F",
   },
   {
     title: "Batch Generation",
     subtitle: "Scale across departments",
     description:
-      "Generate a full Operational Infrastructure Package across multiple departments at once. 30 credits per department.",
+      "Generate a full Operational Infrastructure Package across multiple departments at once. Batch generation costs 30 credits per department.",
     emoji: "\u26A1",
   },
   {
     title: "Document Vault",
     subtitle: "Your entire library in one place",
     description:
-      "All generated SOPs and checklists are stored in your Vault. Search, filter, favourite, and download anytime.",
+      "All generated SOPs and checklists are stored in your Vault. Search, filter, favourite, and download anytime. Everything is audit-ready from the moment it's generated.",
     emoji: "\uD83D\uDEE1\uFE0F",
   },
 ];

@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
 
     const existing = await prisma.company.findUnique({ where: { id: auth.companyId } });
     const hasExistingCredits = existing?.credits != null && existing.credits > 0;
-    const credits = hasExistingCredits ? existing.credits : focus === "sops" ? 100 : 10;
+    const credits = hasExistingCredits ? existing.credits : focus === "sops" ? 30 : 10;
     const hasExistingLifetime = existing?.lifetimeCredits != null && existing.lifetimeCredits > 0;
     const lifetimeCredits = hasExistingLifetime ? existing.lifetimeCredits : credits;
 

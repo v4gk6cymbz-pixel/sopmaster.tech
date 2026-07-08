@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 export default function ChooseFocusPage() {
   const session = useStore((s) => s.session);
   const setFocus = useStore((s) => s.setFocus);
+  const setShowTour = useStore((s) => s.setShowTour);
   const router = useRouter();
   const [busy, setBusy] = useState(false);
 
@@ -18,6 +19,7 @@ export default function ChooseFocusPage() {
     setBusy(true);
     try {
       await setFocus(focus);
+      setShowTour(true);
       router.push("/");
     } catch {
       setBusy(false);
@@ -70,7 +72,7 @@ export default function ChooseFocusPage() {
               Generate standard operating procedures with full governance structure.
             </p>
             <div style={{ fontSize: "12px", color: "var(--text-tertiary)", marginTop: "4px", padding: "6px 14px", borderRadius: "20px", background: "var(--bg-card)" }}>
-              100 free credits included
+              30 free credits — up to 3 SOPs
             </div>
           </button>
           <button

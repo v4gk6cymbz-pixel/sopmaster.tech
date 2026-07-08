@@ -111,6 +111,15 @@ export default function RegisterPage() {
           </div>
 
           {error && <p style={{ fontSize: "13px", color: "var(--danger)", marginBottom: "12px" }}>{error}</p>}
+
+          <div className="glass-light" style={{ marginBottom: "16px", padding: "12px 16px", textAlign: "center" }}>
+            <p style={{ fontSize: "12px", color: "var(--text-secondary)", fontWeight: 500, marginBottom: "4px" }}>What you get after choosing your focus:</p>
+            <div style={{ display: "flex", justifyContent: "center", gap: "24px", fontSize: "12px", color: "var(--text-tertiary)" }}>
+              <span><span style={{ color: "var(--accent)", fontWeight: 600 }}>SOPs</span> — 30 credits (up to 3 SOPs)</span>
+              <span><span style={{ color: "var(--success)", fontWeight: 600 }}>Checklists</span> — 10 credits (up to 10 checklists)</span>
+            </div>
+          </div>
+
           <button onClick={handleRegister} className="btn btn-primary" style={{ width: "100%", padding: "12px 28px", fontSize: "14px" }}>
             Deploy Operational Governance
           </button>
