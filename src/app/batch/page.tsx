@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useStore } from "@/lib/store";
 import { api } from "@/lib/api/client";
 import { generateBatchPackage } from "@/lib/batch-sop-generator";
@@ -74,8 +74,17 @@ export default function BatchPage() {
   const [riskAppetite, setRiskAppetite] = useState("Medium");
   const [brandTone, setBrandTone] = useState("Professional");
   const [complianceReqs, setComplianceReqs] = useState("");
+  const initializedRef = useRef(false);
 
-  useEffect(() => { if (company) { if (!companyName) setCompanyName(company.name); setJurisdiction(company.jurisdiction); } if (companyProfile?.industry) setIndustry(companyProfile.industry as Industry); if (companyProfile?.companySize) setCompanySize(companyProfile.companySize); if (companyProfile?.departments && companyProfile.departments.length > 0) setSelectedDepartments(companyProfile.departments); if (companyProfile?.softwareStack) setSoftwareStack(companyProfile.softwareStack); }, [company, companyProfile]);
+  useEffect(() => {
+    if (initializedRef.current) return;
+    if (company) { setCompanyName(company.name); setJurisdiction(company.jurisdiction); }
+    if (companyProfile?.industry) setIndustry(companyProfile.industry as Industry);
+    if (companyProfile?.companySize) setCompanySize(companyProfile.companySize);
+    if (companyProfile?.departments && companyProfile.departments.length > 0) setSelectedDepartments(companyProfile.departments);
+    if (companyProfile?.softwareStack) setSoftwareStack(companyProfile.softwareStack);
+    initializedRef.current = true;
+  }, [company, companyProfile]);
   useEffect(() => { router.prefetch("/armory"); }, [router]);
   useEffect(() => { if (!session?.isDirector) router.push("/"); }, [session, router]);
 

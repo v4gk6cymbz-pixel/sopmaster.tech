@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useStore } from "@/lib/store";
 import { generateHash, generateVerificationHash, formatDate, buildSopHtml, JURISDICTION_REGULATORY } from "@/lib/utils";
 import type { SOP, Industry, Jurisdiction } from "@/types";
@@ -218,8 +218,15 @@ export default function ChecklistPage() {
   const [logs, setLogs] = useState<string[]>([]);
   const [document, setDocument] = useState<{ sections: { heading: string; content: string[] }[] } | null>(null);
   const [savedSop, setSavedSop] = useState<SOP | null>(null);
+  const initializedRef = useRef(false);
 
-  useEffect(() => { if (company) { if (!compName) setCompName(company.name); setJurisdiction(company.jurisdiction); } if (companyProfile?.industry) setIndustry(companyProfile.industry as Industry); if (companyProfile?.companySize) setCompanySize(companyProfile.companySize); }, [company, companyProfile]);
+  useEffect(() => {
+    if (initializedRef.current) return;
+    if (company) { setCompName(company.name); setJurisdiction(company.jurisdiction); }
+    if (companyProfile?.industry) setIndustry(companyProfile.industry as Industry);
+    if (companyProfile?.companySize) setCompanySize(companyProfile.companySize);
+    initializedRef.current = true;
+  }, [company, companyProfile]);
   useEffect(() => { router.prefetch("/armory"); }, [router]);
   useEffect(() => { if (company && company.subscriptionActive !== "yes" && (!company.focus || company.focus !== "checklists")) router.push("/"); }, [company, router]);
   useEffect(() => { setTitle(`${checklistType} — ${compName || "Your Organisation"}`); }, [checklistType, compName]);
@@ -227,8 +234,12 @@ export default function ChecklistPage() {
   const startGeneration = async () => {
     setError("");
     if (!compName.trim()) { setError("Company name is required."); return; }
-    const canDeduct = await deductCredit();
-    if (!canDeduct && !session?.isDirector) { setError("Insufficient credits. Purchase more in Administration."); return; }
+    if (!session?.isDirector) {
+      try {
+        const canDeduct = await deductCredit();
+        if (!canDeduct) { setError("Insufficient credits. Purchase more in Administration."); return; }
+      } catch { setError("Failed to deduct credit. Try again."); return; }
+    }
     setStep("loading"); setProgress(0); setLogs([]); setLogs((l) => [...l, "Generating checklist..."]);
     await new Promise((r) => setTimeout(r, 3000));
     setProgress(30); setLogs((l) => [...l, "Applying industry-specific content..."]);

@@ -56,6 +56,7 @@ export default function ForgePage() {
   const [decisionNo, setDecisionNo] = useState("");
   const [title, setTitle] = useState("");
   const [sopType, setSopType] = useState<string>("Operational");
+  const initializedRef = useRef(false);
   const [size, setSize] = useState<CompanySize>("1-10");
   const [error, setError] = useState("");
   const [progress, setProgress] = useState(0);
@@ -65,9 +66,11 @@ export default function ForgePage() {
   const abortRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
-    if (company) { if (!compName) setCompName(company.name); setJurisdiction(company.jurisdiction); }
+    if (initializedRef.current) return;
+    if (company) { setCompName(company.name); setJurisdiction(company.jurisdiction); }
     if (companyProfile?.industry) setIndustry(companyProfile.industry as Industry);
     if (companyProfile?.companySize) setHeadcount(companyProfile.companySize);
+    initializedRef.current = true;
   }, [company, companyProfile]);
   useEffect(() => { return () => { if (abortRef.current) abortRef.current.abort(); }; }, []);
   useEffect(() => { router.prefetch("/armory"); }, [router]);
@@ -117,7 +120,7 @@ export default function ForgePage() {
     } catch {
       if (abortRef.current?.signal.aborted) return;
       sopDoc = generateSOPDocument(title, compName, softwareStack.join(", "), headcount, jurisdiction as Jurisdiction, size, industry, sopType);
-      await deductCredit(10);
+      try { await deductCredit(10); } catch {}
     }
     setProgress(100); setLogs((l) => [...l, "Complete"]);
     const hash = generateHash(); const vHash = generateVerificationHash(); const now = new Date();
