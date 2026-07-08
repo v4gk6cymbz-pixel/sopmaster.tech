@@ -32,7 +32,7 @@ export const STRIPE_CREDIT_PRICES: Record<number, string> = {
 
 export const TIER_CREDITS: Record<string, number> = {
   solo: 300,
-  small: 1200,
-  medium: 3500,
-  large: 5000,
+  small: 2500,
+  medium: 6000,
+  large: 12000,
 };

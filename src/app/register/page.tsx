@@ -6,10 +6,10 @@ import { useRouter } from "next/navigation";
 import { DIRECTOR_EMAIL } from "@/lib/config";
 
 const SIZE_OPTIONS = [
-  { value: "solo", label: "Solo / Owner", desc: "Just me — £400/mo" },
-  { value: "1-20", label: "1–20 employees", desc: "Small team — £2,500/mo" },
-  { value: "21-200", label: "21–200 employees", desc: "Growing firm — £5,100/mo" },
-  { value: "201+", label: "201+ employees", desc: "Established firm — £9,000/mo" },
+  { value: "solo", label: "Solo / Owner", desc: "£400/mo · 300 credits monthly" },
+  { value: "1-20", label: "1–20 employees", desc: "£2,500/mo · 2,500 credits monthly" },
+  { value: "21-200", label: "21–200 employees", desc: "£5,100/mo · 6,000 credits monthly" },
+  { value: "201+", label: "201+ employees", desc: "£9,000/mo · 12,000 credits monthly" },
 ];
 
 export default function RegisterPage() {
