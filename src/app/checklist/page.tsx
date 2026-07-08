@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useStore } from "@/lib/store";
 import { generateHash, generateVerificationHash, formatDate, buildSopHtml, JURISDICTION_REGULATORY } from "@/lib/utils";
 import type { SOP, Industry, Jurisdiction } from "@/types";
@@ -209,7 +209,6 @@ export default function ChecklistPage() {
   const [step, setStep] = useState<"input" | "loading" | "preview" | "done">("input");
   const [checklistType, setChecklistType] = useState("Compliance Review");
   const [compName, setCompName] = useState("");
-  const [companySize, setCompanySize] = useState(companyProfile?.companySize || "");
   const [industry, setIndustry] = useState<Industry>((companyProfile?.industry as Industry) || "ProfessionalServices");
   const [jurisdiction, setJurisdiction] = useState<string>(company?.jurisdiction || "UK");
   const [title, setTitle] = useState("");
@@ -218,15 +217,8 @@ export default function ChecklistPage() {
   const [logs, setLogs] = useState<string[]>([]);
   const [document, setDocument] = useState<{ sections: { heading: string; content: string[] }[] } | null>(null);
   const [savedSop, setSavedSop] = useState<SOP | null>(null);
-  const initializedRef = useRef(false);
 
-  useEffect(() => {
-    if (initializedRef.current) return;
-    if (company) { setCompName(company.name); setJurisdiction(company.jurisdiction); }
-    if (companyProfile?.industry) setIndustry(companyProfile.industry as Industry);
-    if (companyProfile?.companySize) setCompanySize(companyProfile.companySize);
-    initializedRef.current = true;
-  }, [company, companyProfile]);
+  useEffect(() => { if (company) { setCompName(company.name); setJurisdiction(company.jurisdiction); } if (companyProfile?.industry) setIndustry(companyProfile.industry as Industry); }, [company, companyProfile]);
   useEffect(() => { router.prefetch("/armory"); }, [router]);
   useEffect(() => { if (company && company.subscriptionActive !== "yes" && (!company.focus || company.focus !== "checklists")) router.push("/"); }, [company, router]);
   useEffect(() => { setTitle(`${checklistType} — ${compName || "Your Organisation"}`); }, [checklistType, compName]);
@@ -234,13 +226,14 @@ export default function ChecklistPage() {
   const startGeneration = async () => {
     setError("");
     if (!compName.trim()) { setError("Company name is required."); return; }
-    if (!session?.isDirector) deductCredit();
+    const canDeduct = await deductCredit();
+    if (!canDeduct && !session?.isDirector) { setError("Insufficient credits. Purchase more in Administration."); return; }
     setStep("loading"); setProgress(0); setLogs([]); setLogs((l) => [...l, "Generating checklist..."]);
-    await new Promise((r) => setTimeout(r, 5000));
+    await new Promise((r) => setTimeout(r, 3000));
     setProgress(30); setLogs((l) => [...l, "Applying industry-specific content..."]);
-    await new Promise((r) => setTimeout(r, 5000));
+    await new Promise((r) => setTimeout(r, 3000));
     setProgress(60); setLogs((l) => [...l, "Building checklist items with data capture fields..."]);
-    await new Promise((r) => setTimeout(r, 5000));
+    await new Promise((r) => setTimeout(r, 3000));
     setProgress(85); setLogs((l) => [...l, "Formatting document..."]);
     const hash = generateHash(); const vHash = generateVerificationHash(); const now = new Date();
     const sections = generateChecklistContent(checklistType, industry, jurisdiction, compName);
@@ -280,7 +273,6 @@ export default function ChecklistPage() {
             <div className="glass" style={{ padding: "24px" }}>
               <div className="card-header" style={{ marginBottom: "16px" }}>Organisation</div>
               <div style={{ marginBottom: "14px" }}><label>Company</label><input type="text" value={compName} onChange={(e) => setCompName(e.target.value)} placeholder="Company name" /></div>
-              <div style={{ marginBottom: "14px" }}><label>Company Size</label><input type="number" value={companySize} onChange={(e) => setCompanySize(e.target.value)} placeholder="Number of employees" /></div>
               <div style={{ marginBottom: "14px" }}><label>Industry</label><select value={industry} onChange={(e) => setIndustry(e.target.value as Industry)}>{["ProfessionalServices","Finance","Healthcare","SaaS","Construction","Accountancy","E-Commerce","Manufacturing","Logistics","Education","Hospitality","RealEstate"].map(i => <option key={i} value={i}>{i.replace(/([A-Z])/g, " $1").trim()}</option>)}</select></div>
               <div><label>Jurisdiction</label><select value={jurisdiction} onChange={(e) => { setJurisdiction(e.target.value); setCompanyJurisdiction(e.target.value); }}>{Object.entries(JURISDICTION_REGULATORY).map(([key, val]) => <option key={key} value={key}>{val.name}</option>)}</select></div>
             </div>

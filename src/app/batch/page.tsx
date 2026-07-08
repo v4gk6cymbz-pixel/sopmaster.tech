@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useStore } from "@/lib/store";
 import { api } from "@/lib/api/client";
 import { generateBatchPackage } from "@/lib/batch-sop-generator";
@@ -74,17 +74,8 @@ export default function BatchPage() {
   const [riskAppetite, setRiskAppetite] = useState("Medium");
   const [brandTone, setBrandTone] = useState("Professional");
   const [complianceReqs, setComplianceReqs] = useState("");
-  const initializedRef = useRef(false);
 
-  useEffect(() => {
-    if (initializedRef.current) return;
-    if (company) { setCompanyName(company.name); setJurisdiction(company.jurisdiction); }
-    if (companyProfile?.industry) setIndustry(companyProfile.industry as Industry);
-    if (companyProfile?.companySize) setCompanySize(companyProfile.companySize);
-    if (companyProfile?.departments && companyProfile.departments.length > 0) setSelectedDepartments(companyProfile.departments);
-    if (companyProfile?.softwareStack) setSoftwareStack(companyProfile.softwareStack);
-    initializedRef.current = true;
-  }, [company, companyProfile]);
+  useEffect(() => { if (company) { setCompanyName(company.name); setJurisdiction(company.jurisdiction); } if (companyProfile?.industry) setIndustry(companyProfile.industry as Industry); if (companyProfile?.companySize) setCompanySize(companyProfile.companySize); if (companyProfile?.departments && companyProfile.departments.length > 0) setSelectedDepartments(companyProfile.departments); if (companyProfile?.softwareStack) setSoftwareStack(companyProfile.softwareStack); }, [company, companyProfile]);
   useEffect(() => { router.prefetch("/armory"); }, [router]);
   useEffect(() => { if (!session?.isDirector) router.push("/"); }, [session, router]);
 
@@ -103,18 +94,19 @@ export default function BatchPage() {
     setGenerating(true); setProgress(0); setLogs([]); setResult(null);
     setLogs(l => [...l, "Generating batch documents across selected departments..."]);
     setLogs(l => [...l, `Analysing ${selectedDepartments.length} departments...`]);
-    const delayMs = selectedDepartments.length * 60000;
+    const delayMs = Math.min(selectedDepartments.length * 30000, 300000);
     const totalSteps = Math.round(delayMs / 500);
     await new Promise<void>((resolve) => {
       let step = 0;
       const timer = setInterval(() => {
         step++;
-        setProgress(Math.min((step / totalSteps) * 95, 95));
+        setProgress(Math.min((step / totalSteps) * 90, 90));
         if (step >= totalSteps) { clearInterval(timer); resolve(); }
       }, 500);
     });
-    const batchResult = generateBatchPackage({ companyName: companyName.trim(), industry, companySize, businessModel, softwareStack: softwareStack.length > 0 ? softwareStack : ["internal system"], businessGoals, operationalChallenges, departments: selectedDepartments });
-    if (!session?.isDirector) deductCredit(batchCost);
+    let batchResult: any;
+    try { batchResult = await api.generate.batch({ companyName: companyName.trim(), industry, jurisdiction, companySize, businessModel, softwareStack: softwareStack.length > 0 ? softwareStack : ["internal system"], departments: selectedDepartments, format: "json", riskAppetite, brandTone, complianceReqs, creditCost: batchCost }); }
+    catch { batchResult = generateBatchPackage({ companyName: companyName.trim(), industry, companySize, businessModel, softwareStack: softwareStack.length > 0 ? softwareStack : ["internal system"], businessGoals, operationalChallenges, departments: selectedDepartments }); await deductCredit(batchCost); }
     setProgress(100); setResult(batchResult); setLogs(l => [...l, `Package complete: ${batchResult.totalCount} SOPs across ${selectedDepartments.length} departments`]); setGenerating(false);
     addNotification({ type: "sop_generated", title: "Batch SOPs Generated", message: `${batchResult.totalCount} SOPs generated across ${selectedDepartments.length} departments for ${industry}.` });
   };

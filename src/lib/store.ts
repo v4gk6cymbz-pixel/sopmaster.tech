@@ -21,10 +21,10 @@ interface StoreState {
   login: (companyName: string, pin: string, memberName?: string, memberRole?: string) => Promise<boolean>;
   loginAsDirector: () => Promise<boolean>;
   logout: () => Promise<void>;
-  addSOP: (sop: SOP) => void;
+  addSOP: (sop: SOP) => Promise<void>;
   updateSOP: (id: string, data: any) => Promise<void>;
   removeSOP: (id: string) => Promise<void>;
-  deductCredit: (amount?: number) => boolean;
+  deductCredit: (amount?: number) => Promise<boolean>;
   addCredits: (amount: number) => void;
   setJurisdiction: (j: string) => Promise<void>;
   updatePin: (newPin: string) => Promise<void>;
@@ -174,10 +174,14 @@ export const useStore = create<StoreState>((set, get) => ({
     set({ session: null, vault: [], companies: [] });
   },
 
-  addSOP: (sop: SOP) => {
-    const vault = [...get().vault, sop];
-    set({ vault });
-    api.vault.create(sop).catch((e) => console.error("Failed to save SOP to vault:", e));
+  addSOP: async (sop: SOP) => {
+    try {
+      await api.vault.create(sop);
+      const vault = [...get().vault, sop];
+      set({ vault });
+    } catch (e) {
+      console.error("Failed to save SOP to vault:", e);
+    }
   },
 
   updateSOP: async (id: string, data: any) => {
@@ -199,13 +203,18 @@ export const useStore = create<StoreState>((set, get) => ({
     }
   },
 
-  deductCredit: (amount = 1) => {
-    const companies = get().companies.map(c =>
-      c.id === get().session?.companyId ? { ...c, credits: Math.max(0, c.credits - amount) } : c
-    );
-    set({ companies });
-    api.company.deductCredits(amount).catch((e) => console.error("Failed to deduct credits:", e));
-    return true;
+  deductCredit: async (amount = 1) => {
+    try {
+      const result = await api.company.deductCredits(amount);
+      const companies = get().companies.map(c =>
+        c.id === get().session?.companyId ? { ...c, credits: result.credits } : c
+      );
+      set({ companies });
+      return true;
+    } catch (e) {
+      console.error("Failed to deduct credits:", e);
+      return false;
+    }
   },
 
   addCredits: (amount: number) => {
