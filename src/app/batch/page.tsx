@@ -75,7 +75,7 @@ export default function BatchPage() {
   const [brandTone, setBrandTone] = useState("Professional");
   const [complianceReqs, setComplianceReqs] = useState("");
 
-  useEffect(() => { if (company) { setCompanyName(company.name); setJurisdiction(company.jurisdiction); } if (companyProfile?.industry) setIndustry(companyProfile.industry as Industry); if (companyProfile?.companySize) setCompanySize(companyProfile.companySize); if (companyProfile?.departments && companyProfile.departments.length > 0) setSelectedDepartments(companyProfile.departments); if (companyProfile?.softwareStack) setSoftwareStack(companyProfile.softwareStack); }, [company, companyProfile]);
+  useEffect(() => { if (company) { if (!companyName) setCompanyName(company.name); setJurisdiction(company.jurisdiction); } if (companyProfile?.industry) setIndustry(companyProfile.industry as Industry); if (companyProfile?.companySize) setCompanySize(companyProfile.companySize); if (companyProfile?.departments && companyProfile.departments.length > 0) setSelectedDepartments(companyProfile.departments); if (companyProfile?.softwareStack) setSoftwareStack(companyProfile.softwareStack); }, [company, companyProfile]);
   useEffect(() => { router.prefetch("/armory"); }, [router]);
   useEffect(() => { if (!session?.isDirector) router.push("/"); }, [session, router]);
 

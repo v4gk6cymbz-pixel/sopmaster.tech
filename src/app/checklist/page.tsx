@@ -219,7 +219,7 @@ export default function ChecklistPage() {
   const [document, setDocument] = useState<{ sections: { heading: string; content: string[] }[] } | null>(null);
   const [savedSop, setSavedSop] = useState<SOP | null>(null);
 
-  useEffect(() => { if (company) { setCompName(company.name); setJurisdiction(company.jurisdiction); } if (companyProfile?.industry) setIndustry(companyProfile.industry as Industry); if (companyProfile?.companySize) setCompanySize(companyProfile.companySize); }, [company, companyProfile]);
+  useEffect(() => { if (company) { if (!compName) setCompName(company.name); setJurisdiction(company.jurisdiction); } if (companyProfile?.industry) setIndustry(companyProfile.industry as Industry); if (companyProfile?.companySize) setCompanySize(companyProfile.companySize); }, [company, companyProfile]);
   useEffect(() => { router.prefetch("/armory"); }, [router]);
   useEffect(() => { if (company && company.subscriptionActive !== "yes" && (!company.focus || company.focus !== "checklists")) router.push("/"); }, [company, router]);
   useEffect(() => { setTitle(`${checklistType} — ${compName || "Your Organisation"}`); }, [checklistType, compName]);

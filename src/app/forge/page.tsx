@@ -65,7 +65,7 @@ export default function ForgePage() {
   const abortRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
-    if (company) { setCompName(company.name); setJurisdiction(company.jurisdiction); }
+    if (company) { if (!compName) setCompName(company.name); setJurisdiction(company.jurisdiction); }
     if (companyProfile?.industry) setIndustry(companyProfile.industry as Industry);
     if (companyProfile?.companySize) setHeadcount(companyProfile.companySize);
   }, [company, companyProfile]);
