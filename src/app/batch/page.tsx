@@ -114,7 +114,7 @@ export default function BatchPage() {
       }, 500);
     });
     const batchResult = generateBatchPackage({ companyName: companyName.trim(), industry, companySize, businessModel, softwareStack: softwareStack.length > 0 ? softwareStack : ["internal system"], businessGoals, operationalChallenges, departments: selectedDepartments });
-    if (!session?.isDirector) try { await deductCredit(batchCost); } catch {}
+    if (!session?.isDirector) deductCredit(batchCost);
     setProgress(100); setResult(batchResult); setLogs(l => [...l, `Package complete: ${batchResult.totalCount} SOPs across ${selectedDepartments.length} departments`]); setGenerating(false);
     addNotification({ type: "sop_generated", title: "Batch SOPs Generated", message: `${batchResult.totalCount} SOPs generated across ${selectedDepartments.length} departments for ${industry}.` });
   };

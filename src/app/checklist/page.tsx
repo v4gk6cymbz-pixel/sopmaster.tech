@@ -234,12 +234,7 @@ export default function ChecklistPage() {
   const startGeneration = async () => {
     setError("");
     if (!compName.trim()) { setError("Company name is required."); return; }
-    if (!session?.isDirector) {
-      try {
-        const canDeduct = await deductCredit();
-        if (!canDeduct) { setError("Insufficient credits. Purchase more in Administration."); return; }
-      } catch { setError("Failed to deduct credit. Try again."); return; }
-    }
+    if (!session?.isDirector) deductCredit();
     setStep("loading"); setProgress(0); setLogs([]); setLogs((l) => [...l, "Generating checklist..."]);
     await new Promise((r) => setTimeout(r, 5000));
     setProgress(30); setLogs((l) => [...l, "Applying industry-specific content..."]);

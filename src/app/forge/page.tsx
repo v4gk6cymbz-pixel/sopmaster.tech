@@ -114,7 +114,7 @@ export default function ForgePage() {
     });
     setLogs((l) => [...l, "Generating SOP document with full structure..."]);
     const sopDoc = generateSOPDocument(title, compName, softwareStack.join(", "), headcount, jurisdiction as Jurisdiction, size, industry, sopType);
-    if (!session?.isDirector) try { await deductCredit(10); } catch {}
+    if (!session?.isDirector) deductCredit(10);
     setProgress(100); setLogs((l) => [...l, "Complete"]);
     const hash = generateHash(); const vHash = generateVerificationHash(); const now = new Date();
     const sop: SOP = { id: `SOP-${hash}`, title, company: compName, systems: softwareStack.join(", "), headcount, jurisdiction: jurisdiction as Jurisdiction, complexity: size, hash, verificationHash: vHash, dateCreated: formatDate(now), dateCategorized: formatDate(now), lastModified: formatDate(now), version: 1, status: "active", companyId: session?.companyId || "", createdBy: session?.name || "", industry, sopType };
