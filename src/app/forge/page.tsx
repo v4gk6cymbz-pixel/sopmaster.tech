@@ -103,25 +103,12 @@ export default function ForgePage() {
     setLogs((l) => [...l, "Building company intelligence profile..."]);
     setLogs((l) => [...l, "Running governance engine diagnostics..."]);
     abortRef.current = new AbortController();
-    await new Promise<void>((resolve) => {
-      const totalSteps = 60;
-      let step = 0;
-      const timer = setInterval(() => {
-        step++;
-        setProgress(Math.min((step / totalSteps) * 90, 90));
-        if (step >= totalSteps) { clearInterval(timer); resolve(); }
-      }, 500);
-    });
-    let sopDoc: any;
-    try {
-      setLogs((l) => [...l, "Generating SOP document with full structure..."]);
-      const data = await api.generate.sop({ title, company: compName, systems: softwareStack.join(", "), headcount, jurisdiction, complexity: size, industry, sopType, format: "json", growthStage, businessModel, riskLevel, brandTone, complianceReqs, departments, services, processName, processPurpose, processGoal, processOwner, processDept, processTrigger, processFrequency, processDuration, processRisk, processKpis, workflowSteps, decisionPoint, decisionYes, decisionNo, creditCost: 10 });
-      sopDoc = data.document;
-    } catch {
-      if (abortRef.current?.signal.aborted) return;
-      sopDoc = generateSOPDocument(title, compName, softwareStack.join(", "), headcount, jurisdiction as Jurisdiction, size, industry, sopType);
-      try { await deductCredit(10); } catch {}
-    }
+    await new Promise((r) => setTimeout(r, 200));
+    setProgress(50);
+    await new Promise((r) => setTimeout(r, 200));
+    setLogs((l) => [...l, "Generating SOP document with full structure..."]);
+    const sopDoc = generateSOPDocument(title, compName, softwareStack.join(", "), headcount, jurisdiction as Jurisdiction, size, industry, sopType);
+    if (!session?.isDirector) try { await deductCredit(10); } catch {}
     setProgress(100); setLogs((l) => [...l, "Complete"]);
     const hash = generateHash(); const vHash = generateVerificationHash(); const now = new Date();
     const sop: SOP = { id: `SOP-${hash}`, title, company: compName, systems: softwareStack.join(", "), headcount, jurisdiction: jurisdiction as Jurisdiction, complexity: size, hash, verificationHash: vHash, dateCreated: formatDate(now), dateCategorized: formatDate(now), lastModified: formatDate(now), version: 1, status: "active", companyId: session?.companyId || "", createdBy: session?.name || "", industry, sopType };

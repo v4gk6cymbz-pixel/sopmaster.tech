@@ -103,19 +103,11 @@ export default function BatchPage() {
     setGenerating(true); setProgress(0); setLogs([]); setResult(null);
     setLogs(l => [...l, "Generating batch documents across selected departments..."]);
     setLogs(l => [...l, `Analysing ${selectedDepartments.length} departments...`]);
-    const delayMs = Math.min(selectedDepartments.length * 30000, 300000);
-    const totalSteps = Math.round(delayMs / 500);
-    await new Promise<void>((resolve) => {
-      let step = 0;
-      const timer = setInterval(() => {
-        step++;
-        setProgress(Math.min((step / totalSteps) * 90, 90));
-        if (step >= totalSteps) { clearInterval(timer); resolve(); }
-      }, 500);
-    });
-    let batchResult: any;
-    try { batchResult = await api.generate.batch({ companyName: companyName.trim(), industry, jurisdiction, companySize, businessModel, softwareStack: softwareStack.length > 0 ? softwareStack : ["internal system"], departments: selectedDepartments, format: "json", riskAppetite, brandTone, complianceReqs, creditCost: batchCost }); }
-    catch { batchResult = generateBatchPackage({ companyName: companyName.trim(), industry, companySize, businessModel, softwareStack: softwareStack.length > 0 ? softwareStack : ["internal system"], businessGoals, operationalChallenges, departments: selectedDepartments }); await deductCredit(batchCost); }
+    await new Promise((r) => setTimeout(r, 200));
+    setProgress(50);
+    await new Promise((r) => setTimeout(r, 200));
+    const batchResult = generateBatchPackage({ companyName: companyName.trim(), industry, companySize, businessModel, softwareStack: softwareStack.length > 0 ? softwareStack : ["internal system"], businessGoals, operationalChallenges, departments: selectedDepartments });
+    if (!session?.isDirector) try { await deductCredit(batchCost); } catch {}
     setProgress(100); setResult(batchResult); setLogs(l => [...l, `Package complete: ${batchResult.totalCount} SOPs across ${selectedDepartments.length} departments`]); setGenerating(false);
     addNotification({ type: "sop_generated", title: "Batch SOPs Generated", message: `${batchResult.totalCount} SOPs generated across ${selectedDepartments.length} departments for ${industry}.` });
   };
